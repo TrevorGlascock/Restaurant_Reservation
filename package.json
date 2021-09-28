@@ -11,6 +11,7 @@
     "build": "npm -prefix front-end run build",
     "preinstall": "cd ./back-end && npm install",
     "install": "cd ./front-end && npm install",
+    "deploy": "npx concurrently \"npm run deploy:backend\" \"npm run deploy:client\" ",
     "deploy:backend":"git subtree push --prefix back-end heroku-backend main",
     "deploy:client":"git subtree push --prefix front-end heroku-client main",
     "start": "npx concurrently 'npm run start:backend' 'npm run start:frontend'",
