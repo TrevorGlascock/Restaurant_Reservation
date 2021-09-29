@@ -18,4 +18,4 @@ function create(NewReservation) {
     .then((rows) => rows[0]);
 }
 
-module.exports = { list };
+module.exports = { list, create };
