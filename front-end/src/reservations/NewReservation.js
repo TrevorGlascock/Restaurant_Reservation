@@ -69,9 +69,12 @@ export default function NewReservation() {
                 required
               />
             </div>
-
-            <button type="submit">Submit</button>
-            <button type="button">Cancel</button>
+            <button type="button" className="btn btn-secondary">
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-primary ml-4">
+              Submit
+            </button>
           </fieldset>
         </form>
       </div>
