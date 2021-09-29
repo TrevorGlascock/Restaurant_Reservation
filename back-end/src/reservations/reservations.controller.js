@@ -1,3 +1,4 @@
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./reservations.service");
 
 /**
@@ -18,6 +19,6 @@ async function create(req, res) {
 }
 
 module.exports = {
-  list,
-  create,
+  list: asyncErrorBoundary(list),
+  create: asyncErrorBoundary(create),
 };
