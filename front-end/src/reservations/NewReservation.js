@@ -12,10 +12,15 @@ export default function NewReservation() {
 
   const [formData, setFormData] = useState(defaultFormData);
 
+  const submitHandler = (event) => {
+    event.preventDefault();
+    console.log(formData);
+  };
+
   return (
     <main>
       <div className="d-md-flex mb-3">
-        <form>
+        <form onSubmit={submitHandler}>
           <fieldset>
             <legend className="h1">New Reservation</legend>
             <div className="form-group">
