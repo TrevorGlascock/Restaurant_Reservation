@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 export default function NewReservation() {
   const defaultFormData = {
@@ -12,6 +13,8 @@ export default function NewReservation() {
 
   const [formData, setFormData] = useState(defaultFormData);
 
+  const history = useHistory();
+
   const formChangeHandler = ({ target: { name, value } }) => {
     setFormData({ ...formData, [name]: value });
   };
@@ -19,6 +22,10 @@ export default function NewReservation() {
   const submitHandler = (event) => {
     event.preventDefault();
     console.log(formData);
+  };
+
+  const cancelHandler = () => {
+    history.push(history.goBack());
   };
 
   return (
@@ -115,7 +122,11 @@ export default function NewReservation() {
                 required
               />
             </div>
-            <button type="button" className="btn btn-secondary">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={cancelHandler}
+            >
               Cancel
             </button>
             <button type="submit" className="btn btn-primary ml-4">
