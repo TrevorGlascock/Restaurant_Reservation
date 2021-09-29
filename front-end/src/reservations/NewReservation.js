@@ -12,6 +12,10 @@ export default function NewReservation() {
 
   const [formData, setFormData] = useState(defaultFormData);
 
+  const formChangeHandler = ({ target: { name, value } }) => {
+    setFormData({ ...formData, [name]: value });
+  };
+
   const submitHandler = (event) => {
     event.preventDefault();
     console.log(formData);
