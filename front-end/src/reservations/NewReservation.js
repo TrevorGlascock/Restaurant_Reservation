@@ -8,36 +8,63 @@ export default function NewReservation() {
           <fieldset>
             <legend className="h1">New Reservation</legend>
             <div className="form-group">
-              <label for="first-name">First Name</label>
+              <label htmlFor="first_name">First Name</label>
               <input
                 id="first_name"
                 type="text"
                 name="first_name"
                 placeholder="Enter your first name"
+                title="Enter your first name"
                 className="form-control"
                 required
               />
             </div>
 
             <div className="form-group">
-              <label for="last-name">Last Name</label>
+              <label htmlFor="last_name">Last Name</label>
               <input
                 id="last_name"
                 type="text"
                 name="last_name"
                 placeholder="Enter your last name"
+                title="Enter your last name"
                 className="form-control"
                 required
               />
             </div>
 
             <div className="form-group">
-              <label for="mobile_number">Mobile number</label>
+              <label htmlFor="mobile_number">Mobile number</label>
               <input
                 id="mobile_number"
                 type="text"
                 name="mobile_number"
                 placeholder="Enter your mobile phone number"
+                title="Enter your mobile phone number"
+                className="form-control"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="reservation_date">Date of Reservation</label>
+              <input
+                id="reservation_date"
+                type="date"
+                name="reservation_date"
+                title="Please select the date you wish to reserve"
+                className="form-control"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="reservation_time">Time of Reservation</label>
+              <input
+                id="reservation_time"
+                type="time"
+                name="reservation_time"
+                title="Please select the time you wish to reserve"
                 className="form-control"
                 required
               />
