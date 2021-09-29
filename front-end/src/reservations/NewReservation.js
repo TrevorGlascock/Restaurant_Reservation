@@ -1,6 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function NewReservation() {
+  const defaultFormData = {
+    first_name: "",
+    last_name: "",
+    mobile_number: "",
+    reservation_date: "",
+    reservation_time: "",
+    people: null,
+  };
+
+  const [formData, setFormData] = useState(defaultFormData);
+
   return (
     <main>
       <div className="d-md-flex mb-3">
