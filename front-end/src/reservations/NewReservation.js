@@ -7,7 +7,7 @@ export default function NewReservation() {
     mobile_number: "",
     reservation_date: "",
     reservation_time: "",
-    people: null,
+    people: "",
   };
 
   const [formData, setFormData] = useState(defaultFormData);
@@ -36,6 +36,8 @@ export default function NewReservation() {
                 placeholder="Enter your first name"
                 title="Enter your first name"
                 className="form-control"
+                value={formData.first_name}
+                onChange={formChangeHandler}
                 required
               />
             </div>
@@ -49,6 +51,8 @@ export default function NewReservation() {
                 placeholder="Enter your last name"
                 title="Enter your last name"
                 className="form-control"
+                value={formData.last_name}
+                onChange={formChangeHandler}
                 required
               />
             </div>
@@ -62,6 +66,8 @@ export default function NewReservation() {
                 placeholder="Enter your mobile phone number"
                 title="Enter your mobile phone number"
                 className="form-control"
+                value={formData.mobile_number}
+                onChange={formChangeHandler}
                 required
               />
             </div>
@@ -74,6 +80,8 @@ export default function NewReservation() {
                 name="reservation_date"
                 title="Please select the date you wish to reserve"
                 className="form-control"
+                value={formData.reservation_date}
+                onChange={formChangeHandler}
                 required
               />
             </div>
@@ -86,6 +94,8 @@ export default function NewReservation() {
                 name="reservation_time"
                 title="Please select the time you wish to reserve"
                 className="form-control"
+                value={formData.reservation_time}
+                onChange={formChangeHandler}
                 required
               />
             </div>
@@ -100,6 +110,8 @@ export default function NewReservation() {
                 title="Please enter the size of your party"
                 className="form-control"
                 min="1"
+                value={formData.people}
+                onChange={formChangeHandler}
                 required
               />
             </div>
