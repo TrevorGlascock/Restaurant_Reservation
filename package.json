@@ -14,7 +14,7 @@
     "deploy": "npx concurrently \"npm run deploy:backend\" \"npm run deploy:client\" ",
     "deploy:backend":"git subtree push --prefix back-end heroku-backend main",
     "deploy:client":"git subtree push --prefix front-end heroku-client main",
-    "start": "npx concurrently 'npm run start:backend' 'npm run start:frontend'",
+    "start": "npx concurrently \"npm run start:backend\" \"npm run start:frontend\"",
     "start:backend": "npm --prefix ./back-end start",
     "start:frontend": "npm --prefix ./front-end start",
     "start:dev": "npx concurrently \"npm run start:dev --prefix ./back-end\" \"npm start --prefix ./front-end\" ",
