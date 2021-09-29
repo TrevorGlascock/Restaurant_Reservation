@@ -69,6 +69,20 @@ export default function NewReservation() {
                 required
               />
             </div>
+
+            <div className="form-group">
+              <label htmlFor="people">Size of Party</label>
+              <input
+                id="people"
+                type="number"
+                name="people"
+                placeholder="Please enter the size of your party"
+                title="Please enter the size of your party"
+                className="form-control"
+                min="1"
+                required
+              />
+            </div>
             <button type="button" className="btn btn-secondary">
               Cancel
             </button>
