@@ -11,10 +11,29 @@ const VALID_PROPERTIES = [
 ];
 
 /**
- * Middleware validation for request bodies to ensure it is a proper reservation
+ * Middleware validation for request bodies
+ * Ensures the request body has all the necessary properties before proceeding
  */
-function validateReservation(req, res, next) {
-  const { data: reservation = {} } = req.body;
+function bodyHasAllRequiredField(req, res, next) {
+  const { data = {} } = req.body;
+
+  for (let property of VALID_PROPERTIES) {
+    if (!data[property])
+      return next({
+        status: 400,
+        message: `The data in the request body requires a ${property} field.`,
+      });
+  }
+
+  res.locals.reservation = data;
+  return next();
+}
+/**
+ * Middleware validation for request bodies
+ * Ensures the request body only has properties that are allowed before proceeding
+ */
+function bodyHasNoInvalidFields(req, res, next) {
+  const { reservation } = res.locals;
   const invalidFields = Object.keys(reservation).filter(
     (field) => !VALID_PROPERTIES.includes(field)
   );
@@ -25,7 +44,6 @@ function validateReservation(req, res, next) {
       message: `Invalid field(s): ${invalidFields.join(", ")}`,
     });
   }
-  res.locals.reservation = reservation;
   return next();
 }
 
@@ -50,5 +68,9 @@ async function create(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [validateReservation, asyncErrorBoundary(create)],
+  create: [
+    bodyHasAllRequiredField,
+    bodyHasNoInvalidFields,
+    asyncErrorBoundary(create),
+  ],
 };
