@@ -4,7 +4,7 @@ const tableName = "reservations";
  * List query fetches all of the table data as an array
  */
 function list() {
-  return db.tableName.select("*");
+  return db(tableName).select("*");
 }
 
 /**
@@ -12,7 +12,7 @@ function list() {
  * and returns the inserted object
  */
 function create(NewReservation) {
-  return db.tableName
+  return db(tableName)
     .insert(NewReservation)
     .returning("*")
     .then((rows) => rows[0]);
