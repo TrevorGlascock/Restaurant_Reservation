@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
+/**
+ * Defines the form for a user to fill out to add a reservation
+ * formData is a control state variable containing all of the form data
+ * history is used to navigate to appropriate urls for submit and cancel
+ * submit will make a post request to the back-end API
+ */
 export default function NewReservation() {
   const defaultFormData = {
     first_name: "",
