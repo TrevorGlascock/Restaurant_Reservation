@@ -1,11 +1,11 @@
 exports.up = function (knex) {
   return knex.schema.table("reservations", (table) => {
-    table.string("first_name");
-    table.string("last_name");
-    table.string("mobile_number");
-    table.string("reservation_date");
-    table.string("reservation_time");
-    table.integer("people");
+    table.string("first_name").notNullable();
+    table.string("last_name").notNullable();
+    table.string("mobile_number").notNullable();
+    table.string("reservation_date").notNullable();
+    table.string("reservation_time").notNullable();
+    table.integer("people").notNullable();
   });
 };
 
