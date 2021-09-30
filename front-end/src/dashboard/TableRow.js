@@ -10,6 +10,17 @@ import React from "react";
  * @returns {JSX.Element}
  */
 export default function TableRow({ data, type }) {
-
-  return <tr></tr>;
+  const reservationKeys = [
+    "first_name",
+    "last_name",
+    "mobile_number",
+    "reservation_date",
+    "reservation_time",
+    "people",
+  ];
+  const row = [];
+  for (let key of reservationKeys) {
+    row.push(<td>{data[key]}</td>);
+  }
+  return <tr>{row}</tr>;
 }
