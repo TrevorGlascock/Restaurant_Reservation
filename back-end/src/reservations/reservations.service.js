@@ -11,9 +11,9 @@ function list() {
  * Create inserts a new Reservation into the table data
  * and returns the inserted object
  */
-function create(NewReservation) {
+function create(reservation) {
   return db(tableName)
-    .insert(NewReservation)
+    .insert(reservation)
     .returning("*")
     .then((rows) => rows[0]);
 }
