@@ -13,7 +13,7 @@ async function list(req, res) {
  * Create handler for new Reservations
  */
 async function create(req, res) {
-  await service.create(req.body);
+  await service.create(req.body.data);
   res.sendStatus(201);
 }
 
