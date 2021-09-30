@@ -7,9 +7,24 @@ import React from "react";
  * @returns {JSX.Element}
  */
 export default function TableHead({ type }) {
+  const reservationsHead = [
+    "First Name",
+    "Last Name",
+    "Mobile Number",
+    "Date of Reservation",
+    "Time of Reservation",
+    "Party Size",
+  ];
+
+  const tableHeaders = reservationsHead.map((collumnName, index) => (
+    <th key={index} scope="col">
+      {collumnName}
+    </th>
+  ));
+
   return (
     <thead>
-      <tr></tr>
+      <tr>{tableHeaders}</tr>
     </thead>
   );
 }
