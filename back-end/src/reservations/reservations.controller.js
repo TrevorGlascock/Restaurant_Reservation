@@ -41,8 +41,11 @@ async function list(req, res) {
  * Create handler for new Reservations
  */
 async function create(req, res) {
-  await service.create(res.locals.reservation);
-  res.sendStatus(201);
+  const { reservation } = res.locals;
+  await service.create(reservation);
+
+  const data = { reservation };
+  res.status(201).json(data);
 }
 
 module.exports = {
