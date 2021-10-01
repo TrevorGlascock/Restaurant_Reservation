@@ -31,7 +31,7 @@ export default function NewReservation() {
   };
 
   const cancelHandler = () => {
-    history.push(history.goBack());
+    history.goBack();
   };
 
   return (
