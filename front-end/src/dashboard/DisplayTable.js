@@ -13,7 +13,7 @@ import TableRow from "./TableRow";
  */
 export default function DisplayTable({ data, type }) {
   const rows = data?.map((object, index) => (
-    <TableRow data={object} key={index} />
+    <TableRow key={index} rowObject={object} type={type} />
   ));
 
   return (
