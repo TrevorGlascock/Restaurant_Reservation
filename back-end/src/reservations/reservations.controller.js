@@ -40,11 +40,11 @@ function bodyHasAllRequiredFields(req, res, next) {
       message: `The reservation_time property (${data.reservation_time}) must be a valid time.`,
     });
 
-  // Validate that people is an integer
-  if (!Number.isInteger(data.people))
+  // Validate that people is a number
+  if (typeof data.people !== "number")
     return next({
       status: 400,
-      message: `The people property (${data.people}) must be an integer.`,
+      message: `The people property (${data.people}) must be a number.`,
     });
 
   res.locals.reservation = data;
