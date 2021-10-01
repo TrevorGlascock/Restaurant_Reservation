@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { previous, next, today } from "../utils/date-time";
 
 /**
@@ -14,22 +15,28 @@ import { previous, next, today } from "../utils/date-time";
  * @var dateChangeUtils
  *  an object that stores the 3 date Changing Utility functions from "../utils/date-time"
  *  the name of the date-time utility function to use will match this Navigation Button's type
+ * @var newDate
+ *  a string that stores the date dynamically generated from one of the dateChangeUtil functions
+ *  we are using the type param that matches the name of the dateChangeUtil functionto generate this date
  * @var destination
- *  a string that stores the dynamically assigned url generated from one of the dateChangeUtil functions
- *  the type param matches the name of the dateChangeUtil function we are using to generate this url
+ *  a string that parses the newDate into a url with the correct date query
+ * @var history
+ *  react-router-dom's UseHistory creates a history object to allow us to navigate to new destination in browser
  *
  * @function onClickHandler
- *  will navigate to the specified destination location with history object
+ *  will navigate to the specified destination location using history.push
  *
  * @returns {JSX.Element}
  */
 export default function DateNavigationButton({ type, currentDate }) {
   const text = type.slice(0, 1).toUpperCase() + type.slice(1);
   const dateChangeUtils = { previous, next, today };
-  const destination = dateChangeUtils[type](currentDate);
+  const newDate = dateChangeUtils[type](currentDate);
+  const destination = `/dashboard?date=${newDate}`;
+  const history = useHistory();
 
   const onClickHandler = () => {
-    console.log(destination);
+    history.push(destination);
   };
 
   return (
