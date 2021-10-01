@@ -1,10 +1,14 @@
 const db = require("../db/connection");
 const tableName = "reservations";
 /**
- * List query fetches all of the table data as an array
+ * List query fetches all of the table data where reservation_date equals the passed in param
  */
-function list() {
-  return db(tableName).select("*");
+function list(reservation_date) {
+  if (!reservation_date) return db(tableName).select("*");
+  return db(tableName)
+    .select("*")
+    .orderBy("reservation_time", "ASC")
+    .where({ reservation_date });
 }
 
 /**
