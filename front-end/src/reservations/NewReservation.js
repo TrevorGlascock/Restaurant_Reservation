@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { createReservation } from "../utils/api";
 
 /**
  * Defines the form for a user to fill out to add a reservation
@@ -28,6 +29,7 @@ export default function NewReservation() {
   const submitHandler = (event) => {
     event.preventDefault();
     console.log(formData);
+    createReservation(formData).then(console.log("yo")).catch(console.log);
   };
 
   const cancelHandler = () => {
