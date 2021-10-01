@@ -11,8 +11,8 @@ import React from "react";
 export default function TableRow({ rowObject, propNames }) {
   const row = [];
   for (let index in propNames) {
-    const col = propNames[index];
-    row.push(<td key={index}>{rowObject[col]}</td>);
+    const propName = propNames[index];
+    row.push(<td key={index}>{rowObject[propName]}</td>);
   }
   return <tr>{row}</tr>;
 }
