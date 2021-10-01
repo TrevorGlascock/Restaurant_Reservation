@@ -11,6 +11,14 @@ import DateNavigationButton from "./DateNavigationButtons";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  const reservationsCols = {
+    first_name: "First Name",
+    last_name: "Last Name",
+    mobile_number: "Mobile Number",
+    reservation_date: "Date of Reservation",
+    reservation_time: "Time of Reservation",
+    people: "Party Size",
+  };
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
@@ -35,7 +43,7 @@ function Dashboard({ date }) {
       <DateNavigationButton type="today" currentDate={date} />
       <DateNavigationButton type="next" currentDate={date} />
       <ErrorAlert error={reservationsError} />
-      <DisplayTable data={reservations} type="reservations" />
+      <DisplayTable data={reservations} objCols={reservationsCols} />
     </main>
   );
 }

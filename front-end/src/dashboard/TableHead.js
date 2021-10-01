@@ -1,30 +1,20 @@
 import React from "react";
 
 /**
- * @param type
- *  a string describing the type of object we are building a Table Header for,
- *  this allow us to dynamically assign column lables based on the type
+ * @param columnLabels
+ *  an array of all the column labels that make the table header row
  * @returns {JSX.Element}
  */
-export default function TableHead({ type }) {
-  const reservationsHead = [
-    "First Name",
-    "Last Name",
-    "Mobile Number",
-    "Date of Reservation",
-    "Time of Reservation",
-    "Party Size",
-  ];
-
-  const tableHeaders = reservationsHead.map((collumnName, index) => (
+export default function TableHead({ columnLabels }) {
+  const tableHeader = columnLabels.map((columnName, index) => (
     <th key={index} scope="col">
-      {collumnName}
+      {columnName}
     </th>
   ));
 
   return (
     <thead>
-      <tr>{tableHeaders}</tr>
+      <tr>{tableHeader}</tr>
     </thead>
   );
 }

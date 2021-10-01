@@ -3,29 +3,16 @@ import React from "react";
 /**
  * Defines one row of a dynamic table.
  * @param rowObject
- *  An object who's properties are each a column in this row
- * @param type
- *  a string describing the type of object being rendered in this row,
- *  this allow us to choose which propsArray to use based on the type.
- *  propsArray will define the properties of the object that compose the columns of this row.
+ *  An object that contains some of the properties that make up the table's row
+ * @param propNames
+ *  An array of all the property names in this rowObject that make up the table's row
  * @returns {JSX.Element}
  */
-export default function TableRow({ rowObject, type }) {
-  const reservationProps = [
-    "first_name",
-    "last_name",
-    "mobile_number",
-    "reservation_date",
-    "reservation_time",
-    "people",
-  ];
-
-  const propsArray = type === "reservations" ? reservationProps : [];
-
+export default function TableRow({ rowObject, propNames }) {
   const row = [];
-  for (let index in propsArray) {
-    const property = propsArray[index];
-    row.push(<td key={index}>{rowObject[property]}</td>);
+  for (let index in propNames) {
+    const col = propNames[index];
+    row.push(<td key={index}>{rowObject[col]}</td>);
   }
   return <tr>{row}</tr>;
 }

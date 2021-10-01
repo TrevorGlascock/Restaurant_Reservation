@@ -6,19 +6,23 @@ import TableRow from "./TableRow";
  * Defines the front-end table displaying appropriate data.
  * @param data
  *  the current array of objects to display in table
- * @param type
- *  a string describing the type of object being rendered in each row,
- *  this allow us to choose the type of row component to use
+ * @param objCols
+ *  the keys of this object represent the property names of all the columns of this object in the database
+ *  the values of this object represent the actual display name used in the TableHead
  * @returns {JSX.Element}
  */
-export default function DisplayTable({ data, type }) {
+export default function DisplayTable({ data, objCols = {} }) {
   const rows = data?.map((object, index) => (
-    <TableRow key={index} rowObject={object} type={type} />
+    <TableRow
+      key={index}
+      rowObject={object}
+      propNames={Object.keys(objCols)}
+    />
   ));
 
   return (
     <table className="table">
-      <TableHead type={type} />
+      <TableHead columnLabels={Object.values(objCols)} />
       <tbody>{rows}</tbody>
     </table>
   );
