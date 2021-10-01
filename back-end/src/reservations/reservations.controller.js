@@ -13,8 +13,9 @@ const VALID_PROPERTIES = [
 /**
  * Middleware validation for request bodies
  * Ensures the request body has all the necessary properties before proceeding
+ * Then also ensures all of the required data is of the correct data type
  */
-function bodyHasAllRequiredField(req, res, next) {
+function bodyHasAllRequiredFields(req, res, next) {
   const { data = {} } = req.body;
 
   for (let property of VALID_PROPERTIES) {
@@ -24,6 +25,27 @@ function bodyHasAllRequiredField(req, res, next) {
         message: `The data in the request body requires a ${property} field.`,
       });
   }
+
+  // Validate the date
+  if (Number.isNaN(Date.parse(data.reservation_date)))
+    return next({
+      status: 400,
+      message: `The reservation_date property (${data.reservation_date}) must be a valid date.`,
+    });
+
+  // Validate the time
+  if (!data.reservation_time.match(/\d\d:\d\d/))
+    return next({
+      status: 400,
+      message: `The reservation_time property (${data.reservation_time}) must be a valid time.`,
+    });
+
+  // Validate that people is an integer
+  if (!Number.isInteger(data.people))
+    return next({
+      status: 400,
+      message: `The people property (${data.people}) must be an integer.`,
+    });
 
   res.locals.reservation = data;
   return next();
@@ -70,7 +92,7 @@ async function create(req, res) {
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
-    bodyHasAllRequiredField,
+    bodyHasAllRequiredFields,
     bodyHasNoInvalidFields,
     asyncErrorBoundary(create),
   ],
