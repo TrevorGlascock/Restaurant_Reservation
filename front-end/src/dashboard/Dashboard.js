@@ -31,9 +31,9 @@ function Dashboard({ date }) {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date</h4>
       </div>
-      <DateNavigationButton type="Previous" />
-      <DateNavigationButton type="Today" />
-      <DateNavigationButton type="Next" />
+      <DateNavigationButton type="previous" currentDate={date} />
+      <DateNavigationButton type="today" currentDate={date} />
+      <DateNavigationButton type="next" currentDate={date} />
       <ErrorAlert error={reservationsError} />
       <DisplayTable data={reservations} type="reservations" />
     </main>
