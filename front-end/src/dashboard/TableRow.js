@@ -23,8 +23,9 @@ export default function TableRow({ rowObject, type }) {
   const propsArray = type === "reservations" ? reservationProps : [];
 
   const row = [];
-  for (let property of propsArray) {
-    row.push(<td>{rowObject[property]}</td>);
+  for (let index in propsArray) {
+    const property = propsArray[index];
+    row.push(<td key={index}>{rowObject[property]}</td>);
   }
   return <tr>{row}</tr>;
 }
