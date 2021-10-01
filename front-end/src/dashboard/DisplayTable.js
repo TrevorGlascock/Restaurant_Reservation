@@ -19,7 +19,7 @@ export default function DisplayTable({ data, type }) {
   return (
     <table className="table">
       <TableHead type={type} />
-      {rows}
+      <tbody>{rows}</tbody>
     </table>
   );
 }
