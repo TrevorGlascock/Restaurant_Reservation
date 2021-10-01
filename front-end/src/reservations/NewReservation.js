@@ -28,8 +28,9 @@ export default function NewReservation() {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    console.log(formData);
-    createReservation(formData).then(console.log("yo")).catch(console.log);
+    createReservation(formData)
+      .then(history.push(`/dashboard?date=${formData.reservation_date}`))
+      .catch(console.log);
   };
 
   const cancelHandler = () => {
