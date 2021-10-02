@@ -44,7 +44,9 @@ function bodyHasAllRequiredFields(req, res, next) {
   if (typeof data.people !== "number")
     return next({
       status: 400,
-      message: `The people property (${data.people}) must be a number.`,
+      message: `The people property (${
+        data.people
+      } of type ${typeof data.people}) must be a number.`,
     });
 
   res.locals.reservation = data;
@@ -83,10 +85,9 @@ async function list(req, res) {
  */
 async function create(req, res) {
   const { reservation } = res.locals;
-  await service.create(reservation);
+  const data = await service.create(reservation);
 
-  const data = { reservation };
-  res.status(201).json(data);
+  res.status(201).json({ data });
 }
 
 module.exports = {
