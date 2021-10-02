@@ -27,7 +27,10 @@ export default function NewReservation() {
   };
 
   const submitHandler = (event) => {
-    event.preventDefault();
+    event.preventDefault(); 
+
+    formData.people = parseInt(formData.people); // people must be parsed into an integer before submiting the data to the backend
+
     createReservation(formData)
       .then(history.push(`/dashboard?date=${formData.reservation_date}`))
       .catch(console.log);
