@@ -6,6 +6,8 @@ import React from "react";
  *  An object that contains some of the properties that make up the table's row
  * @param propNames
  *  An array of all the property names in this rowObject that make up the table's row
+ * @var row 
+ *  An array of JSX table-data containing all the data of that makes up this row
  * @returns {JSX.Element}
  */
 export default function TableRow({ rowObject, propNames }) {
