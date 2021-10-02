@@ -8,7 +8,6 @@ import { previous, next, today } from "../utils/date-time";
  *  a string describing the type Navigation Button
  * @param currentDate
  *  a string which stores the current date to use as a reference for navigation
- *
  * @var text
  *  a string which represents the text of the button
  *  it is identical to type, but with first letter capitalized
@@ -22,7 +21,6 @@ import { previous, next, today } from "../utils/date-time";
  *  a string that parses the newDate into a url with the correct date query
  * @var history
  *  react-router-dom's UseHistory creates a history object to allow us to navigate to new destination in browser
- *
  * @function onClickHandler
  *  will navigate to the specified destination location using history.push
  *
