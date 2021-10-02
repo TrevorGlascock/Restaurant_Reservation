@@ -96,23 +96,36 @@ function validateDateTime(req, res, next) {
     });
 
   if (closedDays[date.getDay()]) {
-    const closedDayNames = Object.values(closedDays);
-    let closedMessage = `The date you have selected is a ${
-      closedDays[date.getDay()]
-    }. The restaurant is closed on `;
-
-    if (closedDayNames.length > 1)
-      closedMessage = closedDayNames.slice(0, -1).join(", ");
-
-    if (closedDayNames.length > 2) closedMessage += ",";
-    if (closedDayNames.length > 1) closedMessage += " and ";
-
-    closedMessage += closedDays[date.getDay()] + ".";
     return next({
       status: 400,
-      message: closedMessage,
+      message: _generateClosedMessage(closedDays, date.getDay()),
     });
   }
+}
+
+function _generateClosedMessage(closedDays, selectedDay) {
+  // An array of all names of the days the resetaurant is closed
+  const closedDayNames = Object.values(closedDays);
+
+  // First sentence
+  let closedMessage = `The date you have selected is a ${closedDays[selectedDay]}. `;
+  // Start of second sentence
+  closedMessage += "The restaurant is closed on ";
+
+  // If the array contains more than 1 dayName, join all of the names with a comma except for the last one
+  if (closedDayNames.length > 1)
+    closedMessage += closedDayNames.slice(0, -1).join(", ");
+
+  // if the array is more than 2 elements, english grammar dictates there be another comma
+  if (closedDayNames.length > 2) closedMessage += ",";
+
+  // if the array has more than one element, we add a final " and " before listing the last element
+  if (closedDayNames.length > 1) closedMessage += " and ";
+
+  // Add the last element
+  closedMessage += closedDays[selectedDay];
+
+  return closedMessage + "."; // Return the final message with a period at the end
 }
 
 /**
