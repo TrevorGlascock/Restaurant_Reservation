@@ -26,7 +26,7 @@ function bodyHasAllRequiredFields(req, res, next) {
       });
   }
 
-  // Validate the date
+  // Validate that the date is an actual date
   if (Number.isNaN(Date.parse(data.reservation_date)))
     return next({
       status: 400,
@@ -52,6 +52,7 @@ function bodyHasAllRequiredFields(req, res, next) {
   res.locals.reservation = data;
   return next();
 }
+
 /**
  * Middleware validation for request bodies
  * Ensures the request body only has properties that are allowed before proceeding
@@ -69,6 +70,38 @@ function bodyHasNoInvalidFields(req, res, next) {
     });
   }
   return next();
+}
+/**
+ * Middleware validation for reservation_date and reservation_time properties
+ * This middleware will always come after the two generic validations
+ * Therefore both properties will exist inside of req.body.data with proper formatting
+ *
+ * This validation ensures the date and time are not in the past
+ * And that both are during a time that the restaurant is open
+ *
+ * Restaurant's operational dates and times are set at the start of this function
+ */
+function validateDateTime(req, res, next) {
+  // 0 is Sunday -- 6 is Saturday
+  const closedDays = { 2: "Tuesday" }; // Days the restaurant is closed -- Restaurant is currently closed on only closed on Tuesdays (2)
+
+  const { reservation_date, reservation_time } = req.body.data;
+  const date = new Date(`${reservation_date}T${reservation_time}`);
+  const today = new Date();
+
+  if (Date.parse(date) <= Date.parse(today))
+    return next({
+      status: 400,
+      message: `Your reservation cannot be made for a date or time of the past.`,
+    });
+
+  if (closedDays[date.getDay()])
+    return next({
+      status: 400,
+      message: `The restaurant is closed on ${
+        closedDays[date.getDay()]
+      }. You cannot make a reservation for a day that the restaurant is closed on.`,
+    });
 }
 
 /**
@@ -95,6 +128,7 @@ module.exports = {
   create: [
     bodyHasAllRequiredFields,
     bodyHasNoInvalidFields,
+    validateDateTime,
     asyncErrorBoundary(create),
   ],
 };
