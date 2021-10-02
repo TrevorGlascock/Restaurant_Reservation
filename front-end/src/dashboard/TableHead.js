@@ -3,6 +3,8 @@ import React from "react";
 /**
  * @param columnLabels
  *  an array of all the column labels that make the table header row
+ * @var tableHeader
+ *  an array of the table head columns which represent the labels of each column in a table's header
  * @returns {JSX.Element}
  */
 export default function TableHead({ columnLabels }) {
