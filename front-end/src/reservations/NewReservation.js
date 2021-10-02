@@ -7,7 +7,11 @@ import { createReservation } from "../utils/api";
  * @var formData
  *  a control state variable containing all of the form data
  * @function setFormData
- *  will change the formData without race conditions
+ *  will dynamically change the formData without introducing race conditions
+ * @var submissionErrors
+ *  a control state variable containing all of the errors recieved from the API call
+ * @function setSubmissionErrors
+ *  will dynamically change the submissionErrors without introducing race conditions
  * @var history
  *  is used to navigate to appropriate urls for submit and cancel
  * @function submitHandler
@@ -28,6 +32,7 @@ export default function NewReservation() {
   };
 
   const [formData, setFormData] = useState(defaultFormData);
+  const [submissionErrors, setSubmissionErrors] = useState([]);
 
   const history = useHistory();
 
