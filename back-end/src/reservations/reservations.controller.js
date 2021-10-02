@@ -95,13 +95,24 @@ function validateDateTime(req, res, next) {
       message: `Your reservation cannot be made for a date or time of the past.`,
     });
 
-  if (closedDays[date.getDay()])
+  if (closedDays[date.getDay()]) {
+    const closedDayNames = Object.values(closedDays);
+    let closedMessage = `The date you have selected is a ${
+      closedDays[date.getDay()]
+    }. The restaurant is closed on `;
+
+    if (closedDayNames.length > 1)
+      closedMessage = closedDayNames.slice(0, -1).join(", ");
+
+    if (closedDayNames.length > 2) closedMessage += ",";
+    if (closedDayNames.length > 1) closedMessage += " and ";
+
+    closedMessage += closedDays[date.getDay()] + ".";
     return next({
       status: 400,
-      message: `The restaurant is closed on ${
-        closedDays[date.getDay()]
-      }. You cannot make a reservation for a day that the restaurant is closed on.`,
+      message: closedMessage,
     });
+  }
 }
 
 /**
