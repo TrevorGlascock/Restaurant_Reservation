@@ -26,7 +26,7 @@ function bodyHasAllRequiredFields(req, res, next) {
       });
   }
 
-  // Validate the date
+  // Validate that the date is an actual date
   if (Number.isNaN(Date.parse(data.reservation_date)))
     return next({
       status: 400,
