@@ -4,9 +4,18 @@ import { createReservation } from "../utils/api";
 
 /**
  * Defines the form for a user to fill out to add a reservation
- * formData is a control state variable containing all of the form data
- * history is used to navigate to appropriate urls for submit and cancel
- * submit will make a post request to the back-end API
+ * @var formData
+ *  a control state variable containing all of the form data
+ * @function setFormData
+ *  will change the formData without race conditions
+ * @var history
+ *  is used to navigate to appropriate urls for submit and cancel
+ * @function submitHandler
+ *  will make a post request to the back-end API (onSubmit for form)
+ * @function cancelHandler
+ *   will send user back one step in history (onClick for cancel button)
+ *
+ * @returns {JSX.Element}
  */
 export default function NewReservation() {
   const defaultFormData = {
@@ -27,19 +36,22 @@ export default function NewReservation() {
   };
 
   const submitHandler = (event) => {
-    event.preventDefault(); 
+    event.preventDefault(); // prevents the submit button's default behavior
 
     formData.people = parseInt(formData.people); // people must be parsed into an integer before submiting the data to the backend
 
+    // API util to submit to the backend
     createReservation(formData)
       .then(history.push(`/dashboard?date=${formData.reservation_date}`))
       .catch(console.log);
   };
 
   const cancelHandler = () => {
+    // Navigate one step backwards through browser's history
     history.goBack();
   };
 
+  // JSX return statement to create the form
   return (
     <main>
       <div className="d-md-flex mb-3">
