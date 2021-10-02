@@ -89,20 +89,34 @@ function validateDateTime(req, res, next) {
   const date = new Date(`${reservation_date}T${reservation_time}`);
   const today = new Date();
 
+  // If the reservation is in the past, throw an error
   if (Date.parse(date) <= Date.parse(today))
     return next({
       status: 400,
       message: `Your reservation cannot be made for a date or time of the past.`,
     });
 
+  // If the restaurant is closed on that day, generate the appropriate error message
   if (closedDays[date.getDay()]) {
     return next({
       status: 400,
       message: _generateClosedMessage(closedDays, date.getDay()),
     });
   }
+
+  return next();
 }
 
+/**
+ *
+ * @param closedDays
+ *  an object who's keys are the dayNumber where 0 is sunday
+ *  and who's values are the string for the day, such as "Sunday"
+ * @param selectedDay
+ *  the dayNumber for the date the user has entered
+ * @returns
+ *  the generated message informing the user what day they have selected and which days the restaurant is closed on.
+ */
 function _generateClosedMessage(closedDays, selectedDay) {
   // An array of all names of the days the resetaurant is closed
   const closedDayNames = Object.values(closedDays);
@@ -112,12 +126,15 @@ function _generateClosedMessage(closedDays, selectedDay) {
   // Start of second sentence
   closedMessage += "The restaurant is closed on ";
 
-  // If the array contains more than 1 dayName, join all of the names with a comma except for the last one
+  // If the array contains more than 1 dayName, join all of the names with a plural "s" comma except for the last one
   if (closedDayNames.length > 1)
-    closedMessage += closedDayNames.slice(0, -1).join(", ");
+    closedMessage += closedDayNames.slice(0, -1).join("s, ");
 
   // if the array is more than 2 elements, english grammar dictates there be another comma
-  if (closedDayNames.length > 2) closedMessage += ",";
+  if (closedDayNames.length > 2) closedMessage += "s,";
+
+  // if the array has exactly 2 elements, then add the plural "s" before the " and "
+  if (closedDayNames.length == 2) closedMessage += "s";
 
   // if the array has more than one element, we add a final " and " before listing the last element
   if (closedDayNames.length > 1) closedMessage += " and ";
@@ -125,7 +142,7 @@ function _generateClosedMessage(closedDays, selectedDay) {
   // Add the last element
   closedMessage += closedDays[selectedDay];
 
-  return closedMessage + "."; // Return the final message with a period at the end
+  return closedMessage + "s."; // Return the final message with a plural "s" and a period at the end
 }
 
 /**
