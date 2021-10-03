@@ -47,7 +47,7 @@ export default function NewReservation() {
 
     // API util to submit to the backend
     createReservation(formData)
-      .then(history.push(`/dashboard?date=${formData.reservation_date}`))
+      .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
       .catch(console.log);
   };
 
