@@ -93,7 +93,7 @@ function validateDateTime(req, res, next) {
   if (Date.parse(date) <= Date.parse(today))
     return next({
       status: 400,
-      message: `Your reservation cannot be made for a date or time of the past.`,
+      message: `Your reservation cannot be made for a date or time of the past. Please select a future date.`,
     });
 
   // If the restaurant is closed on that day, generate the appropriate error message
