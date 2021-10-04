@@ -26,19 +26,27 @@ function bodyHasAllRequiredFields(req, res, next) {
       });
   }
 
-  // Validate that the date is an actual date
-  if (Number.isNaN(Date.parse(data.reservation_date)))
+  // Validate that the date is in the correct format
+  if (!data.reservation_date.match(/\d\d\d\d-\d\d-\d\d/))
     return next({
       status: 400,
-      message: `The reservation_date property (${data.reservation_date}) must be a valid date.`,
+      message: `The reservation_date property (${data.reservation_date}) must be a valid date in the format of YYYY-MM-DD`,
     });
 
-  // Validate the time
-  if (!data.reservation_time.match(/\d\d:\d\d/))
+  // Validate that the time is in the correct format
+  if (!data.reservation_time.match(/^\d\d:\d\d/))
     return next({
       status: 400,
-      message: `The reservation_time property (${data.reservation_time}) must be a valid time.`,
+      message: `The reservation_time property (${data.reservation_time}) must be a valid time in the format of HH:MM.`,
     });
+
+  const datetime = `${data.reservation_date}T${data.reservation_time}`;
+  if (Number.isNaN(Date.parse(datetime))) {
+    return next({
+      status: 400,
+      message: `The reservation_date and reservation_time property do not make a valid Date-Time string (${datetime}).`,
+    });
+  }
 
   // Validate that people is a number
   if (typeof data.people !== "number")
@@ -84,6 +92,8 @@ function bodyHasNoInvalidFields(req, res, next) {
 function validateDateTime(req, res, next) {
   // 0 is Sunday -- 6 is Saturday
   const closedDays = { 2: "Tuesday" }; // Days the restaurant is closed -- Restaurant is currently closed on only closed on Tuesdays (2)
+  const startTime = "10:30"; // Start time is the target date at opening time
+  const closeTime = "21:30"; // End time is the target date an hour before closing time
 
   const { reservation_date, reservation_time } = req.body.data;
   const date = new Date(`${reservation_date}T${reservation_time}`);
@@ -101,6 +111,20 @@ function validateDateTime(req, res, next) {
     return next({
       status: 400,
       message: _generateClosedMessage(closedDays, date.getDay()),
+    });
+  }
+
+  const startDateTime = new Date(`${reservation_date}T${startTime}`); // Date-time with target date and startTime
+  const closeDateTime = new Date(`${reservation_date}T${closeTime}`); //
+
+  // If the restaurant isn't taking reservations for that time, throw an error
+  if (
+    Date.parse(date) < Date.parse(startDateTime) ||
+    Date.parse(date) > Date.parse(closeDateTime)
+  ) {
+    return next({
+      status: 400,
+      message: `Your reservation cannot be made for that time (${reservation_time}). The restaurant is only taking reservations between ${startTime} and ${closeTime}`,
     });
   }
 
@@ -140,7 +164,7 @@ function _generateClosedMessage(closedDays, selectedDay) {
   if (closedDayNames.length > 1) closedMessage += " and ";
 
   // Add the last element
-  closedMessage += closedDays[selectedDay];
+  closedMessage += closedDayNames.slice(-1);
 
   return closedMessage + "s."; // Return the final message with a plural "s" and a period at the end
 }
