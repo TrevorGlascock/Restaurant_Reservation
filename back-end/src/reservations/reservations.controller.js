@@ -27,10 +27,13 @@ function bodyHasAllRequiredFields(req, res, next) {
   }
 
   // Validate that the date is an actual date
-  if (Number.isNaN(Date.parse(data.reservation_date)))
+  if (
+    !data.reservation_date.match(/\d\d\d\d-\d\d-\d\d/) ||
+    Number.isNaN(Date.parse(data.reservation_date))
+  )
     return next({
       status: 400,
-      message: `The reservation_date property (${data.reservation_date}) must be a valid date.`,
+      message: `The reservation_date property (${data.reservation_date}) must be a valid date in the format of YYYY-MM-DD`,
     });
 
   // Validate the time
