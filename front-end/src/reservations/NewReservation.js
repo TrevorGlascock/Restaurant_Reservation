@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import ErrorAlert from "../layout/ErrorAlert";
 import { createReservation } from "../utils/api";
 
 /**
@@ -7,7 +8,11 @@ import { createReservation } from "../utils/api";
  * @var formData
  *  a control state variable containing all of the form data
  * @function setFormData
- *  will change the formData without race conditions
+ *  will dynamically change the formData without introducing race conditions
+ * @var submissionErrors
+ *  a control state variable containing all of the errors recieved from the API call
+ * @function setSubmissionErrors
+ *  will dynamically change the submissionErrors without introducing race conditions
  * @var history
  *  is used to navigate to appropriate urls for submit and cancel
  * @function submitHandler
@@ -28,6 +33,7 @@ export default function NewReservation() {
   };
 
   const [formData, setFormData] = useState(defaultFormData);
+  const [submissionErrors, setSubmissionErrors] = useState(null);
 
   const history = useHistory();
 
@@ -42,8 +48,8 @@ export default function NewReservation() {
 
     // API util to submit to the backend
     createReservation(formData)
-      .then(history.push(`/dashboard?date=${formData.reservation_date}`))
-      .catch(console.log);
+      .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
+      .catch(setSubmissionErrors);
   };
 
   const cancelHandler = () => {
@@ -54,6 +60,10 @@ export default function NewReservation() {
   // JSX return statement to create the form
   return (
     <main>
+      <div className="d-md-flex mb-3">
+        <ErrorAlert error={submissionErrors} />
+      </div>
+
       <div className="d-md-flex mb-3">
         <form onSubmit={submitHandler}>
           <fieldset>
