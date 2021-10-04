@@ -26,22 +26,27 @@ function bodyHasAllRequiredFields(req, res, next) {
       });
   }
 
-  // Validate that the date is an actual date
-  if (
-    !data.reservation_date.match(/\d\d\d\d-\d\d-\d\d/) ||
-    Number.isNaN(Date.parse(data.reservation_date))
-  )
+  // Validate that the date is in the correct format
+  if (!data.reservation_date.match(/\d\d\d\d-\d\d-\d\d/))
     return next({
       status: 400,
       message: `The reservation_date property (${data.reservation_date}) must be a valid date in the format of YYYY-MM-DD`,
     });
 
-  // Validate the time
-  if (!data.reservation_time.match(/\d\d:\d\d/))
+  // Validate that the time is in the correct format
+  if (!data.reservation_time.match(/^\d\d:\d\d/))
     return next({
       status: 400,
-      message: `The reservation_time property (${data.reservation_time}) must be a valid time.`,
+      message: `The reservation_time property (${data.reservation_time}) must be a valid time in the format of HH:MM.`,
     });
+
+  const datetime = `${data.reservation_date}T${data.reservation_time}`;
+  if (Number.isNaN(Date.parse(datetime))) {
+    return next({
+      status: 400,
+      message: `The reservation_date and reservation_time property do not make a valid Date-Time string (${datetime}).`,
+    });
+  }
 
   // Validate that people is a number
   if (typeof data.people !== "number")
