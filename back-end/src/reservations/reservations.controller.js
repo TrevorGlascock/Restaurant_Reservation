@@ -140,7 +140,7 @@ function _generateClosedMessage(closedDays, selectedDay) {
   if (closedDayNames.length > 1) closedMessage += " and ";
 
   // Add the last element
-  closedMessage += closedDays[selectedDay];
+  closedMessage += closedDayNames.slice(-1);
 
   return closedMessage + "s."; // Return the final message with a plural "s" and a period at the end
 }
