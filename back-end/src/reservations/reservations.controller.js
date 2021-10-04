@@ -92,6 +92,8 @@ function bodyHasNoInvalidFields(req, res, next) {
 function validateDateTime(req, res, next) {
   // 0 is Sunday -- 6 is Saturday
   const closedDays = { 2: "Tuesday" }; // Days the restaurant is closed -- Restaurant is currently closed on only closed on Tuesdays (2)
+  const startTime = "10:30"; // Start time is the target date at opening time
+  const closeTime = "21:30"; // End time is the target date an hour before closing time
 
   const { reservation_date, reservation_time } = req.body.data;
   const date = new Date(`${reservation_date}T${reservation_time}`);
@@ -109,6 +111,20 @@ function validateDateTime(req, res, next) {
     return next({
       status: 400,
       message: _generateClosedMessage(closedDays, date.getDay()),
+    });
+  }
+
+  const startDateTime = new Date(`${reservation_date}T${startTime}`); // Date-time with target date and startTime
+  const closeDateTime = new Date(`${reservation_date}T${closeTime}`); //
+
+  // If the restaurant isn't taking reservations for that time, throw an error
+  if (
+    Date.parse(date) < Date.parse(startDateTime) ||
+    Date.parse(date) > Date.parse(closeDateTime)
+  ) {
+    return next({
+      status: 400,
+      message: `Your reservation cannot be made for that time (${reservation_time}). The restaurant is only taking reservations between ${startTime} and ${closeTime}`,
     });
   }
 
