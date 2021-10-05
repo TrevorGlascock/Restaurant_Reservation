@@ -145,10 +145,10 @@ export default function NewReservation() {
   function _convert12HourTime(timeString) {
     let hours = Number(timeString.split(":")[0]);
     const minutes = timeString.split(":")[1];
-    let meridiem = "am";
+    let meridiem = "AM";
     if (hours > 12) {
       hours -= 12;
-      meridiem = "pm";
+      meridiem = "PM";
     }
     return `${hours}:${minutes}${meridiem}`;
   }
