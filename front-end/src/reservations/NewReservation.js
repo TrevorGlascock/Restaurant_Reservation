@@ -33,7 +33,7 @@ export default function NewReservation() {
   };
 
   const [formData, setFormData] = useState(defaultFormData);
-  const [submissionErrors, setSubmissionErrors] = useState(null);
+  const [submissionErrors, setSubmissionErrors] = useState([]);
 
   const history = useHistory();
 
@@ -41,29 +41,73 @@ export default function NewReservation() {
     setFormData({ ...formData, [name]: value });
   };
 
+  const formIsValid = () => {
+    let validForm = true;
+
+    return validForm;
+  };
+
   const submitHandler = (event) => {
     event.preventDefault(); // prevents the submit button's default behavior
+    setSubmissionErrors([]);
 
     formData.people = parseInt(formData.people); // people must be parsed into an integer before submiting the data to the backend
 
     // API util to submit to the backend
-    createReservation(formData)
-      .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
-      .catch(setSubmissionErrors);
+    if (formIsValid)
+      createReservation(formData)
+        .then(() =>
+          history.push(`/dashboard?date=${formData.reservation_date}`)
+        )
+        .catch((errorObj) =>
+          setSubmissionErrors((subErrors) => [...subErrors, errorObj])
+        );
+    else console.log(submissionErrors);
   };
+
+  // Helper function to generate error message for days the restaurant is closed
+  function _generateClosedMessage(closedDays, selectedDay) {
+    // An array of all names of the days the resetaurant is closed
+    const closedDayNames = Object.values(closedDays);
+
+    // First sentence
+    let closedMessage = `The date you have selected is a ${closedDays[selectedDay]}. `;
+    // Start of second sentence
+    closedMessage += "The restaurant is closed on ";
+
+    // If the array contains more than 1 dayName, join all of the names with a plural "s" comma except for the last one
+    if (closedDayNames.length > 1)
+      closedMessage += closedDayNames.slice(0, -1).join("s, ");
+
+    // if the array is more than 2 elements, english grammar dictates there be another comma
+    if (closedDayNames.length > 2) closedMessage += "s,";
+
+    // if the array has exactly 2 elements, then add the plural "s" before the " and "
+    if (closedDayNames.length == 2) closedMessage += "s";
+
+    // if the array has more than one element, we add a final " and " before listing the last element
+    if (closedDayNames.length > 1) closedMessage += " and ";
+
+    // Add the last element
+    closedMessage += closedDayNames.slice(-1);
+
+    return closedMessage + "s."; // Return the final message with a plural "s" and a period at the end
+  }
 
   const cancelHandler = () => {
     // Navigate one step backwards through browser's history
     history.goBack();
   };
 
+  const errorDisplay = submissionErrors.map((error, index) => (
+    <ErrorAlert key={index} error={error} />
+  ));
+
   // JSX return statement to create the form
   return (
     <main>
-      <div className="d-md-flex mb-3">
-        <ErrorAlert error={submissionErrors} />
-      </div>
-
+      <div className="d-md-flex mb-3"></div>
+      {errorDisplay}
       <div className="d-md-flex mb-3">
         <form onSubmit={submitHandler}>
           <fieldset>
