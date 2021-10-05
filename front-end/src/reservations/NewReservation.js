@@ -42,7 +42,6 @@ export default function NewReservation() {
   };
 
   const formIsValid = () => {
-    console.log("hello");
     let validForm = true;
     const closedDays = { 2: "Tuesday" }; // Days the restaurant is closed -- Restaurant is currently closed on only closed on Tuesdays (2)
     const startTime = "10:30"; // Start time is the target date at opening time
@@ -86,7 +85,9 @@ export default function NewReservation() {
       setSubmissionErrors((subErrors) => [
         ...subErrors,
         {
-          message: `Your reservation cannot be made for that time (${formData.reservation_time}). The restaurant is only taking reservations between ${startTime} and ${closeTime}`,
+          message: `The restaurant is only taking reservations between ${_convert12HourTime(
+            startTime
+          )} and ${_convert12HourTime(closeTime)}.`,
         },
       ]);
     }
@@ -109,7 +110,6 @@ export default function NewReservation() {
         .catch((errorObj) =>
           setSubmissionErrors((subErrors) => [...subErrors, errorObj])
         );
-    else console.log(submissionErrors);
   };
 
   // Helper function to generate error message for days the restaurant is closed
@@ -139,6 +139,18 @@ export default function NewReservation() {
     closedMessage += closedDayNames.slice(-1);
 
     return closedMessage + "s."; // Return the final message with a plural "s" and a period at the end
+  }
+
+  //Helper function to convert 24hr time to 12hr time
+  function _convert12HourTime(timeString) {
+    let hours = Number(timeString.split(":")[0]);
+    const minutes = timeString.split(":")[1];
+    let meridiem = "am";
+    if (hours > 12) {
+      hours -= 12;
+      meridiem = "pm";
+    }
+    return `${hours}:${minutes}${meridiem}`;
   }
 
   const cancelHandler = () => {
