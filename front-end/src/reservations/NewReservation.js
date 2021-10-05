@@ -42,7 +42,54 @@ export default function NewReservation() {
   };
 
   const formIsValid = () => {
+    console.log("hello");
     let validForm = true;
+    const closedDays = { 2: "Tuesday" }; // Days the restaurant is closed -- Restaurant is currently closed on only closed on Tuesdays (2)
+    const startTime = "10:30"; // Start time is the target date at opening time
+    const closeTime = "21:30"; // End time is the target date an hour before closing time
+
+    const date = new Date(
+      `${formData.reservation_date}T${formData.reservation_time}`
+    );
+    const today = new Date();
+    // If the reservation is in the past, throw an error
+    if (Date.parse(date) <= Date.parse(today)) {
+      validForm = false;
+      setSubmissionErrors((subErrors) => [
+        ...subErrors,
+        {
+          message: `Your reservation cannot be made for a date or time of the past. Please select a future date.`,
+        },
+      ]);
+    }
+
+    // If the restaurant is closed on that day, generate the appropriate error message
+    if (closedDays[date.getDay()]) {
+      validForm = false;
+      setSubmissionErrors((subErrors) => [
+        ...subErrors,
+        {
+          message: _generateClosedMessage(closedDays, date.getDay()),
+        },
+      ]);
+    }
+
+    const startDateTime = new Date(`${formData.reservation_date}T${startTime}`); // Date-time with target date and startTime
+    const closeDateTime = new Date(`${formData.reservation_date}T${closeTime}`); //
+
+    // If the restaurant isn't taking reservations for that time, throw an error
+    if (
+      Date.parse(date) < Date.parse(startDateTime) ||
+      Date.parse(date) > Date.parse(closeDateTime)
+    ) {
+      validForm = false;
+      setSubmissionErrors((subErrors) => [
+        ...subErrors,
+        {
+          message: `Your reservation cannot be made for that time (${formData.reservation_time}). The restaurant is only taking reservations between ${startTime} and ${closeTime}`,
+        },
+      ]);
+    }
 
     return validForm;
   };
@@ -54,7 +101,7 @@ export default function NewReservation() {
     formData.people = parseInt(formData.people); // people must be parsed into an integer before submiting the data to the backend
 
     // API util to submit to the backend
-    if (formIsValid)
+    if (formIsValid())
       createReservation(formData)
         .then(() =>
           history.push(`/dashboard?date=${formData.reservation_date}`)
