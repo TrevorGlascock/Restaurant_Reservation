@@ -158,7 +158,7 @@ function _generateClosedMessage(closedDays, selectedDay) {
   if (closedDayNames.length > 2) closedMessage += "s,";
 
   // if the array has exactly 2 elements, then add the plural "s" before the " and "
-  if (closedDayNames.length == 2) closedMessage += "s";
+  if (closedDayNames.length === 2) closedMessage += "s";
 
   // if the array has more than one element, we add a final " and " before listing the last element
   if (closedDayNames.length > 1) closedMessage += " and ";

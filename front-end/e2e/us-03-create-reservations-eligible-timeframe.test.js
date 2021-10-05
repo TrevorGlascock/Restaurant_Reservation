@@ -1,5 +1,5 @@
 const puppeteer = require("puppeteer");
-const { setDefaultOptions } = require('expect-puppeteer');
+const { setDefaultOptions } = require("expect-puppeteer");
 const fs = require("fs");
 const fsPromises = fs.promises;
 
@@ -88,7 +88,7 @@ describe("US-03 - Create reservation on a future, working date - E2E", () => {
       await page.click("button[type=submit]");
 
       await page.screenshot({
-        path: ".screenshots/us-02-reservation-too-late-after.png",
+        path: ".screenshots/us-03-reservation-too-late-after.png",
       });
 
       expect(await page.$(".alert-danger")).toBeTruthy();
