@@ -10,4 +10,17 @@ async function list(req, res) {
   res.json({ data });
 }
 
-module.exports = { list: asyncErrorBoundary(list) };
+/**
+ * Create handler for new Tables
+ */
+async function create(req, res) {
+  const table = req.body.data;
+  const data = await service.create(table);
+
+  res.status(201).json({ data });
+}
+
+module.exports = {
+  list: asyncErrorBoundary(list),
+  create: asyncErrorBoundary(create),
+};
