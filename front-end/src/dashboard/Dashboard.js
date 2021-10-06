@@ -46,15 +46,15 @@ function Dashboard({ date }) {
   return (
     <main>
       <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date {date}</h4>
-      </div>
+      <div className="d-md-flex mb-3"></div>
       <DateNavigationButton type="previous" currentDate={date} />
       <DateNavigationButton type="today" currentDate={date} />
       <DateNavigationButton type="next" currentDate={date} />
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
+      <h4 className="h4">Reservations for date {date}</h4>
       <DisplayTable data={reservations} objCols={reservationsCols} />
+      <h4 className="h4">Available Tables for date {date}</h4>
       <DisplayTable data={tables} objCols={tableCols} />
     </main>
   );
