@@ -46,8 +46,6 @@ export default function NewTable() {
     event.preventDefault(); // prevents the submit button's default behavior
     setSubmissionErrors([]);
 
-    formData.people = parseInt(formData.people); // people must be parsed into an integer before submiting the data to the backend
-
     // API util to submit to the backend
     if (formIsValid())
       createTable(formData)
