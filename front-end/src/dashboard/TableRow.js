@@ -15,9 +15,13 @@ export default function TableRow({ rowObject, propNames }) {
   const row = [];
   for (let index in propNames) {
     const propName = propNames[index];
-    // if data is undefined, default to a seating button
+    // if data is undefined, default to a seating button with the current reservation_id
     const data =
-      rowObject[propName] === undefined ? <SeatButton /> : rowObject[propName];
+      rowObject[propName] === undefined ? (
+        <SeatButton id={rowObject["reservation_id"]} />
+      ) : (
+        rowObject[propName]
+      );
 
     // if data is a boolean, we will need to disply a status string based on the boolean value
     const isBoolean = typeof data === "boolean";

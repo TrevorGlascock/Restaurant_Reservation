@@ -6,9 +6,10 @@ import { Link } from "react-router-dom";
  * @returns {JSX.Element}
  */
 
-export default function SeatButton() {
+export default function SeatButton({ id }) {
+  const href = `/reservations/${id}/seat`;
   return (
-    <Link className="btn btn-primary" to="test">
+    <Link className="btn btn-primary" to={href}>
       Seat
     </Link>
   );
