@@ -19,6 +19,13 @@ function Dashboard({ date }) {
     reservation_time: "Time of Reservation",
     people: "Party Size",
   };
+
+  const tableCols = {
+    table_name: "Table Name",
+    capacity: "Maximum Capacity",
+    occupied: "Availability",
+  };
+
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
@@ -44,6 +51,7 @@ function Dashboard({ date }) {
       <DateNavigationButton type="next" currentDate={date} />
       <ErrorAlert error={reservationsError} />
       <DisplayTable data={reservations} objCols={reservationsCols} />
+      {/* <DisplayTable data={tables} objCols={tableCols} /> */}
     </main>
   );
 }
