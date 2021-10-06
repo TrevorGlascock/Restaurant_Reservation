@@ -25,7 +25,7 @@ export default function TableRow({ rowObject, propNames }) {
 
     // if data is a boolean, we will need to disply a status string based on the boolean value
     const isBoolean = typeof data === "boolean";
-    const status = data ? "Occupied" : "Open";
+    const status = data ? "Occupied" : "Free";
     const display = isBoolean ? status : data;
 
     row.push(<td key={index}>{display}</td>);
