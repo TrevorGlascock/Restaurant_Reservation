@@ -1,6 +1,7 @@
 import React from "react";
 
 /**
+ * Defines the head of a dynamic table containing all the column labels
  * @param columnLabels
  *  an array of all the column labels that make the table header row
  * @var tableHeader
