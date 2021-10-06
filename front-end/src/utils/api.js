@@ -87,3 +87,14 @@ export async function createReservation(reservation, signal) {
   };
   return fetchJson(url, options, {});
 }
+
+/**
+ * Retrieves all existing reservation.
+ * @returns {Promise<[reservation]>}
+ *  a promise that resolves to a possibly empty array of reservation saved in the database.
+ */
+
+export async function listTables(signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  return fetchJson(url, { headers, signal }, []);
+}

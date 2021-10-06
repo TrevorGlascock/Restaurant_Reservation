@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import DisplayTable from "./DisplayTable";
 import DateNavigationButton from "./DateNavigationButtons";
@@ -27,7 +27,9 @@ function Dashboard({ date }) {
   };
 
   const [reservations, setReservations] = useState([]);
+  const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tablesError, setTablesError] = useState(null);
 
   useEffect(loadDashboard, [date]);
 
@@ -37,6 +39,7 @@ function Dashboard({ date }) {
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+    listTables(abortController.signal).then(setTables).catch(setTablesError);
     return () => abortController.abort();
   }
 
@@ -50,8 +53,9 @@ function Dashboard({ date }) {
       <DateNavigationButton type="today" currentDate={date} />
       <DateNavigationButton type="next" currentDate={date} />
       <ErrorAlert error={reservationsError} />
+      <ErrorAlert error={tablesError} />
       <DisplayTable data={reservations} objCols={reservationsCols} />
-      {/* <DisplayTable data={tables} objCols={tableCols} /> */}
+      <DisplayTable data={tables} objCols={tableCols} />
     </main>
   );
 }
