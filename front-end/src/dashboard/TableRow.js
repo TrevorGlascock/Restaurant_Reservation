@@ -1,4 +1,5 @@
 import React from "react";
+import SeatButton from "./SeatButton";
 
 /**
  * Defines one row of a dynamic table.
@@ -14,13 +15,16 @@ export default function TableRow({ rowObject, propNames }) {
   const row = [];
   for (let index in propNames) {
     const propName = propNames[index];
-    const data = rowObject[propName];
+    // if data is undefined, default to a seating button
+    const data =
+      rowObject[propName] === undefined ? <SeatButton /> : rowObject[propName];
 
     // if data is a boolean, we will need to disply a status string based on the boolean value
     const isBoolean = typeof data === "boolean";
     const status = data ? "Occupied" : "Open";
+    const display = isBoolean ? status : data;
 
-    row.push(<td key={index}>{isBoolean ? status : data}</td>);
+    row.push(<td key={index}>{display}</td>);
   }
   return <tr>{row}</tr>;
 }
