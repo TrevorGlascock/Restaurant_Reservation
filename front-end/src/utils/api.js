@@ -108,7 +108,7 @@ export async function listTables(signal) {
  *  a promise that resolves the new reservation.
  */
 export async function createTable(table, signal) {
-  const url = new URL(`${API_BASE_URL}/table`);
+  const url = new URL(`${API_BASE_URL}/tables`);
   const options = {
     method: "POST",
     headers,
