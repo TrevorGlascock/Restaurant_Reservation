@@ -1,5 +1,5 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const service = require("./reservations.service");
+const service = require("./tables.service");
 
 /**
  * List handler for tables resource
