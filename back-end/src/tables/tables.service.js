@@ -7,4 +7,15 @@ function list() {
   return db(tableName).select("*").orderBy("table_name");
 }
 
-module.exports = { list };
+/**
+ * Create inserts a new Table into the table data
+ * and returns the inserted object
+ */
+function create(table) {
+  return db(tableName)
+    .insert(table)
+    .returning("*")
+    .then((rows) => rows[0]);
+}
+
+module.exports = { list, create };
