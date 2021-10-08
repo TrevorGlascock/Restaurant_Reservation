@@ -58,6 +58,21 @@ function bodyHasNoInvalidFields(req, res, next) {
 }
 
 /**
+ * Middleware validation for request parameters
+ * Ensures that the table_id param is a valid table
+ */
+async function tableExists(req, res, next) {
+  const { table_id = null } = req.params;
+  const table = await service.read(req.params.table_id);
+
+  if (!table)
+    return next({ status: 404, message: `Table ${table_id} cannot be found.` });
+
+  res.locals.table = table;
+  return next();
+}
+
+/**
  * List handler for tables resource
  */
 async function list(req, res) {
@@ -80,7 +95,7 @@ async function create(req, res) {
  */
 async function assignReservation(req, res) {
   const reservation_id = req.body.data.reservation_id;
-  const { table_id } = req.params;
+  const { table_id } = res.locals.table;
   const data = await service.assignReservation(reservation_id, table_id);
   res.json({ data });
 }
@@ -92,5 +107,8 @@ module.exports = {
     bodyHasNoInvalidFields,
     asyncErrorBoundary(create),
   ],
-  assignReservation: asyncErrorBoundary(assignReservation),
+  assignReservation: [
+    asyncErrorBoundary(tableExists),
+    asyncErrorBoundary(assignReservation),
+  ],
 };
