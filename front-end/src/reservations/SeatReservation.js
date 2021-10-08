@@ -9,9 +9,11 @@ import { listTables, seatReservation } from "../utils/api";
  */
 export default function SeatReservation() {
   const { reservationId } = useParams();
-  const [tableSelection, setTableSelection] = useState("");
-  const [tableOptions, setTableOptions] = useState("");
-  const [tablesError, setTablesError] = useState(null);
+  const [tableSelection, setTableSelection] = useState(""); // Current Selection
+  const [tableOptions, setTableOptions] = useState(""); // All the table options to choose from
+  const [tablesError, setTablesError] = useState(null); // Potential error from loadTables GET request
+  const [submissionErrors, setSubmissionErrors] = useState([]); // All errors in validation, potential API error on submit, and finally the tablesError, if it isn't null
+
   const history = useHistory();
 
   useEffect(loadTableNames, []);
@@ -40,7 +42,9 @@ export default function SeatReservation() {
     event.preventDefault(); // prevents the submit button's default behavior
     seatReservation(reservationId, tableSelection)
       .then(() => history.push(""))
-      .catch(console.log);
+      .catch((errorObj) =>
+        setSubmissionErrors((subErrors) => [...subErrors, errorObj])
+      );
   };
 
   const cancelHandler = () => {
@@ -48,10 +52,18 @@ export default function SeatReservation() {
     history.goBack();
   };
 
+  const errorDisplay = submissionErrors.map((error, index) => (
+    <ErrorAlert key={index} error={error} />
+  ));
+
+  // If there is a tablesError, we add it to the errorDisplay
+  if (tablesError)
+    errorDisplay.push(<ErrorAlert key="tablesError" error={tablesError} />);
+
   return (
     <main>
       <h1>Seating Reservation #{reservationId}</h1>
-      <ErrorAlert error={tablesError} />
+      {errorDisplay}
       <div className="d-md-flex mb-3">
         <form onSubmit={submitHandler}>
           <fieldset>
