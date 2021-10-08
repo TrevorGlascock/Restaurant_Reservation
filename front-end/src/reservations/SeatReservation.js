@@ -38,13 +38,21 @@ export default function SeatReservation() {
     setTableSelection(target.value);
   };
 
+  const selectionIsValid = () => {
+    let validSelection = true;
+
+    return validSelection;
+  };
+
   const submitHandler = (event) => {
     event.preventDefault(); // prevents the submit button's default behavior
-    seatReservation(reservationId, tableSelection)
-      .then(() => history.push(""))
-      .catch((errorObj) =>
-        setSubmissionErrors((subErrors) => [...subErrors, errorObj])
-      );
+    setSubmissionErrors([]);
+    if (selectionIsValid())
+      seatReservation(reservationId, tableSelection)
+        .then(() => history.push(""))
+        .catch((errorObj) =>
+          setSubmissionErrors((subErrors) => [...subErrors, errorObj])
+        );
   };
 
   const cancelHandler = () => {
