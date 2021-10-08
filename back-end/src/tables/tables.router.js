@@ -15,7 +15,7 @@ router
   .all(methodNotAllowed);
 
 router
-  .route("/:table_id")
+  .route("/:table_id/seat")
   .get(controller.read)
   .put(controller.assignReservation)
   .all(methodNotAllowed);
