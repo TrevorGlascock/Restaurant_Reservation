@@ -1,5 +1,6 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./tables.service");
+const reservationService = require("../reservations/reservations.service");
 
 const VALID_PROPERTIES = ["table_name", "capacity", "occupied"];
 const REQUIRED_PROPERTIES = ["table_name", "capacity"];
@@ -77,7 +78,7 @@ async function tableExists(req, res, next) {
  * When updating with a reservation, we must make sure the body only contains a reservation ID
  * And we must also ensure that the reservation ID provided matches a valid reservation
  */
-function validateReservation(req, res, next) {
+async function validateReservation(req, res, next) {
   const { data } = req.body;
   if (!data)
     return next({
@@ -91,7 +92,14 @@ function validateReservation(req, res, next) {
       message: `The data in the request body requires a reservation_id property.`,
     });
 
-  res.locals.reservation_id = data.reservation_id;
+  const reservation = await reservationService.read(reservation_id);
+  if (!reservation)
+    return next({
+      status: 404,
+      message: `Reservation ${reservation_id} cannot be found.`,
+    });
+
+  res.locals.reservation = reservation;
   return next();
 }
 
@@ -124,7 +132,7 @@ function read(req, res) {
  * Update handler for assigning a reservation to a Table
  */
 async function assignReservation(req, res) {
-  const { reservation_id } = res.locals;
+  const { reservation_id } = res.locals.reservation;
   const { table_id } = res.locals.table;
   const data = await service.assignReservation(reservation_id, table_id);
   res.json({ data });
@@ -140,7 +148,7 @@ module.exports = {
   read: [asyncErrorBoundary(tableExists), read],
   assignReservation: [
     asyncErrorBoundary(tableExists),
-    validateReservation,
+    asyncErrorBoundary(validateReservation),
     asyncErrorBoundary(assignReservation),
   ],
 };
