@@ -53,7 +53,7 @@ async function fetchJson(url, options, onCancel) {
 }
 
 /**
- * Retrieves all existing reservation.
+ * Retrieves all reservations for a specified date.
  * @returns {Promise<[reservation]>}
  *  a promise that resolves to a possibly empty array of reservation saved in the database.
  */
@@ -66,6 +66,16 @@ export async function listReservations(params, signal) {
   return fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
+}
+
+/**
+ * Retrieves one specefic reservation object.
+ * @returns {Promise<[reservation]>}
+ *  a promise that resolves to the reservation in the database that matches the reservation_id.
+ */
+export async function readReservation(reservation_id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+  return fetchJson(url, { headers, signal }, []);
 }
 
 /**
