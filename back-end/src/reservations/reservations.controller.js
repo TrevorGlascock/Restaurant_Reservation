@@ -184,8 +184,16 @@ async function list(req, res) {
 async function create(req, res) {
   const { reservation } = res.locals;
   const data = await service.create(reservation);
-
   res.status(201).json({ data });
+}
+
+/**
+ * Read handler for reading a specified Reservation
+ */
+async function read(req, res) {
+  const { reservation_id } = req.params;
+  const data = await service.read(reservation_id);
+  res.json({ data });
 }
 
 module.exports = {
@@ -196,4 +204,5 @@ module.exports = {
     validateDateTime,
     asyncErrorBoundary(create),
   ],
+  read: asyncErrorBoundary(read),
 };
