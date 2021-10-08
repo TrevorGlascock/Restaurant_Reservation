@@ -68,12 +68,12 @@ export default function SeatReservation() {
         <form onSubmit={submitHandler}>
           <fieldset>
             <div className="form-group">
-              <label htmlFor="table-select">
+              <label htmlFor="table_id">
                 Please assign a table for reservation #{reservationId}
               </label>
               <select
-                id="table-select"
-                name="table-select"
+                id="table_id"
+                name="table_id"
                 title="Select a table to assign to this reservation"
                 className="form-control"
                 value={tableSelection}
