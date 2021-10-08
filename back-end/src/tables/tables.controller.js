@@ -79,14 +79,18 @@ async function tableExists(req, res, next) {
  * And we must also ensure that the reservation ID provided matches a valid reservation
  */
 async function validateReservation(req, res, next) {
-  const { data } = req.body;
-  if (!data)
-    return next({
-      status: 400,
-      message: `The request body must have a data object.`,
-    });
+  const {
+    data: { reservation_id },
+  } = req.body;
 
-  if (!data.reservation_id)
+  // reservation_id CAN be explicitly null or 0, it just means that the reservation is leaving the table
+  if (reservation_id === null || reservation_id === 0) {
+    res.locals.reservation = { reservation_id: null };
+    return next();
+  }
+
+  // if reservation_id is undefined or falsey for any other reason, then we throw a 400 error
+  if (!reservation_id)
     return next({
       status: 400,
       message: `The data in the request body requires a reservation_id property.`,
