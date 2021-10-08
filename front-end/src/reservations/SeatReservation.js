@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
-import { listTables } from "../utils/api";
+import { listTables, seatReservation } from "../utils/api";
 
 /**
  * Defines the Reservation-Table Assignment Page.
@@ -22,7 +22,7 @@ export default function SeatReservation() {
     listTables(abortController.signal)
       .then((data) =>
         data.map((table, index) => (
-          <option key={index} value={table}>
+          <option key={index} value={table.table_id}>
             {table.table_name} - {table.capacity}
           </option>
         ))
@@ -38,7 +38,9 @@ export default function SeatReservation() {
 
   const submitHandler = (event) => {
     event.preventDefault(); // prevents the submit button's default behavior
-    console.log(tableSelection);
+    seatReservation(reservationId, tableSelection)
+      .then(() => history.push(""))
+      .catch(console.log);
   };
 
   const cancelHandler = () => {
