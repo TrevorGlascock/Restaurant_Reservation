@@ -23,7 +23,10 @@ function create(table) {
  * and returns the entire updated object
  */
 function assignReservation(reservation_id, table_id) {
-  return db(tableName).where({ table_id }).update({ reservation_id }, "*");
+  return db(tableName)
+    .where({ table_id })
+    .update({ reservation_id }, "*")
+    .then((rows) => rows[0]);
 }
 
 module.exports = { list, create, assignReservation };
