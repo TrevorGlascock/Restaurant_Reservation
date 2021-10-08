@@ -81,13 +81,6 @@ async function tableExists(req, res, next) {
 async function validateReservation(req, res, next) {
   const { data: { reservation_id } = {} } = req.body;
 
-  // reservation_id CAN be explicitly null or 0, it just means that the reservation is leaving the table
-  if (reservation_id === null || reservation_id === 0) {
-    res.locals.reservation = { reservation_id: null };
-    return next();
-  }
-
-  // if reservation_id is undefined or falsey for any other reason, then we throw a 400 error
   if (!reservation_id)
     return next({
       status: 400,
@@ -111,7 +104,6 @@ async function validateReservation(req, res, next) {
  */
 function hasAppropriateSeating(req, res, next) {
   const { reservation, table } = res.locals;
-
   if (table.occupied)
     return next({
       status: 400,
@@ -156,8 +148,10 @@ function read(req, res) {
  */
 async function assignReservation(req, res) {
   const { reservation_id } = res.locals.reservation;
-  const { table_id } = res.locals.table;
-  const data = await service.assignReservation(reservation_id, table_id);
+  const { table } = res.locals;
+  table.occupied = true;
+
+  const data = await service.assignReservation(reservation_id, table);
   res.json({ data });
 }
 
