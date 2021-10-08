@@ -79,9 +79,7 @@ async function tableExists(req, res, next) {
  * And we must also ensure that the reservation ID provided matches a valid reservation
  */
 async function validateReservation(req, res, next) {
-  const {
-    data: { reservation_id },
-  } = req.body;
+  const { data: { reservation_id } = {} } = req.body;
 
   // reservation_id CAN be explicitly null or 0, it just means that the reservation is leaving the table
   if (reservation_id === null || reservation_id === 0) {
