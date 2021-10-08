@@ -113,7 +113,7 @@ function hasAppropriateSeating(req, res, next) {
   if (reservation.people > table.capacity)
     return next({
       status: 400,
-      message: `"${table.table_name}" (#${table.table_id}) has a maximum capacity of ${table.capacity}. This table cannot accomate the ${reservation.people} people in reservation #${reservation.reservation_id}.`,
+      message: `"${table.table_name}" (#${table.table_id}) has a maximum capacity of ${table.capacity}. This table cannot accomodate the ${reservation.people} people in reservation #${reservation.reservation_id}.`,
     });
   return next();
 }
