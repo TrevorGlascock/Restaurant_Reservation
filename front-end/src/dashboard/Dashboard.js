@@ -56,7 +56,7 @@ function Dashboard({ date }) {
       <ErrorAlert error={tablesError} />
       <h4 className="h4">Reservations for date {date}</h4>
       <DisplayTable data={reservations} objCols={reservationsCols} />
-      <h4 className="h4">Available Tables for date {date}</h4>
+      <h4 className="h4">Tables in the Restaurant</h4>
       <DisplayTable data={tables} objCols={tableCols} />
     </main>
   );
