@@ -117,3 +117,26 @@ export async function createTable(table, signal) {
   };
   return fetchJson(url, options, {});
 }
+
+/**
+ * Creates a relation between a table and a reservation
+ * A reservation will be seated at a table
+ * @param reservation_id
+ *  the reservation_id that corresponds to the reservation currently being seated (reading reservation)
+ * @param table_id
+ *  the table_id that corresponds to table the reservation is to be seated at (updating table)
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<reservation>}
+ *  a promise that resolves the updated table.
+ */
+export async function seatReservation(reservation_id, table_id, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: { reservation_id } }),
+    signal,
+  };
+  return fetchJson(url, options, {});
+}
