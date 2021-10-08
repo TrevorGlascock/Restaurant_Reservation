@@ -91,6 +91,13 @@ async function create(req, res) {
 }
 
 /**
+ * Read handler for reading a specified table
+ */
+function read(req, res) {
+  res.json({ data: res.locals.table });
+}
+
+/**
  * Update handler for assigning a reservation to a Table
  */
 async function assignReservation(req, res) {
@@ -107,6 +114,7 @@ module.exports = {
     bodyHasNoInvalidFields,
     asyncErrorBoundary(create),
   ],
+  read: [asyncErrorBoundary(tableExists), read],
   assignReservation: [
     asyncErrorBoundary(tableExists),
     asyncErrorBoundary(assignReservation),
