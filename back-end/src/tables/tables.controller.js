@@ -60,7 +60,7 @@ function bodyHasNoInvalidFields(req, res, next) {
 
 /**
  * Middleware validation for request parameters
- * Ensures that the table_id param is a valid table
+ * Ensures that the table_id param corresponds to a valid table
  */
 async function tableExists(req, res, next) {
   const { table_id = null } = req.params;
