@@ -106,6 +106,27 @@ async function validateReservation(req, res, next) {
 }
 
 /**
+ * Validation middleware to ensure that the table can accomodate the reservation
+ * The table must not be occupied, and must have enough seats to sit everyone in the reservation
+ */
+function hasAppropriateSeating(req, res, next) {
+  const { reservation, table } = res.locals;
+
+  if (table.occupied)
+    return next({
+      status: 400,
+      message: `Table ${table.table_id} is currently occupied, and cannot be seated.`,
+    });
+
+  if (reservation.people > table.capacity)
+    return next({
+      status: 400,
+      message: `Table ${table.table_id} has a maximum capacity of ${table.capacity}. This table cannot accomate the ${reservation.people} people in reservation ${reservation.reservation_id}.`,
+    });
+  return next();
+}
+
+/**
  * List handler for tables resource
  */
 async function list(req, res) {
@@ -151,6 +172,7 @@ module.exports = {
   assignReservation: [
     asyncErrorBoundary(tableExists),
     asyncErrorBoundary(validateReservation),
+    hasAppropriateSeating,
     asyncErrorBoundary(assignReservation),
   ],
 };
