@@ -18,4 +18,12 @@ function create(table) {
     .then((rows) => rows[0]);
 }
 
-module.exports = { list, create };
+/**
+ * Assign a foreign key reservation_id to the corresponding table
+ * and returns the entire updated object
+ */
+function assignReservation(reservation_id, table_id) {
+  return db(tableName).where({ table_id }).update({ reservation_id }, "*");
+}
+
+module.exports = { list, create, assignReservation };
