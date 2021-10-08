@@ -80,7 +80,8 @@ async function create(req, res) {
  */
 async function assignReservation(req, res) {
   const reservation_id = req.body.data.reservation_id;
-  const data = await service.assignReservation(reservation_id);
+  const { table_id } = req.params;
+  const data = await service.assignReservation(reservation_id, table_id);
   res.json({ data });
 }
 
