@@ -30,10 +30,11 @@ function read(table_id) {
  * Assign a foreign key reservation_id to the corresponding table
  * and returns the entire updated object
  */
-function assignReservation(reservation_id, table_id) {
+function assignReservation(reservation_id, table) {
+  const { table_id, occupied } = table;
   return db(tableName)
     .where({ table_id })
-    .update({ reservation_id }, "*")
+    .update({ reservation_id, occupied }, "*")
     .then((rows) => rows[0]);
 }
 
