@@ -73,6 +73,29 @@ async function tableExists(req, res, next) {
 }
 
 /**
+ * Middleware validation for request bodies only when assigning a reservation ID to the table
+ * When updating with a reservation, we must make sure the body only contains a reservation ID
+ * And we must also ensure that the reservation ID provided matches a valid reservation
+ */
+function validateReservation(req, res, next) {
+  const { data } = req.body;
+  if (!data)
+    return next({
+      status: 400,
+      message: `The request body must have a data object.`,
+    });
+
+  if (!data.reservation_id)
+    return next({
+      status: 400,
+      message: `The data in the request body requires a reservation_id property.`,
+    });
+
+  res.locals.reservation_id = data.reservation_id;
+  return next();
+}
+
+/**
  * List handler for tables resource
  */
 async function list(req, res) {
@@ -101,7 +124,7 @@ function read(req, res) {
  * Update handler for assigning a reservation to a Table
  */
 async function assignReservation(req, res) {
-  const reservation_id = req.body.data.reservation_id;
+  const { reservation_id } = res.locals;
   const { table_id } = res.locals.table;
   const data = await service.assignReservation(reservation_id, table_id);
   res.json({ data });
@@ -117,6 +140,7 @@ module.exports = {
   read: [asyncErrorBoundary(tableExists), read],
   assignReservation: [
     asyncErrorBoundary(tableExists),
+    validateReservation,
     asyncErrorBoundary(assignReservation),
   ],
 };
