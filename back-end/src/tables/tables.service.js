@@ -19,6 +19,14 @@ function create(table) {
 }
 
 /**
+ * Returns a selected table from the database
+ * Can be used to validate table_id in the controller
+ */
+function read(table_id) {
+  return db(tableName).where({ table_id }).first();
+}
+
+/**
  * Assign a foreign key reservation_id to the corresponding table
  * and returns the entire updated object
  */
@@ -29,4 +37,4 @@ function assignReservation(reservation_id, table_id) {
     .then((rows) => rows[0]);
 }
 
-module.exports = { list, create, assignReservation };
+module.exports = { list, create, read, assignReservation };
