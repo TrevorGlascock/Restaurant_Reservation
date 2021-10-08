@@ -72,8 +72,16 @@ async function list(req, res) {
 async function create(req, res) {
   const { table } = res.locals;
   const data = await service.create(table);
-
   res.status(201).json({ data });
+}
+
+/**
+ * Update handler for assigning a reservation to a Table
+ */
+async function assignReservation(req, res) {
+  const reservation_id = req.body.data.reservation_id;
+  const data = await service.assignReservation(reservation_id);
+  res.json({ data });
 }
 
 module.exports = {
@@ -83,4 +91,5 @@ module.exports = {
     bodyHasNoInvalidFields,
     asyncErrorBoundary(create),
   ],
+  assignReservation: asyncErrorBoundary(assignReservation),
 };
