@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
-import { listTables, seatReservation } from "../utils/api";
+import { listTables, readReservation, seatReservation } from "../utils/api";
 
 /**
  * Defines the Reservation-Table Assignment Page.
@@ -9,29 +9,41 @@ import { listTables, seatReservation } from "../utils/api";
  */
 export default function SeatReservation() {
   const { reservationId } = useParams();
+  const [reservation, setReservation] = useState();
+  const [tables, setTables] = useState([]);
   const [tableSelection, setTableSelection] = useState(""); // Current Selection
   const [tableOptions, setTableOptions] = useState(""); // All the table options to choose from
-  const [tablesError, setTablesError] = useState(null); // Potential error from loadTables GET request
-  const [submissionErrors, setSubmissionErrors] = useState([]); // All errors in validation, potential API error on submit, and finally the tablesError, if it isn't null
+  const [errorsArray, setErrorsArray] = useState([]); // All errors in validation, potential API error on submit, and finally the tablesError, if it isn't null
 
   const history = useHistory();
 
-  useEffect(loadTableNames, []);
+  useEffect(loadTables, []);
+  useEffect(loadReservation, [reservationId]);
+  useEffect(loadTableSelection, [tables]);
 
-  function loadTableNames() {
+  function loadTables() {
     const abortController = new AbortController();
-    setTablesError(null);
     listTables(abortController.signal)
-      .then((data) =>
-        data.map((table, index) => (
-          <option key={index} value={table.table_id}>
-            {table.table_name} - {table.capacity}
-          </option>
-        ))
-      )
-      .then(setTableOptions)
-      .catch(setTablesError);
+      .then(setTables)
+      .catch((errorObj) => setErrorsArray((errors) => [...errors, errorObj]));
     return () => abortController.abort();
+  }
+
+  function loadReservation() {
+    const abortController = new AbortController();
+    readReservation(reservationId)
+      .then(setReservation)
+      .catch((errorObj) => setErrorsArray((errors) => [...errors, errorObj]));
+    return () => abortController.abort();
+  }
+
+  function loadTableSelection() {
+    const loadedOptions = tables?.map((table, index) => (
+      <option key={index} value={table.table_id}>
+        {table.table_name} - {table.capacity}
+      </option>
+    ));
+    setTableOptions(loadedOptions);
   }
 
   const selectTableHandler = ({ target }) => {
@@ -40,18 +52,41 @@ export default function SeatReservation() {
 
   const selectionIsValid = () => {
     let validSelection = true;
+    const table = tables.find(
+      (currentTable) => currentTable.table_id === Number(tableSelection)
+    );
+
+    if (table.occupied) {
+      validSelection = false;
+      setErrorsArray((subErrors) => [
+        ...subErrors,
+        {
+          message: `"${table?.table_name}" is currently occupied, and cannot be seated.`,
+        },
+      ]);
+    }
+
+    if (table.capacity < reservation.people) {
+      validSelection = false;
+      setErrorsArray((subErrors) => [
+        ...subErrors,
+        {
+          message: `"${table?.table_name}" has a maximum capacity of ${table?.capacity}. This table cannot accomodate the ${reservation.people} people in reservation #${reservation.reservation_id}.`,
+        },
+      ]);
+    }
 
     return validSelection;
   };
 
   const submitHandler = (event) => {
     event.preventDefault(); // prevents the submit button's default behavior
-    setSubmissionErrors([]);
+    setErrorsArray([]);
     if (selectionIsValid())
       seatReservation(reservationId, tableSelection)
         .then(() => history.push(""))
         .catch((errorObj) =>
-          setSubmissionErrors((subErrors) => [...subErrors, errorObj])
+          setErrorsArray((subErrors) => [...subErrors, errorObj])
         );
   };
 
@@ -60,13 +95,9 @@ export default function SeatReservation() {
     history.goBack();
   };
 
-  const errorDisplay = submissionErrors.map((error, index) => (
+  const errorDisplay = errorsArray.map((error, index) => (
     <ErrorAlert key={index} error={error} />
   ));
-
-  // If there is a tablesError, we add it to the errorDisplay
-  if (tablesError)
-    errorDisplay.push(<ErrorAlert key="tablesError" error={tablesError} />);
 
   return (
     <main>
