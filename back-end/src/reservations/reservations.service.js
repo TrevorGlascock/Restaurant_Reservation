@@ -22,4 +22,12 @@ function create(reservation) {
     .then((rows) => rows[0]);
 }
 
-module.exports = { list, create };
+/**
+ * Returns a selected reservation from the database
+ * This is primarily used for debugging and for reservation validation in the tables.controller
+ */
+function read(reservation_id) {
+  return db(tableName).where({ reservation_id }).first();
+}
+
+module.exports = { list, create, read };

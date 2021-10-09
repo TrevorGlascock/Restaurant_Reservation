@@ -170,6 +170,24 @@ function _generateClosedMessage(closedDays, selectedDay) {
 }
 
 /**
+ * Middleware validation for request parameters
+ * Ensures that the reservation_id param corresponds to a valid reservation
+ */
+async function reservationExists(req, res, next) {
+  const { reservation_id } = req.params;
+  const reservation = await service.read(reservation_id);
+
+  if (!reservation)
+    return next({
+      status: 404,
+      message: `Reservation ${reservation_id} cannot be found.`,
+    });
+
+  res.locals.reservation = reservation;
+  return next();
+}
+
+/**
  * List handler for reservation resources
  */
 async function list(req, res) {
@@ -184,8 +202,14 @@ async function list(req, res) {
 async function create(req, res) {
   const { reservation } = res.locals;
   const data = await service.create(reservation);
-
   res.status(201).json({ data });
+}
+
+/**
+ * Read handler for reading a specified Reservation
+ */
+async function read(req, res) {
+  res.json({ data: res.locals.reservation });
 }
 
 module.exports = {
@@ -196,4 +220,5 @@ module.exports = {
     validateDateTime,
     asyncErrorBoundary(create),
   ],
+  read: [asyncErrorBoundary(reservationExists), read],
 };
