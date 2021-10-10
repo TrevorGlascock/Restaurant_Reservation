@@ -1,5 +1,5 @@
 import React from "react";
-import AssignmentButton from "./AssignmentButton";
+import AssignmentButton from "./AssignmentButton/AssignmentButton";
 
 /**
  * Defines one row of a dynamic table.
