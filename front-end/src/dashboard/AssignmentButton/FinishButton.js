@@ -6,5 +6,12 @@ import React from "react";
  */
 
 export default function FinishButton({ id }) {
-  return <button className="btn btn-danger">Finish</button>;
+  const onClick = () => {
+    console.log(`Finish him: ${id}`);
+  };
+  return (
+    <button type="button" onClick={onClick} className="btn btn-danger">
+      Finish
+    </button>
+  );
 }
