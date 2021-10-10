@@ -150,3 +150,23 @@ export async function seatReservation(reservation_id, table_id, signal) {
   };
   return fetchJson(url, options, {});
 }
+
+/**
+ * Removes the relation between a table and a reservation
+ * unseat the table, free it up, and remove a reservation from it
+ * @param table_id
+ *  the table_id that corresponds to table be unseated
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<reservation>}
+ *  a promise that resolves the updated table.
+ */
+export async function deleteReservation(table_id, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  const options = {
+    method: "DELETE",
+    headers,
+    signal,
+  };
+  return fetchJson(url, options, {});
+}
