@@ -155,11 +155,12 @@ async function assignReservation(req, res) {
 
 /**
  * Delete handler for removing a reservation from a Table
+ * Despite being called a delete, this is really an update request
  */
-async function destroy(req, res) {
+async function deleteReservation(req, res) {
   const { table_id } = res.locals.table;
-  await service.delete(table_id);
-  res.sendStatus(204);
+  const data = await service.delete(table_id);
+  res.status(204).json({ data });
 }
 
 module.exports = {
@@ -176,5 +177,8 @@ module.exports = {
     hasAppropriateSeating,
     asyncErrorBoundary(assignReservation),
   ],
-  delete: [asyncErrorBoundary(tableExists), asyncErrorBoundary(destroy)],
+  delete: [
+    asyncErrorBoundary(tableExists),
+    asyncErrorBoundary(deleteReservation),
+  ],
 };
