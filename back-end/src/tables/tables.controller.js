@@ -117,6 +117,19 @@ function hasAppropriateSeating(req, res, next) {
     });
   return next();
 }
+/**
+ * Validation middleware to make sure the table is currently occupied
+ * We cannot unseat a table that is vacant, it MUST be occupied
+ */
+function tableIsOccupied(req, res, next) {
+  const { table } = res.locals;
+  if (!table.occupied)
+    return next({
+      status: 400,
+      message: `"${table.table_name}" (#${table.table_id}) is not currently occupied. A table must be occupied before it can be unseated.`,
+    });
+  return next();
+}
 
 /**
  * List handler for tables resource
@@ -179,6 +192,7 @@ module.exports = {
   ],
   delete: [
     asyncErrorBoundary(tableExists),
+    tableIsOccupied,
     asyncErrorBoundary(deleteReservation),
   ],
 };
