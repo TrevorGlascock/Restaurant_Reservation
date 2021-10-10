@@ -167,7 +167,7 @@ async function assignReservation(req, res) {
 }
 
 /**
- * Delete handler for removing a reservation from a Table
+ * Delete handler for removing a reservation from a Table (unseating the table)
  * Despite being called a delete, this is really an update request
  */
 async function deleteReservation(req, res) {
