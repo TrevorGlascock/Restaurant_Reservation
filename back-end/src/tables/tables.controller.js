@@ -173,7 +173,7 @@ async function assignReservation(req, res) {
 async function deleteReservation(req, res) {
   const { table_id } = res.locals.table;
   const data = await service.deleteReservation(table_id);
-  res.status(204).json({ data });
+  res.json({ data });
 }
 
 module.exports = {
