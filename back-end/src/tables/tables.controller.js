@@ -148,10 +148,8 @@ function read(req, res) {
  */
 async function assignReservation(req, res) {
   const { reservation_id } = res.locals.reservation;
-  const { table } = res.locals;
-  table.occupied = true;
-
-  const data = await service.assignReservation(reservation_id, table);
+  const { table_id } = res.locals.table;
+  const data = await service.assignReservation(reservation_id, table_id);
   res.json({ data });
 }
 
