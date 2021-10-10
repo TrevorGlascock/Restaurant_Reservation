@@ -1,5 +1,5 @@
 import React from "react";
-import SeatButton from "./SeatButton";
+import AssignmentButton from "./AssignmentButton";
 
 /**
  * Defines one row of a dynamic table.
@@ -18,7 +18,7 @@ export default function TableRow({ rowObject, propNames }) {
     // if data is undefined, default to a seating button with the current reservation_id
     const data =
       rowObject[propName] === undefined ? (
-        <SeatButton id={rowObject["reservation_id"]} />
+        <AssignmentButton rowObject={rowObject} />
       ) : (
         rowObject[propName]
       );
