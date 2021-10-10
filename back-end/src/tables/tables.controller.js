@@ -126,7 +126,7 @@ function tableIsOccupied(req, res, next) {
   if (!table.occupied)
     return next({
       status: 400,
-      message: `"${table.table_name}" (#${table.table_id}) is not currently occupied. A table must be occupied before it can be unseated.`,
+      message: `"${table.table_name}" (#${table.table_id}) is currently not occupied. A table must be occupied before it can be unseated.`,
     });
   return next();
 }
