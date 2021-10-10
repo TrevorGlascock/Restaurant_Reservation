@@ -12,16 +12,16 @@ import DateNavigationButton from "./DateNavigationButtons";
  */
 function Dashboard({ date }) {
   const reservationsCols = {
-    seatButton: "Seat Table",
+    seatButton: "",
     first_name: "First Name",
     last_name: "Last Name",
     mobile_number: "Mobile Number",
-    reservation_date: "Date of Reservation",
     reservation_time: "Time of Reservation",
     people: "Party Size",
   };
 
   const tableCols = {
+    finishButton: "",
     table_name: "Table Name",
     capacity: "Maximum Capacity",
     occupied: "Availability",
