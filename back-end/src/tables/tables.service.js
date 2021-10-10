@@ -28,6 +28,7 @@ function read(table_id) {
 
 /**
  * Assign a foreign key reservation_id to the corresponding table
+ * sets the table to be occupied
  * and returns the entire updated object
  */
 function assignReservation(reservation_id, table_id) {
@@ -37,4 +38,16 @@ function assignReservation(reservation_id, table_id) {
     .then((rows) => rows[0]);
 }
 
-module.exports = { list, create, read, assignReservation };
+/**
+ * Assign the former foreign key reservation_id to NULL
+ * sets the table to be unoccupied
+ * and returns the entire updated object
+ */
+function deleteReservation(table_id) {
+  return db(tableName)
+    .where({ table_id })
+    .update({ occupied: false, reservation_id: null })
+    .then((rows) => rows[0]);
+}
+
+module.exports = { list, create, read, assignReservation, deleteReservation };
