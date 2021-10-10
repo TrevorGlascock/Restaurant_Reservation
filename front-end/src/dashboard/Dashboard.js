@@ -34,6 +34,10 @@ function Dashboard({ date }) {
 
   useEffect(loadDashboard, [date]);
 
+  /**
+   * API call to listReservations and listTables
+   * Retrieves the data necessary to render the dashboard and stores it in useStatevariables
+   */
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
@@ -43,6 +47,14 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
     listTables(abortController.signal).then(setTables).catch(setTablesError);
     return () => abortController.abort();
+  }
+
+  /**
+   * Function to call deleteReservation, then to call listTables
+   * This function will be prop-drilled into FinishButton
+   */
+  function finishTable(id) {
+    console.log(`Finish him: ${id}`);
   }
 
   return (
@@ -57,7 +69,11 @@ function Dashboard({ date }) {
       <h4 className="h4">Reservations for date {date}</h4>
       <DisplayTable data={reservations} objCols={reservationsCols} />
       <h4 className="h4">Tables in the Restaurant</h4>
-      <DisplayTable data={tables} objCols={tableCols} />
+      <DisplayTable
+        data={tables}
+        objCols={tableCols}
+        finishTable={finishTable}
+      />
     </main>
   );
 }

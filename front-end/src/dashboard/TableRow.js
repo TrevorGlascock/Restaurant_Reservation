@@ -11,14 +11,14 @@ import AssignmentButton from "./AssignmentButton/AssignmentButton";
  *  An array of JSX table-data containing all the data of that makes up this row
  * @returns {JSX.Element}
  */
-export default function TableRow({ rowObject, propNames }) {
+export default function TableRow({ rowObject, propNames, finishTable }) {
   const row = [];
   for (let index in propNames) {
     const propName = propNames[index];
     // if data is undefined, default to a seating button with the current reservation_id
     const data =
       rowObject[propName] === undefined ? (
-        <AssignmentButton rowObject={rowObject} />
+        <AssignmentButton rowObject={rowObject} finishTable={finishTable} />
       ) : (
         rowObject[propName]
       );

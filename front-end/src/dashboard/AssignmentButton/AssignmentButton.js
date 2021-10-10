@@ -16,10 +16,11 @@ import SeatButton from "./SeatButton";
 
 export default function AssignmentButton({
   rowObject: { table_id = null, reservation_id = null },
+  finishTable,
 }) {
   return table_id ? (
     // Table objects have FinishButtons
-    <FinishButton id={table_id} />
+    <FinishButton id={table_id} finishTable={finishTable} />
   ) : (
     // Reservation objects have SeatButtons
     <SeatButton id={reservation_id} />
