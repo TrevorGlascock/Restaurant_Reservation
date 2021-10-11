@@ -204,13 +204,15 @@ async function reservationExists(req, res, next) {
 
 function hasValidStatus(req, res, next) {
   const { data: { status } = {} } = req.body;
+  const { reservation } = res.locals;
+  const validStatuses = ["booked", "seated", "finished"];
+
   if (!status)
     return next({
       status: 400,
       message: `The data in the request body requires a status field.`,
     });
 
-  const validStatuses = ["booked", "seated", "finished"];
   if (!validStatuses.includes(status))
     return next({
       status: 400,
@@ -218,6 +220,13 @@ function hasValidStatus(req, res, next) {
         "', '"
       )}'.`,
     });
+
+  if (reservation.status === "finished")
+    return next({
+      status: 400,
+      message: `A finished reservation cannot be updated. If you must book this reservation again, please make a new reservation instead.`,
+    });
+
   res.locals.status = status;
   return next();
 }
