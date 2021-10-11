@@ -10,7 +10,7 @@ const REQUIRED_PROPERTIES = [
   "people",
 ];
 
-const VALID_PROPERTIES = [...REQUIRED_PROPERTIES, "reservation_id"];
+const VALID_PROPERTIES = [...REQUIRED_PROPERTIES];
 
 /**
  * Middleware validation for request bodies
