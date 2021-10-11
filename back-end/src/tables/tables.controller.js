@@ -146,6 +146,36 @@ function tableIsOccupied(req, res, next) {
 }
 
 /**
+ * Middleware validation to ensure the current reservation has not already been finished.
+ * Finished reservations cannot be seated or unseated
+ */
+function isReservationFinished(req, res, next) {
+  const { reservation } = res.locals;
+  if (reservation.status === "finished")
+    return next({
+      status: 400,
+      message:
+        "This reservation is currently finished. Finished reservations are archived, and cannot be seated or re-finished.",
+    });
+  return next();
+}
+
+/**
+ * Middleware validation to ensure the current reservation has not already been seated
+ * Already seated reservations cannot be seated elsewhere
+ */
+async function isReservationSeatedAlready(req, res, next) {
+  const { reservation } = res.locals;
+  if (reservation.status === "seated")
+    return next({
+      status: 400,
+      message:
+        "This reservation has already been seated, and therefore cannot be seated elsewhere simultaneously.",
+    });
+  return next();
+}
+
+/**
  * List handler for tables resource
  */
 async function list(req, res) {
@@ -208,11 +238,14 @@ module.exports = {
     hasReservationId,
     asyncErrorBoundary(isValidReservation),
     hasAppropriateSeating,
+    isReservationFinished,
+    isReservationSeatedAlready,
     asyncErrorBoundary(assignReservation),
   ],
   delete: [
     asyncErrorBoundary(tableExists),
     tableIsOccupied,
+    isReservationFinished,
     asyncErrorBoundary(deleteReservation),
   ],
 };
