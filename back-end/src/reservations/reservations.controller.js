@@ -190,6 +190,33 @@ async function reservationExists(req, res, next) {
 }
 
 /**
+ * Middleware validation for the request bodies
+ * Ensures that the request body has a status field
+ * And Ensures that the status is a valid status
+ * Used for updateStatus() requests
+ */
+
+function hasValidStatus(req, res, next) {
+  const { data: { status } = {} } = req.body;
+  if (!status)
+    return next({
+      status: 404,
+      message: `The data in the request body requires a status field.`,
+    });
+
+  const validStatuses = ["booked", "seated", "finished"];
+  if (!validStatuses.includes(status))
+    return next({
+      status: 404,
+      message: `${status} is an invalid status. The only valid statuses are: '${validStatuses.join(
+        "', '"
+      )}'.`,
+    });
+  res.locals.status = status;
+  return next();
+}
+
+/**
  * List handler for reservation resources
  */
 async function list(req, res) {
@@ -214,6 +241,15 @@ async function read(req, res) {
   res.json({ data: res.locals.reservation });
 }
 
+/**
+ * Update handler for updating reservation status
+ */
+async function updateStatus(req, res) {
+  const { status, reservation } = res.locals;
+  const data = await service.updateStatus(reservation.reservation_id, status);
+  res.json({ data });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -223,4 +259,9 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), read],
+  updateStatus: [
+    asyncErrorBoundary(reservationExists),
+    hasValidStatus,
+    asyncErrorBoundary(updateStatus),
+  ],
 };
