@@ -3,7 +3,7 @@ const service = require("./tables.service");
 const reservationService = require("../reservations/reservations.service");
 
 const REQUIRED_PROPERTIES = ["table_name", "capacity"];
-const VALID_PROPERTIES = [...REQUIRED_PROPERTIES, "occupied", "reservation_id"];
+const VALID_PROPERTIES = [...REQUIRED_PROPERTIES, "reservation_id"];
 
 /**
  * Middleware validation for request bodies
@@ -33,8 +33,6 @@ function bodyHasAllRequiredFields(req, res, next) {
       message: `The 'capacity' property must be a number that is 1 or greater`,
     });
 
-  // data must be a boolean, and will default to false if falsy
-  data.occupied = !!data.occupied;
   res.locals.table = data;
   return next();
 }
@@ -55,6 +53,9 @@ function bodyHasNoInvalidFields(req, res, next) {
       message: `Invalid field(s): ${invalidFields.join(", ")}`,
     });
   }
+
+  // Occupied property must be a non-null boolean, and will only be true if there is a reservation_id
+  table.occupied = !!table.reservation_id;
   return next();
 }
 

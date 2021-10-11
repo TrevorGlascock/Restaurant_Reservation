@@ -35,6 +35,7 @@ export default function FinishButton({ table, finishTable }) {
       onClick={onClick}
       className={`btn ${buttonStyle}`}
       disabled={!occupied}
+      data-table-id-finish={id}
     >
       Finish
     </button>
