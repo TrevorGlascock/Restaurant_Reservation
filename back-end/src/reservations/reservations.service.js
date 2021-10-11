@@ -9,7 +9,8 @@ function list(reservation_date) {
   return db(tableName)
     .select("*")
     .orderBy("reservation_time", "ASC")
-    .where({ reservation_date });
+    .where({ reservation_date })
+    .whereNot({ status: "finished" });
 }
 
 /**
