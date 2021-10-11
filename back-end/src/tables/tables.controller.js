@@ -75,11 +75,11 @@ async function tableExists(req, res, next) {
 }
 
 /**
- * Middleware validation for request bodies only when assigning a reservation ID to the table
- * When updating with a reservation, we must make sure the body only contains a reservation ID
- * And we must also ensure that the reservation ID provided matches a valid reservation
+ * Middleware Validation that requires the request body to have a reservation_id property
+ * Currently only used for request bodies when assigning a reservation ID to the table with assignReservation()
+ * Works best when followed by isValidReservation() middleware
  */
-async function validateReservation(req, res, next) {
+function hasReservationId(req, res, next) {
   const { data: { reservation_id } = {} } = req.body;
 
   if (!reservation_id)
@@ -87,6 +87,19 @@ async function validateReservation(req, res, next) {
       status: 400,
       message: `The data in the request body requires a reservation_id property.`,
     });
+  return next();
+}
+
+/**
+ * Middleware validation for ensuring reservationIds are valid before assigning them to a foreign key
+ * When updating with a reservation, or adding a table that has a reservation we must ensure it is a valid reservation
+ * NOTE: This middleware will skip itself if there is no reservation_id in the req.body, for validating that see hasReservationId() above
+ */
+async function isValidReservation(req, res, next) {
+  const { data: { reservation_id } = {} } = req.body;
+
+  // Skip this validation if there is no reservation_id
+  if (!reservation_id) return next();
 
   const reservation = await reservationService.read(reservation_id);
   if (!reservation)
@@ -182,12 +195,14 @@ module.exports = {
   create: [
     bodyHasAllRequiredFields,
     bodyHasNoInvalidFields,
+    asyncErrorBoundary(isValidReservation),
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(tableExists), read],
   assignReservation: [
     asyncErrorBoundary(tableExists),
-    asyncErrorBoundary(validateReservation),
+    hasReservationId,
+    asyncErrorBoundary(isValidReservation),
     hasAppropriateSeating,
     asyncErrorBoundary(assignReservation),
   ],
