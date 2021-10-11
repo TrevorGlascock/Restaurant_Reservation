@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations, listTables } from "../utils/api";
+import { deleteReservation, listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import DisplayTable from "./DisplayTable";
 import DateNavigationButton from "./DateNavigationButtons";
@@ -54,7 +54,17 @@ function Dashboard({ date }) {
    * This function will be prop-drilled into FinishButton
    */
   function finishTable(id) {
-    console.log(`Finish him: ${id}`);
+    const abortController = new AbortController();
+    deleteReservation(id, abortController.signal)
+      .catch(console.log)
+      .then(() => {
+        listTables(abortController.signal).then((data) => {
+          console.log(data);
+          return setTables(data);
+        });
+      })
+      .catch(setTablesError);
+    return () => abortController.abort();
   }
 
   return (
