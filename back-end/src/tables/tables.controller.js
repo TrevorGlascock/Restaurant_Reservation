@@ -3,7 +3,7 @@ const service = require("./tables.service");
 const reservationService = require("../reservations/reservations.service");
 
 const REQUIRED_PROPERTIES = ["table_name", "capacity"];
-const VALID_PROPERTIES = [...REQUIRED_PROPERTIES, "occupied"];
+const VALID_PROPERTIES = [...REQUIRED_PROPERTIES, "occupied", "reservation_id"];
 
 /**
  * Middleware validation for request bodies
