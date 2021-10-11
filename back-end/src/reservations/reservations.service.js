@@ -30,4 +30,15 @@ function read(reservation_id) {
   return db(tableName).where({ reservation_id }).first();
 }
 
-module.exports = { list, create, read };
+/**
+ * Updates status property of selected reservation
+ * and returns the entire updated object
+ */
+function updateStatus(reservation_id, status) {
+  return db(tableName)
+    .where({ reservation_id })
+    .update({ status }, "*")
+    .then((rows) => rows[0]);
+}
+
+module.exports = { list, create, read, updateStatus };
