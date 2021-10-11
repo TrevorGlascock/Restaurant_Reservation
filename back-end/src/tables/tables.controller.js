@@ -2,8 +2,8 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./tables.service");
 const reservationService = require("../reservations/reservations.service");
 
-const VALID_PROPERTIES = ["table_name", "capacity", "occupied"];
 const REQUIRED_PROPERTIES = ["table_name", "capacity"];
+const VALID_PROPERTIES = [...REQUIRED_PROPERTIES, "occupied"];
 
 /**
  * Middleware validation for request bodies
