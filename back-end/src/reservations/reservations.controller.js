@@ -206,14 +206,14 @@ function hasValidStatus(req, res, next) {
   const { data: { status } = {} } = req.body;
   if (!status)
     return next({
-      status: 404,
+      status: 400,
       message: `The data in the request body requires a status field.`,
     });
 
   const validStatuses = ["booked", "seated", "finished"];
   if (!validStatuses.includes(status))
     return next({
-      status: 404,
+      status: 400,
       message: `${status} is an invalid status. The only valid statuses are: '${validStatuses.join(
         "', '"
       )}'.`,
