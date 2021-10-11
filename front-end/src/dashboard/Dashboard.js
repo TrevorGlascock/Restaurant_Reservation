@@ -53,17 +53,16 @@ function Dashboard({ date }) {
    * Function to call deleteReservation, then to call listTables
    * This function will be prop-drilled into FinishButton
    */
-  function finishTable(id) {
+  async function finishTable(id) {
+    setTablesError(null);
     const abortController = new AbortController();
-    deleteReservation(id, abortController.signal)
-      .catch(console.log)
-      .then(() => {
-        listTables(abortController.signal).then((data) => {
-          console.log(data);
-          return setTables(data);
-        });
-      })
-      .catch(setTablesError);
+    try {
+      await deleteReservation(id, abortController.signal);
+      const data = await listTables(abortController.signal);
+      setTables(data);
+    } catch (error) {
+      setTablesError(error);
+    }
     return () => abortController.abort();
   }
 
