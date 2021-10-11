@@ -176,6 +176,8 @@ function read(req, res) {
 async function assignReservation(req, res) {
   const { reservation_id } = res.locals.reservation;
   const { table_id } = res.locals.table;
+  // When seating a table, we must set the reservation status to 'seated'
+  await reservationService.updateStatus(reservation_id, "seated");
   const data = await service.assignReservation(reservation_id, table_id);
   res.json({ data });
 }
@@ -186,6 +188,8 @@ async function assignReservation(req, res) {
  */
 async function deleteReservation(req, res) {
   const { table_id } = res.locals.table;
+  // When unseating/finishing a table, we must set the reservation status to 'finished'
+  await reservationService.updateStatus(reservation_id, "finished");
   const data = await service.deleteReservation(table_id);
   res.json({ data });
 }
