@@ -1,5 +1,5 @@
 import React from "react";
-import SeatButton from "./SeatButton";
+import AssignmentButton from "./AssignmentButton/AssignmentButton";
 
 /**
  * Defines one row of a dynamic table.
@@ -11,14 +11,14 @@ import SeatButton from "./SeatButton";
  *  An array of JSX table-data containing all the data of that makes up this row
  * @returns {JSX.Element}
  */
-export default function TableRow({ rowObject, propNames }) {
+export default function TableRow({ rowObject, propNames, finishTable }) {
   const row = [];
   for (let index in propNames) {
     const propName = propNames[index];
     // if data is undefined, default to a seating button with the current reservation_id
     const data =
       rowObject[propName] === undefined ? (
-        <SeatButton id={rowObject["reservation_id"]} />
+        <AssignmentButton rowObject={rowObject} finishTable={finishTable} />
       ) : (
         rowObject[propName]
       );
@@ -26,9 +26,21 @@ export default function TableRow({ rowObject, propNames }) {
     // if data is a boolean, we will need to disply a status string based on the boolean value
     const isBoolean = typeof data === "boolean";
     const status = data ? "Occupied" : "Free";
-    const display = isBoolean ? status : data;
 
-    row.push(<td key={index}>{display}</td>);
+    // If there is a table_id, the object is a table, otherwise it's a reservation
+    const id = rowObject.table_id
+      ? rowObject.table_id
+      : rowObject.reservation_id;
+
+    // if data is a boolean, push the status into the row
+    if (isBoolean)
+      row.push(
+        <td key={index} data-table-id-status={id}>
+          {status}
+        </td>
+      );
+    // Otherwise, just push the raw data into the row
+    else row.push(<td key={index}>{data}</td>);
   }
   return <tr>{row}</tr>;
 }

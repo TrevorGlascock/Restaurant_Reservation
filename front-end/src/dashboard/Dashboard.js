@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations, listTables } from "../utils/api";
+import { deleteReservation, listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import DisplayTable from "./DisplayTable";
 import DateNavigationButton from "./DateNavigationButtons";
@@ -12,16 +12,16 @@ import DateNavigationButton from "./DateNavigationButtons";
  */
 function Dashboard({ date }) {
   const reservationsCols = {
-    seatButton: "Seat Table",
+    seatButton: "",
     first_name: "First Name",
     last_name: "Last Name",
     mobile_number: "Mobile Number",
-    reservation_date: "Date of Reservation",
     reservation_time: "Time of Reservation",
     people: "Party Size",
   };
 
   const tableCols = {
+    finishButton: "",
     table_name: "Table Name",
     capacity: "Maximum Capacity",
     occupied: "Availability",
@@ -34,6 +34,10 @@ function Dashboard({ date }) {
 
   useEffect(loadDashboard, [date]);
 
+  /**
+   * API call to listReservations and listTables
+   * Retrieves the data necessary to render the dashboard and stores it in useStatevariables
+   */
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
@@ -42,6 +46,33 @@ function Dashboard({ date }) {
       .then(setReservations)
       .catch(setReservationsError);
     listTables(abortController.signal).then(setTables).catch(setTablesError);
+    return () => abortController.abort();
+  }
+
+  /**
+   * Function to call deleteReservation, then to call listTables
+   * This function will be prop-drilled into FinishButton
+   */
+  async function finishTable(id) {
+    setTablesError(null);
+    const abortController = new AbortController();
+
+    // Window confirmation dialogue
+    if (
+      !window.confirm(
+        "Is this table ready to seat new guests?\nThis cannot be undone."
+      )
+    )
+      return () => abortController.abort();
+
+    // After confirmation, deleteReservation then listTables
+    try {
+      await deleteReservation(id, abortController.signal);
+      const data = await listTables(abortController.signal);
+      setTables(data);
+    } catch (error) {
+      setTablesError(error);
+    }
     return () => abortController.abort();
   }
 
@@ -57,7 +88,11 @@ function Dashboard({ date }) {
       <h4 className="h4">Reservations for date {date}</h4>
       <DisplayTable data={reservations} objCols={reservationsCols} />
       <h4 className="h4">Tables in the Restaurant</h4>
-      <DisplayTable data={tables} objCols={tableCols} />
+      <DisplayTable
+        data={tables}
+        objCols={tableCols}
+        finishTable={finishTable}
+      />
     </main>
   );
 }

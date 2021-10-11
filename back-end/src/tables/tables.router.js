@@ -20,6 +20,7 @@ router
   .route("/:table_id/seat")
   .get(controller.read)
   .put(controller.assignReservation)
+  .delete(controller.delete)
   .all(methodNotAllowed);
 
 module.exports = router;
