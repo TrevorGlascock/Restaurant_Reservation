@@ -56,6 +56,16 @@ function Dashboard({ date }) {
   async function finishTable(id) {
     setTablesError(null);
     const abortController = new AbortController();
+
+    // Window confirmation dialogue
+    if (
+      !window.confirm(
+        "Is this table ready to seat new guests?\nThis cannot be undone."
+      )
+    )
+      return () => abortController.abort();
+
+    // After confirmation, deleteReservation then listTables
     try {
       await deleteReservation(id, abortController.signal);
       const data = await listTables(abortController.signal);
