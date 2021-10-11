@@ -10,7 +10,7 @@ const REQUIRED_PROPERTIES = [
   "people",
 ];
 
-const VALID_PROPERTIES = [...REQUIRED_PROPERTIES];
+const VALID_PROPERTIES = [...REQUIRED_PROPERTIES, "status"];
 
 /**
  * Middleware validation for request bodies
@@ -59,6 +59,12 @@ function bodyHasAllRequiredFields(req, res, next) {
       } of type ${typeof data.people}) must be a number.`,
     });
 
+  // If an optional status is added, only allow it post if the value is 'booked'
+  if (data.status && data.status !== "booked")
+    return next({
+      status: 400,
+      message: `Status cannot be set to '${data.status}'. When creating a reservation, it must have the default status of 'booked', or no status at all.`,
+    });
   res.locals.reservation = data;
   return next();
 }
