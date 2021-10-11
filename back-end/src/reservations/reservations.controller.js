@@ -1,7 +1,7 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./reservations.service");
 
-const VALID_PROPERTIES = [
+const REQUIRED_PROPERTIES = [
   "first_name",
   "last_name",
   "mobile_number",
@@ -9,6 +9,8 @@ const VALID_PROPERTIES = [
   "reservation_time",
   "people",
 ];
+
+const VALID_PROPERTIES = [...REQUIRED_PROPERTIES, "reservation_id"];
 
 /**
  * Middleware validation for request bodies
@@ -18,7 +20,7 @@ const VALID_PROPERTIES = [
 function bodyHasAllRequiredFields(req, res, next) {
   const { data = {} } = req.body;
 
-  for (let property of VALID_PROPERTIES) {
+  for (let property of REQUIRED_PROPERTIES) {
     if (!data[property])
       return next({
         status: 400,
