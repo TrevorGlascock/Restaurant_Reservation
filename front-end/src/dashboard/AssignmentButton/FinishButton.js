@@ -4,12 +4,19 @@ import React from "react";
  * @returns {JSX.Element}
  */
 
-export default function FinishButton({ id, finishTable }) {
+export default function FinishButton({ table, finishTable }) {
+  const { table_id: id, occupied } = table;
   const onClick = () => {
     finishTable(id);
   };
+
   return (
-    <button type="button" onClick={onClick} className="btn btn-danger">
+    <button
+      type="button"
+      onClick={onClick}
+      className="btn btn-danger"
+      disabled={!occupied}
+    >
       Finish
     </button>
   );
