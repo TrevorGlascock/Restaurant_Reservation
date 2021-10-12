@@ -234,15 +234,15 @@ function hasValidStatus(req, res, next) {
 /**
  * List handler for reservation resources with 3 variants based on the query provided:
  * date query: list all reservation with matching reservation_date properties sorted by time
- * mobile_phone query: list all reservations with matching mobile_number properties sorted by date
+ * mobile_number query: list all reservations with matching mobile_number properties sorted by date
  * default: list all reservations sorted by id
  * Each variant is handled by a different service function
  */
 async function list(req, res) {
-  const { date = null, mobile_phone = null } = req.query;
+  const { date = null, mobile_number = null } = req.query;
   let data = null;
   if (date) data = await service.searchByDate(date);
-  else if (mobile_phone) data = await service.searchByPhone(mobile_phone);
+  else if (mobile_number) data = await service.searchByPhone(mobile_number);
   else data = await service.list();
   res.json({ data });
 }
