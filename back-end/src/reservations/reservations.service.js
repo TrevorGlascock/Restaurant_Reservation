@@ -19,17 +19,29 @@ function searchByDate(reservation_date) {
     .whereNot({ status: "finished" })
     .orderBy("reservation_time", "ASC");
 }
+
 /**
- * Search query fetches all of the table data where mobile_number equals the passed in param
- * Sorted by reservation_date in descending order
+ * Dynamic search query fetches all of the table data filtered by the queriesObject and sorted by date
+ * queriesObject is an object who's keys are the request query variable names, and values are the actual value of the variable
+ * Can handle multiple simultaneous queries
+ * searchByDate is distinct: it uses 'date' query sorts by time, and requires the date to be an exact match
  */
-function searchByPhone(mobile_number) {
+function searchByProperty(queriesObject) {
+  const entries = Object.entries(queriesObject);
+  if (!entries.length) return list();
+
+  let whereQuery = "";
+  for (let i = 0; i < entries.length; i++) {
+    const [name, value] = entries[i];
+    whereQuery += `${name}::text ilike '%${value}%'`;
+    if (i !== entries.length - 1) whereQuery += " AND ";
+  }
+
   return db(tableName)
     .select("*")
-    .where("mobile_number", "like", `%${mobile_number}%`)
+    .where(db.raw(whereQuery))
     .orderBy("reservation_date", "DESC");
 }
-
 /**
  * Create inserts a new Reservation into the table data
  * and returns the inserted object
@@ -63,7 +75,7 @@ function updateStatus(reservation_id, status) {
 module.exports = {
   list,
   searchByDate,
-  searchByPhone,
+  searchByProperty,
   create,
   read,
   updateStatus,
