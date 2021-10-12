@@ -11,11 +11,16 @@ import { Link } from "react-router-dom";
  */
 
 export default function SeatButton({ reservation }) {
-  const { reservation_id: id } = reservation;
+  const { reservation_id: id, status } = reservation;
   const href = `/reservations/${id}/seat`;
+  const buttonStyle = status === "booked" ? "btn-primary" : "btn-secondary";
+  const disabled = status === "booked" ? false : true;
+
   return (
-    <Link className="btn btn-primary" to={href}>
-      Seat
+    <Link to={href}>
+      <button className={`btn ${buttonStyle}`} disabled={disabled}>
+        Seat
+      </button>
     </Link>
   );
 }
