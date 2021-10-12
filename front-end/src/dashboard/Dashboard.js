@@ -18,6 +18,7 @@ function Dashboard({ date }) {
     mobile_number: "Mobile Number",
     reservation_time: "Time of Reservation",
     people: "Party Size",
+    status: "Current Status",
   };
 
   const tableCols = {
