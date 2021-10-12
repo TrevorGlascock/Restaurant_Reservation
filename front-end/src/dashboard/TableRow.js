@@ -39,6 +39,13 @@ export default function TableRow({ rowObject, propNames, finishTable }) {
           {status}
         </td>
       );
+    // if data is a reservation status, we need to give it a special attribute for the unit test to find it
+    else if (data === "booked" || data === "seated" || data === "finished")
+      row.push(
+        <td key={index} data-reservation-id-status={id}>
+          {data}
+        </td>
+      );
     // Otherwise, just push the raw data into the row
     else row.push(<td key={index}>{data}</td>);
   }
