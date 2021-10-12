@@ -26,7 +26,7 @@ function searchByDate(reservation_date) {
 function searchByPhone(mobile_number) {
   return db(tableName)
     .select("*")
-    .where({ mobile_number })
+    .where("mobile_number", "like", `%${mobile_number}%`)
     .orderBy("reservation_date", "DESC");
 }
 
