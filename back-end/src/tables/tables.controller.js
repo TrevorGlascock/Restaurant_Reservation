@@ -146,6 +146,28 @@ function tableIsOccupied(req, res, next) {
 }
 
 /**
+ * Middleware validation to ensure the current reservation has not already been seated,and is not finished
+ * Already seated reservations cannot be seated elsewhere
+ * Finished reservations are archived and cannot be seated
+ */
+async function isReservationSeatedAlready(req, res, next) {
+  const { reservation } = res.locals;
+  if (reservation.status === "seated")
+    return next({
+      status: 400,
+      message:
+        "This reservation has already been seated, and therefore cannot be seated elsewhere simultaneously.",
+    });
+  if (reservation.status === "finished")
+    return next({
+      status: 400,
+      message:
+        "This reservation is currently finished. Finished reservations are archived, and cannot be seated.",
+    });
+  return next();
+}
+
+/**
  * List handler for tables resource
  */
 async function list(req, res) {
@@ -176,6 +198,8 @@ function read(req, res) {
 async function assignReservation(req, res) {
   const { reservation_id } = res.locals.reservation;
   const { table_id } = res.locals.table;
+  // When seating a table, we must set the reservation status to 'seated'
+  await reservationService.updateStatus(reservation_id, "seated");
   const data = await service.assignReservation(reservation_id, table_id);
   res.json({ data });
 }
@@ -185,7 +209,9 @@ async function assignReservation(req, res) {
  * Despite being called a delete, this is really an update request
  */
 async function deleteReservation(req, res) {
-  const { table_id } = res.locals.table;
+  const { reservation_id, table_id } = res.locals.table;
+  // When unseating/finishing a table, we must set the reservation status to 'finished'
+  await reservationService.updateStatus(reservation_id, "finished");
   const data = await service.deleteReservation(table_id);
   res.json({ data });
 }
@@ -204,6 +230,7 @@ module.exports = {
     hasReservationId,
     asyncErrorBoundary(isValidReservation),
     hasAppropriateSeating,
+    isReservationSeatedAlready,
     asyncErrorBoundary(assignReservation),
   ],
   delete: [

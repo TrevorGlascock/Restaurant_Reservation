@@ -18,6 +18,7 @@ function Dashboard({ date }) {
     mobile_number: "Mobile Number",
     reservation_time: "Time of Reservation",
     people: "Party Size",
+    status: "Current Status",
   };
 
   const tableCols = {
@@ -65,11 +66,10 @@ function Dashboard({ date }) {
     )
       return () => abortController.abort();
 
-    // After confirmation, deleteReservation then listTables
+    // After confirmation, deleteReservation then loadDashboard again
     try {
       await deleteReservation(id, abortController.signal);
-      const data = await listTables(abortController.signal);
-      setTables(data);
+      loadDashboard();
     } catch (error) {
       setTablesError(error);
     }
