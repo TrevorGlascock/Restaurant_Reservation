@@ -1,16 +1,33 @@
 const db = require("../db/connection");
 const tableName = "reservations";
 /**
- * List query fetches all of the table data where reservation_date equals the passed in param
+ * List query fetches all of the table reservations in the table
+ * Sorted by their IDs in ascending order
  */
-function list(reservation_date) {
-  if (!reservation_date)
-    return db(tableName).select("*").orderBy("reservation_id", "ASC");
+function list() {
+  return db(tableName).select("*").orderBy("reservation_id", "ASC");
+}
+
+/**
+ * Search query fetches all of the table data where reservation_date equals the passed in param
+ * Sorted by the time of the reservation in ascending order
+ */
+function searchByDate(reservation_date) {
   return db(tableName)
     .select("*")
-    .orderBy("reservation_time", "ASC")
     .where({ reservation_date })
-    .whereNot({ status: "finished" });
+    .whereNot({ status: "finished" })
+    .orderBy("reservation_time", "ASC");
+}
+/**
+ * Search query fetches all of the table data where mobile_number equals the passed in param
+ * Sorted by reservation_date in descending order
+ */
+function searchByPhone(mobile_number) {
+  return db(tableName)
+    .select("*")
+    .where({ mobile_number })
+    .orderBy("reservation_date", "DESC");
 }
 
 /**
@@ -43,4 +60,11 @@ function updateStatus(reservation_id, status) {
     .then((rows) => rows[0]);
 }
 
-module.exports = { list, create, read, updateStatus };
+module.exports = {
+  list,
+  searchByDate,
+  searchByPhone,
+  create,
+  read,
+  updateStatus,
+};
