@@ -68,7 +68,7 @@ function read(reservation_id) {
 function update(reservation_id, reservation) {
   return db(tableName)
     .where({ reservation_id })
-    .update({ reservation }, "*")
+    .update(reservation, "*")
     .then((rows) => rows[0]);
 }
 
