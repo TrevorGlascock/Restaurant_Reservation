@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 import { listReservations } from "../utils/api";
 
@@ -8,19 +8,25 @@ import { listReservations } from "../utils/api";
  */
 export function Search() {
   const [searchQuery, setSearchQuery] = useState(""); // useState control form that defines the search query for the API call
-  const [reservations, setReservations] = useState([]); // useState Array to store the queried reservations
+  const [reservations, setReservations] = useState(null); // useState Array to store the queried reservations
+  const [searchResult, setSearchResult] = useState(""); // useState variable to store the searchResults generated from reservations
   const [errorsArray, setErrorsArray] = useState([]); // All errors in validation, potential API error on submit, and finally the tablesError, if it isn't null
 
   const submitHandler = (event) => {
     event.preventDefault(); // prevents the submit button's default behavior
     setErrorsArray([]);
-    console.log(searchQuery);
     const abortController = new AbortController();
     listReservations({ mobile_number: searchQuery }, abortController.signal)
       .then(setReservations)
       .catch((errorObj) => setErrorsArray((errors) => [...errors, errorObj]));
     return () => abortController.abort();
   };
+
+  useEffect(() => {
+    if (!reservations) setSearchResult("");
+    else if (!reservations.length) setSearchResult("No reservations found!");
+    else setSearchResult(JSON.stringify(reservations));
+  }, [reservations]);
 
   const errorDisplay = errorsArray.map((error, index) => (
     <ErrorAlert key={index} error={error} />
@@ -60,7 +66,7 @@ export function Search() {
           </fieldset>
         </form>
       </div>
-      {JSON.stringify(reservations)}
+      {searchResult}
     </main>
   );
 }
