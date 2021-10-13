@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import ErrorAlert from "../layout/ErrorAlert";
+import { listReservations } from "../utils/api";
 
 /**
  * Defines the Search page.
@@ -6,16 +8,28 @@ import React, { useState } from "react";
  */
 export function Search() {
   const [searchQuery, setSearchQuery] = useState(""); // useState control form that defines the search query for the API call
+  const [reservations, setReservations] = useState([]); // useState Array to store the queried reservations
   const [errorsArray, setErrorsArray] = useState([]); // All errors in validation, potential API error on submit, and finally the tablesError, if it isn't null
 
   const submitHandler = (event) => {
     event.preventDefault(); // prevents the submit button's default behavior
     setErrorsArray([]);
     console.log(searchQuery);
+    const abortController = new AbortController();
+    listReservations({ mobile_number: searchQuery }, abortController.signal)
+      .then(setReservations)
+      .catch((errorObj) => setErrorsArray((errors) => [...errors, errorObj]));
+    return () => abortController.abort();
   };
+
+  const errorDisplay = errorsArray.map((error, index) => (
+    <ErrorAlert key={index} error={error} />
+  ));
 
   return (
     <main>
+      <div className="d-md-flex mb-3"></div>
+      {errorDisplay}
       <div className="d-md-flex mb-3">
         <form onSubmit={submitHandler}>
           <fieldset>
@@ -46,6 +60,7 @@ export function Search() {
           </fieldset>
         </form>
       </div>
+      {JSON.stringify(reservations)}
     </main>
   );
 }
