@@ -224,9 +224,15 @@ function hasValidStatus(req, res, next) {
   if (reservation.status === "finished" || reservation.status === "cancelled")
     return next({
       status: 400,
-      message: `A ${reservation.status} reservation cannot be updated. If you must book this reservation again, please make a new reservation instead.`,
+      message: `A '${reservation.status}' reservation cannot be updated. If you must book this reservation again, please make a new reservation instead.`,
     });
 
+  // Seated reservations can only be updated if they are being set to finished
+  if (reservation.status === "seated" && status !== "finished")
+    return next({
+      status: 400,
+      message: `A 'seated' reservation can not be updated to '${status}'. Seated reservations can only have their status changed to 'finished'.`,
+    });
   res.locals.status = status;
   return next();
 }
