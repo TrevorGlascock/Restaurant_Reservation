@@ -207,12 +207,14 @@ function hasValidStatus(req, res, next) {
   const { reservation } = res.locals;
   const validStatuses = ["booked", "seated", "finished", "cancelled"];
 
+  // There must be a status in the request body
   if (!status)
     return next({
       status: 400,
       message: `The data in the request body requires a status field.`,
     });
 
+  // Status must be a valid value
   if (!validStatuses.includes(status))
     return next({
       status: 400,
@@ -221,6 +223,7 @@ function hasValidStatus(req, res, next) {
       )}'.`,
     });
 
+  // Finished and Cancelled reservations are archived, therefore should be uneditable
   if (reservation.status === "finished" || reservation.status === "cancelled")
     return next({
       status: 400,
@@ -233,6 +236,7 @@ function hasValidStatus(req, res, next) {
       status: 400,
       message: `A 'seated' reservation can not be updated to '${status}'. Seated reservations can only have their status changed to 'finished'.`,
     });
+    
   res.locals.status = status;
   return next();
 }
