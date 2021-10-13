@@ -65,13 +65,22 @@ function bodyHasAllRequiredFields(req, res, next) {
       } of type ${typeof data.people}) must be a number.`,
     });
 
-  // If an optional status is added, only allow it post if the value is 'booked'
-  if (data.status && data.status !== "booked")
+  res.locals.newReservation = data;
+  return next();
+}
+
+/**
+ * Validation Middleware only for POST requests with new Reservations
+ * If an optional status is added, only allow it to post if the value is 'booked'
+ * on PUT requests, instead use validateUpdateStatus middleware
+ */
+function validateNewStatus(req, res, next) {
+  const { status = "booked" } = res.locals.newReservation;
+  if (status !== "booked")
     return next({
       status: 400,
-      message: `Status cannot be set to '${data.status}'. When creating a reservation, it must have the default status of 'booked', or no status at all.`,
+      message: `Status cannot be set to '${status}'. When creating a reservation, it must have the default status of 'booked', or no status at all.`,
     });
-  res.locals.newReservation = data;
   return next();
 }
 
@@ -208,7 +217,7 @@ async function reservationExists(req, res, next) {
  * Used for updateStatus() requests
  */
 
-function hasValidStatus(req, res, next) {
+function validateUpdateStatus(req, res, next) {
   const { data: { status } = {} } = req.body;
   const { reservation } = res.locals;
   const validStatuses = ["booked", "seated", "finished", "cancelled"];
@@ -244,6 +253,43 @@ function hasValidStatus(req, res, next) {
     });
 
   res.locals.status = status;
+  return next();
+}
+
+/**
+ * Validation middleware for update Reservations
+ * Ensures that uneditable properties are not being changed
+ * And forces update_at to become the new date
+ */
+
+function validateReservationUpdate(req, res, next) {
+  const {
+    reservation: { reservation_id: id, created_at: created },
+    newReservation,
+  } = res.locals;
+
+  const {
+    reservation_id: newId = id,
+    created_at: newCreated = created.toISOString(),
+  } = newReservation;
+
+  // reservation_id must match or be omitted from the request body
+  if (id !== newId)
+    return next({
+      status: 400,
+      message: `You are attempting to change this reservation's id from ${id} to ${newId}. You cannot change a reservation's id.`,
+    });
+
+  // created_at must match or be omitted from the request body
+  if (created.toISOString() !== newCreated)
+    return next({
+      status: 400,
+      message: `You cannot alter the date this reservation was created on. Either remove 'created_at' from the request body or ensure it matches the original date`,
+    });
+
+  // Updated_at will always be set to the current date, regardless of the request body
+  newReservation.updated_at = new Date();
+
   return next();
 }
 
@@ -300,6 +346,7 @@ module.exports = {
   create: [
     bodyHasAllRequiredFields,
     bodyHasNoInvalidFields,
+    validateNewStatus,
     validateDateTime,
     asyncErrorBoundary(create),
   ],
@@ -309,11 +356,13 @@ module.exports = {
     bodyHasAllRequiredFields,
     bodyHasNoInvalidFields,
     validateDateTime,
+    validateReservationUpdate,
+    validateUpdateStatus,
     asyncErrorBoundary(update),
   ],
   updateStatus: [
     asyncErrorBoundary(reservationExists),
-    hasValidStatus,
+    validateUpdateStatus,
     asyncErrorBoundary(updateStatus),
   ],
 };
