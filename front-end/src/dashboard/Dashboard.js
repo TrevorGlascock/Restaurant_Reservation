@@ -19,6 +19,8 @@ function Dashboard({ date }) {
     reservation_time: "Time of Reservation",
     people: "Party Size",
     status: "Current Status",
+    editButton: "",
+    cancelButton: "",
   };
 
   const tableCols = {
