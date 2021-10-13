@@ -65,7 +65,7 @@ function bodyHasAllRequiredFields(req, res, next) {
       status: 400,
       message: `Status cannot be set to '${data.status}'. When creating a reservation, it must have the default status of 'booked', or no status at all.`,
     });
-  res.locals.reservation = data;
+  res.locals.newReservation = data;
   return next();
 }
 
@@ -74,8 +74,8 @@ function bodyHasAllRequiredFields(req, res, next) {
  * Ensures the request body only has properties that are allowed before proceeding
  */
 function bodyHasNoInvalidFields(req, res, next) {
-  const { reservation } = res.locals;
-  const invalidFields = Object.keys(reservation).filter(
+  const { newReservation } = res.locals;
+  const invalidFields = Object.keys(newReservation).filter(
     (field) => !VALID_PROPERTIES.includes(field)
   );
 
@@ -103,7 +103,7 @@ function validateDateTime(req, res, next) {
   const startTime = "10:30"; // Start time is the target date at opening time
   const closeTime = "21:30"; // End time is the target date an hour before closing time
 
-  const { reservation_date, reservation_time } = req.body.data;
+  const { reservation_date, reservation_time } = res.locals.newReservation;
   const date = new Date(`${reservation_date}T${reservation_time}`);
   const today = new Date();
 
@@ -236,7 +236,7 @@ function hasValidStatus(req, res, next) {
       status: 400,
       message: `A 'seated' reservation can not be updated to '${status}'. Seated reservations can only have their status changed to 'finished'.`,
     });
-    
+
   res.locals.status = status;
   return next();
 }
@@ -259,8 +259,8 @@ async function list(req, res) {
  * Create handler for new Reservations
  */
 async function create(req, res) {
-  const { reservation } = res.locals;
-  const data = await service.create(reservation);
+  const { newReservation } = res.locals;
+  const data = await service.create(newReservation);
   res.status(201).json({ data });
 }
 
@@ -269,6 +269,15 @@ async function create(req, res) {
  */
 async function read(req, res) {
   res.json({ data: res.locals.reservation });
+}
+
+/**
+ * Update handler for editing entire reservation
+ */
+async function update(req, res) {
+  const { reservation, newReservation } = res.locals;
+  const data = await service.update(reservation.reservation_id, newReservation);
+  res.json({ data });
 }
 
 /**
@@ -289,6 +298,13 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), read],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    bodyHasAllRequiredFields,
+    bodyHasNoInvalidFields,
+    validateDateTime,
+    asyncErrorBoundary(update),
+  ],
   updateStatus: [
     asyncErrorBoundary(reservationExists),
     hasValidStatus,
