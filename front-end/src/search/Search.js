@@ -22,22 +22,27 @@ export function Search() {
             <legend className="h1">Search for Reservations</legend>
             <div className="form-group">
               <label htmlFor="mobile_number">Mobile Number</label>
-              <input
-                id="mobile_number"
-                type="text"
-                name="mobile_number"
-                placeholder="Enter a customer's phone number"
-                title="Enter a customer's phone number"
-                className="form-control"
-                value={searchQuery}
-                onChange={({ target }) => setSearchQuery(target.value)}
-                required
-              />
+              <div className="row">
+                <div className="col-9">
+                  <input
+                    id="mobile_number"
+                    type="text"
+                    name="mobile_number"
+                    placeholder="Enter a customer's phone number"
+                    title="Enter a customer's phone number"
+                    className="form-control"
+                    value={searchQuery}
+                    onChange={({ target }) => setSearchQuery(target.value)}
+                    required
+                  />
+                </div>
+                <div className="col">
+                  <button type="submit" className="btn btn-info px-3">
+                    Find
+                  </button>
+                </div>
+              </div>
             </div>
-
-            <button type="submit" className="btn btn-primary ">
-              Find
-            </button>
           </fieldset>
         </form>
       </div>
