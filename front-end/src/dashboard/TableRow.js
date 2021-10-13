@@ -1,5 +1,7 @@
 import React from "react";
 import AssignmentButton from "./AssignmentButton/AssignmentButton";
+import CancelButton from "./AssignmentButton/CancelButton";
+import EditButton from "./AssignmentButton/EditButton";
 
 /**
  * Defines one row of a dynamic table.
@@ -15,13 +17,8 @@ export default function TableRow({ rowObject, propNames, finishTable }) {
   const row = [];
   for (let index in propNames) {
     const propName = propNames[index];
-    // if data is undefined, default to a seating button with the current reservation_id
-    const data =
-      rowObject[propName] === undefined ? (
-        <AssignmentButton rowObject={rowObject} finishTable={finishTable} />
-      ) : (
-        rowObject[propName]
-      );
+    // data is the value of the rowObject at that property name
+    const data = rowObject[propName];
 
     // if data is a boolean, we will need to disply a status string based on the boolean value
     const isBoolean = typeof data === "boolean";
@@ -39,8 +36,34 @@ export default function TableRow({ rowObject, propNames, finishTable }) {
           {status}
         </td>
       );
+    else if (!data) {
+      // if data is undefined, we will need to conditionally render a type of button
+      if (propName === "seatButton" || propName === "finishButton")
+        row.push(
+          <td key={index} data-reservation-id-status={id}>
+            <AssignmentButton rowObject={rowObject} finishTable={finishTable} />
+          </td>
+        );
+      else if (propName === "cancelButton")
+        row.push(
+          <td key={index} data-reservation-id-status={id}>
+            <CancelButton reservation={rowObject} />
+          </td>
+        );
+      else
+        row.push(
+          <td key={index} data-reservation-id-status={id}>
+            <EditButton reservation={rowObject} />
+          </td>
+        );
+    }
     // if data is a reservation status, we need to give it a special attribute for the unit test to find it
-    else if (data === "booked" || data === "seated" || data === "finished")
+    else if (
+      data === "booked" ||
+      data === "seated" ||
+      data === "finished" ||
+      data === "cancelled"
+    )
       row.push(
         <td key={index} data-reservation-id-status={id}>
           {data}
