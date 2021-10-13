@@ -8,17 +8,26 @@ import React from "react";
  *  the reservation_id destructed from the reservation object
  * @function onClick
  *  function containing the actual cancel functionality
- * @returns {JSX.Element} 
+ * @returns {JSX.Element}
  */
 
 export default function CancelButton({ reservation }) {
-  const { reservation_id: id } = reservation;
+  const { reservation_id: id, status } = reservation;
+
+  const disabled = status === "booked" ? false : true;
+
   const onClick = () => {
     console.log(`Cancel reservation #${id}`);
   };
 
-  return (
-    <button type="button" onClick={onClick} className={`btn btn-danger`}>
+  // When disabled, CancelButton is a secondary, disabled button element
+  return disabled ? (
+    <button type="button" className="btn btn-secondary" disabled>
+      Cancel
+    </button>
+  ) : (
+    // Otherwise it's a danger button with the proper functionality
+    <button type="button" onClick={onClick} className="btn btn-danger">
       Cancel
     </button>
   );
