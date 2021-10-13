@@ -232,11 +232,16 @@ function hasValidStatus(req, res, next) {
 }
 
 /**
- * List handler for reservation resources
+ * List handler for reservation resources with two variants based on the provided queries
+ * If any of the queries are a date query: list all reservation with exact matching reservation_date properties sorted by time
+ * Otherwise list all the reservations that have matching data to the provided queries sorted by date
+ * (If no queries are provided, searchByProperty will return all reservations sorted by id)
  */
 async function list(req, res) {
-  const { date } = req.query;
-  const data = await service.list(date);
+  const { date: reservation_date } = req.query;
+  const data = reservation_date
+    ? await service.searchByDate(reservation_date)
+    : await service.searchByProperty(req.query);
   res.json({ data });
 }
 
