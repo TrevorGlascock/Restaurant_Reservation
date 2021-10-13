@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import DisplayTable from "../dashboard/DisplayTable";
 import ErrorAlert from "../layout/ErrorAlert";
 import { listReservations } from "../utils/api";
 
@@ -23,9 +24,21 @@ export function Search() {
   };
 
   useEffect(() => {
+    const resultTableCols = {
+      first_name: "First Name",
+      last_name: "Last Name",
+      mobile_number: "Mobile Number",
+      reservation_date: "Date of Reservation",
+      reservation_time: "Time of Reservation",
+      people: "Party Size",
+      status: "Current Status",
+    };
     if (!reservations) setSearchResult("");
     else if (!reservations.length) setSearchResult("No reservations found!");
-    else setSearchResult(JSON.stringify(reservations));
+    else
+      setSearchResult(
+        <DisplayTable data={reservations} objCols={resultTableCols} />
+      );
   }, [reservations]);
 
   const errorDisplay = errorsArray.map((error, index) => (
