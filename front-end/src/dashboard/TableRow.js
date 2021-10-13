@@ -1,7 +1,5 @@
 import React from "react";
 import AssignmentButton from "./AssignmentButton/AssignmentButton";
-import CancelButton from "./AssignmentButton/CancelButton";
-import EditButton from "./AssignmentButton/EditButton";
 
 /**
  * Defines one row of a dynamic table.
@@ -24,53 +22,35 @@ export default function TableRow({ rowObject, propNames, finishTable }) {
     const isBoolean = typeof data === "boolean";
     const status = data ? "Occupied" : "Free";
 
-    // If there is a table_id, the object is a table, otherwise it's a reservation
-    const id = rowObject.table_id
-      ? rowObject.table_id
-      : rowObject.reservation_id;
-
-    // if data is a boolean, push the status into the row
+    // if data is a boolean, then it's a table status that we push into the row instead
     if (isBoolean)
       row.push(
-        <td key={index} data-table-id-status={id}>
+        <td key={index} data-table-id-status={rowObject.table_id}>
           {status}
         </td>
       );
+    // if data is undefined, we render a button of the matching propName type instead
     else if (!data) {
-      // if data is undefined, we will need to conditionally render a type of button
-      if (propName === "seatButton" || propName === "finishButton")
-        row.push(
-          <td key={index} data-reservation-id-status={id}>
-            <AssignmentButton rowObject={rowObject} finishTable={finishTable} />
-          </td>
-        );
-      else if (propName === "cancelButton")
-        row.push(
-          <td key={index} data-reservation-id-status={id}>
-            <CancelButton reservation={rowObject} />
-          </td>
-        );
-      else
-        row.push(
-          <td key={index} data-reservation-id-status={id}>
-            <EditButton reservation={rowObject} />
-          </td>
-        );
-    }
-    // if data is a reservation status, we need to give it a special attribute for the unit test to find it
-    else if (
-      data === "booked" ||
-      data === "seated" ||
-      data === "finished" ||
-      data === "cancelled"
-    )
       row.push(
-        <td key={index} data-reservation-id-status={id}>
+        <td key={index}>
+          <AssignmentButton
+            rowObject={rowObject}
+            finishTable={finishTable}
+            type={propName}
+          />
+        </td>
+      );
+    }
+    // if data is a reservation status, give it a special attribute for the unit test to find it
+    else if (["booked", "seated", "finished", "cancelled"].includes(data))
+      row.push(
+        <td key={index} data-reservation-id-status={rowObject.reservation_id}>
           {data}
         </td>
       );
     // Otherwise, just push the raw data into the row
     else row.push(<td key={index}>{data}</td>);
   }
+
   return <tr>{row}</tr>;
 }
