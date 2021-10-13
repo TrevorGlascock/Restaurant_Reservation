@@ -62,6 +62,17 @@ function read(reservation_id) {
 }
 
 /**
+ * Updates entire reservation for the selected reservation
+ * and returns the entire updated object
+ */
+function update(reservation_id, reservation) {
+  return db(tableName)
+    .where({ reservation_id })
+    .update({ reservation }, "*")
+    .then((rows) => rows[0]);
+}
+
+/**
  * Updates status property of selected reservation
  * and returns the entire updated object
  */
@@ -78,5 +89,6 @@ module.exports = {
   searchByProperty,
   create,
   read,
+  update,
   updateStatus,
 };
