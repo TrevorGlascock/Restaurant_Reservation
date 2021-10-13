@@ -205,7 +205,7 @@ async function reservationExists(req, res, next) {
 function hasValidStatus(req, res, next) {
   const { data: { status } = {} } = req.body;
   const { reservation } = res.locals;
-  const validStatuses = ["booked", "seated", "finished"];
+  const validStatuses = ["booked", "seated", "finished", "cancelled"];
 
   if (!status)
     return next({
@@ -221,10 +221,10 @@ function hasValidStatus(req, res, next) {
       )}'.`,
     });
 
-  if (reservation.status === "finished")
+  if (reservation.status === "finished" || reservation.status === "cancelled")
     return next({
       status: 400,
-      message: `A finished reservation cannot be updated. If you must book this reservation again, please make a new reservation instead.`,
+      message: `A ${reservation.status} reservation cannot be updated. If you must book this reservation again, please make a new reservation instead.`,
     });
 
   res.locals.status = status;
