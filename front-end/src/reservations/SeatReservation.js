@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
 import { listTables, readReservation, seatReservation } from "../utils/api";
+import DisplayReservation from "./DisplayReservation";
 
 /**
  * Defines the Reservation-Table Assignment Page.
@@ -136,6 +137,7 @@ export default function SeatReservation() {
           </fieldset>
         </form>
       </div>
+      <DisplayReservation reservation={reservation} />
     </main>
   );
 }
