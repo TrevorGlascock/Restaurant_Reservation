@@ -11,12 +11,12 @@ import SearchBar from "./SearchBar";
  */
 export function Search() {
   const [searchOptions, setSearchOptions] = useState({
-    first_name: false,
-    last_name: false,
-    mobile_number: true,
-    reservation_time: false,
-    people: false,
-    status: false,
+    first_name: { label: "First Name", checked: false },
+    last_name: { label: "Last Name", checked: false },
+    mobile_number: { label: "Phone Number", checked: true },
+    reservation_time: { label: "Time of Reservation", checked: false },
+    people: { label: "Size of Party", checked: false },
+    status: { label: "Status", checked: false },
   });
   const [searchBars, setSearchBars] = useState([
     {
@@ -86,9 +86,9 @@ export function Search() {
       setSearchBars((options) => [
         ...options,
         {
-          label: propName,
+          label: target.name,
           name: propName,
-          placeholder: `Enter a customer's ${propName}`,
+          placeholder: `Enter a customer's ${target.name.toLowerCase()}`,
         },
       ]);
     }
@@ -96,7 +96,7 @@ export function Search() {
     // After clicking an option, flip it's checked value
     setSearchOptions((options) => ({
       ...options,
-      [propName]: target.checked,
+      [propName]: { ...options[propName], checked: target.checked },
     }));
   };
 
@@ -107,14 +107,17 @@ export function Search() {
       role="group"
       aria-label="Search options toggle button group"
     >
-      {Object.entries(searchOptions).map(([label, checked], index) => (
-        <OptionButton
-          label={label}
-          checked={checked}
-          key={index}
-          onChange={optionClickHandler}
-        />
-      ))}
+      {Object.entries(searchOptions).map(
+        ([propName, { label, checked }], index) => (
+          <OptionButton
+            label={label}
+            propName={propName}
+            checked={checked}
+            key={index}
+            onChange={optionClickHandler}
+          />
+        )
+      )}
     </div>
   );
 

@@ -8,6 +8,7 @@ import React from "react";
  */
 export default function OptionButton({
   label = "",
+  propName = "",
   checked = false,
   onChange = () => null,
 }) {
@@ -16,12 +17,13 @@ export default function OptionButton({
       <input
         type="checkbox"
         className="btn-check"
-        id={`${label}-btn`}
+        id={`${propName}-btn`}
         autoComplete="off"
         onChange={onChange}
+        name={label}
         checked={checked}
       />
-      <label className="btn btn-outline-primary" htmlFor={`${label}-btn`}>
+      <label className="btn btn-outline-primary" htmlFor={`${propName}-btn`}>
         {label}
       </label>
     </>
