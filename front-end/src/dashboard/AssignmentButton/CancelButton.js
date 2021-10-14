@@ -26,8 +26,13 @@ export default function CancelButton({ reservation, cancelReservation }) {
       Cancel
     </button>
   ) : (
-    // Otherwise it's a danger button with the proper functionality
-    <button type="button" onClick={onClick} className="btn btn-danger">
+    // Otherwise it's a danger button with the proper functionality, and an additional attribute so the unit test can locate it
+    <button
+      type="button"
+      onClick={onClick}
+      className="btn btn-danger"
+      data-reservation-id-cancel={id}
+    >
       Cancel
     </button>
   );
