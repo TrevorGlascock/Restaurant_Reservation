@@ -6,22 +6,24 @@ import React from "react";
  *  string for the text that labels the input
  * @param name
  *  string for the property_name and HTML name
- * @param placeholder
- *  string defining the placeholder and title text
  * @param value
  *  string for dynamic form value
  * @param onChange
  *  function defined in parent component to handle changing form state
+ * @param required
+ *  optional attribute used to conditionally make a searchBar one that is required
+ * @var placeholder
+ *  string defining the placeholder and title text derived fromn the lowerCase label
  * @returns
  */
 export default function SearchBar({
   label = "",
   name = "",
-  placeholder = "",
   value = "",
   onChange = () => null,
   required = false,
 }) {
+  const placeholder = `Enter a customer's ${label.toLowerCase()}`;
   return (
     <div className="form-group my-2">
       <label htmlFor={name}>{label}</label>
