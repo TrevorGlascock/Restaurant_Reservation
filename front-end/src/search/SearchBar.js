@@ -20,6 +20,7 @@ export default function SearchBar({
   placeholder,
   value,
   onChange,
+  required,
 }) {
   return (
     <div className="form-group my-2">
@@ -35,7 +36,7 @@ export default function SearchBar({
             className="form-control my-2"
             value={value}
             onChange={onChange}
-            required
+            required={required}
           />
         </div>
       </div>

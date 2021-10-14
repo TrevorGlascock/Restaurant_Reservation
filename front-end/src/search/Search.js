@@ -30,14 +30,6 @@ export function Search() {
   const [searchResult, setSearchResult] = useState(""); // useState variable to store the searchResults generated from reservations
   const [errorsArray, setErrorsArray] = useState([]); // All errors in validation, potential API error on submit, and finally the tablesError, if it isn't null
 
-  const queriesChangeHandler = ({ target: { name, value } }) =>
-    setSearchQueries((queries) => {
-      return {
-        ...queries,
-        [name]: value,
-      };
-    });
-
   const submitHandler = (event) => {
     event.preventDefault(); // prevents the submit button's default behavior
     setErrorsArray([]);
@@ -72,14 +64,23 @@ export function Search() {
     <ErrorAlert key={index} error={error} />
   ));
 
-  const optionClick = ({ target }) => {
-    // When the option is unchecked, remove it's searchBar
-    if (!target.checked)
+  const optionClickHandler = ({ target }) => {
+    // When the option is unchecked:
+    if (!target.checked) {
+      // Filter out the matching searchBar
       setSearchBars((options) =>
         options.filter(({ name }) => name !== target.name)
       );
-    // When the option is checked, add it's searchBar
-    else
+      // Set it's corresponding query to an empty string
+      setSearchQueries((queries) => ({
+        ...queries,
+        [target.name]: "",
+      }));
+    }
+
+    // When the option is checked:
+    else {
+      // Add a new searchBar based on the option clicked
       setSearchBars((options) => [
         ...options,
         {
@@ -88,8 +89,9 @@ export function Search() {
           placeholder: `Enter a customer's ${target.name}`,
         },
       ]);
+    }
 
-    // After adding or removing the searchBar, update the option that was changed
+    // After clicking an option, flip it's checked value
     setSearchOptions((options) => ({
       ...options,
       [target.name]: target.checked,
@@ -108,11 +110,17 @@ export function Search() {
           label={label}
           checked={checked}
           key={index}
-          onChange={optionClick}
+          onChange={optionClickHandler}
         />
       ))}
     </div>
   );
+
+  const queriesChangeHandler = ({ target: { name, value } }) =>
+    setSearchQueries((queries) => ({
+      ...queries,
+      [name]: value,
+    }));
 
   // Dynamic SearchBars Display
   const searchBarsDisplay = searchBars.map(
@@ -124,6 +132,7 @@ export function Search() {
         value={searchQueries[name]}
         onChange={queriesChangeHandler}
         key={index}
+        required={index === 0}
       />
     )
   );
