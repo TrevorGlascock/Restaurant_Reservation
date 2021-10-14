@@ -10,7 +10,14 @@ import SearchBar from "./SearchBar";
  * @returns {JSX.Element}
  */
 export function Search() {
-  const [searchOptions, setSearchOptions] = useState(["mobile_number"]);
+  const [searchOptions, setSearchOptions] = useState([
+    { label: "mobile_number", checked: true },
+    { label: "first_name" },
+    { label: "last_name" },
+    { label: "status" },
+    { label: "people" },
+    { label: "reservation_time" },
+  ]);
   const [searchBars, setSearchBars] = useState([
     {
       label: "Mobile Number",
@@ -66,9 +73,17 @@ export function Search() {
   ));
 
   // Dynamic search options picker
-  const optionsPicker = searchOptions.map((option, index) => (
-    <OptionButton label={option} key={index} />
-  ));
+  const optionsPicker = (
+    <div
+      className="btn-group"
+      role="group"
+      aria-label="Search options toggle button group"
+    >
+      {searchOptions.map(({ label, checked = false }, index) => (
+        <OptionButton label={label} checked={checked} key={index} />
+      ))}
+    </div>
+  );
 
   // Dynamic SearchBars Display
   const searchBarsDisplay = searchBars.map(
