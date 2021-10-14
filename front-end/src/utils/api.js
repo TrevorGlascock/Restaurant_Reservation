@@ -99,6 +99,32 @@ export async function createReservation(reservation, signal) {
 }
 
 /**
+ * Updates a reservation in the database
+ * @param reservation_id
+ *  the id of the reservation to be updated
+ * @param newReservation
+ *  the reservation to object that will overwrite the old reservation
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<reservation>}
+ *  a promise that resolves the new reservation.
+ */
+export async function updateReservation(
+  reservation_id,
+  newReservation,
+  signal
+) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: newReservation }),
+    signal,
+  };
+  return fetchJson(url, options, {});
+}
+
+/**
  * Retrieves all existing tables.
  *  @param signal
  *  optional AbortController.signal
