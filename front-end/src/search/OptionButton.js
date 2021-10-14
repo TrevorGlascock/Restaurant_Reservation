@@ -16,7 +16,6 @@ export default function OptionButton({
       <input
         type="checkbox"
         className="btn-check"
-        name={label}
         id={`${label}-btn`}
         autoComplete="off"
         onChange={onChange}

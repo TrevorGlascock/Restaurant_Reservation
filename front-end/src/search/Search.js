@@ -66,16 +66,17 @@ export function Search() {
   ));
 
   const optionClickHandler = ({ target }) => {
+    const propName = target.id.replace(/-btn$/, "");
     // When the option is unchecked:
     if (!target.checked) {
       // Filter out the matching searchBar
       setSearchBars((options) =>
-        options.filter(({ name }) => name !== target.name)
+        options.filter(({ name }) => name !== propName)
       );
       // Set it's corresponding query to an empty string
       setSearchQueries((queries) => ({
         ...queries,
-        [target.name]: "",
+        [propName]: "",
       }));
     }
 
@@ -85,9 +86,9 @@ export function Search() {
       setSearchBars((options) => [
         ...options,
         {
-          label: target.name,
-          name: target.name,
-          placeholder: `Enter a customer's ${target.name}`,
+          label: propName,
+          name: propName,
+          placeholder: `Enter a customer's ${propName}`,
         },
       ]);
     }
@@ -95,7 +96,7 @@ export function Search() {
     // After clicking an option, flip it's checked value
     setSearchOptions((options) => ({
       ...options,
-      [target.name]: target.checked,
+      [propName]: target.checked,
     }));
   };
 
