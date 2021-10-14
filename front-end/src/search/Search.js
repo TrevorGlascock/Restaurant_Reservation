@@ -86,10 +86,23 @@ export function Search() {
         <form onSubmit={submitHandler}>
           <fieldset>
             <legend className="h1">Search for Reservations</legend>
+            <input
+              type="checkbox"
+              className="btn-check"
+              id="btn-check-outlined"
+              autocomplete="off"
+              value={true}
+            />
+            <label
+              className="btn btn-outline-primary"
+              htmlFor="btn-check-outlined"
+            >
+              mobile_number
+            </label>
             {searchBarsDisplay}
           </fieldset>
           <div>
-            <button type="submit" className="btn btn-info px-3">
+            <button type="submit" className="btn btn-success px-3 mt-2">
               Find
             </button>
           </div>
