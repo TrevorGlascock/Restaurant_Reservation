@@ -10,7 +10,13 @@ import SearchBar from "./SearchBar";
  */
 export function Search() {
   // const [searchOptions, setSearchOptions] = useState();
-  const [searchBars, setSearchBars] = useState(["test"]);
+  const [searchBars, setSearchBars] = useState([
+    {
+      label: "Mobile Number",
+      name: "mobile_number",
+      placeholder: "Enter a customer's phone number",
+    },
+  ]);
   const [searchQueries, setSearchQueries] = useState({ mobile_number: "" }); // useState control form that defines the search query for the API call
   const [reservations, setReservations] = useState(null); // useState Array to store the queried reservations
   const [searchResult, setSearchResult] = useState(""); // useState variable to store the searchResults generated from reservations
@@ -34,6 +40,7 @@ export function Search() {
     return () => abortController.abort();
   };
 
+  // Update the search results anytime reservations changes
   useEffect(() => {
     const resultTableCols = {
       first_name: "First Name",
@@ -52,20 +59,24 @@ export function Search() {
       );
   }, [reservations]);
 
+  // Dynamic error display
   const errorDisplay = errorsArray.map((error, index) => (
     <ErrorAlert key={index} error={error} />
   ));
 
-  const searchBarDisplay = searchBars.map((element, index) => (
-    <SearchBar
-      lable="Mobile Number"
-      name="mobile_number"
-      placeholder="Enter a customer's phone number"
-      value={searchQueries.mobile_number}
-      onChange={queriesChangeHandler}
-      key={index}
-    />
-  ));
+  // Dynamic SearchBars Display
+  const searchBarsDisplay = searchBars.map(
+    ({ label, name, placeholder }, index) => (
+      <SearchBar
+        label={label}
+        name={name}
+        placeholder={placeholder}
+        value={searchQueries.mobile_number}
+        onChange={queriesChangeHandler}
+        key={index}
+      />
+    )
+  );
 
   return (
     <main>
@@ -75,7 +86,7 @@ export function Search() {
         <form onSubmit={submitHandler}>
           <fieldset>
             <legend className="h1">Search for Reservations</legend>
-            <div className="form-group">{searchBarDisplay}</div>
+            {searchBarsDisplay}
           </fieldset>
           <div>
             <button type="submit" className="btn btn-info px-3">
@@ -84,7 +95,6 @@ export function Search() {
           </div>
         </form>
       </div>
-
       {searchResult}
     </main>
   );
