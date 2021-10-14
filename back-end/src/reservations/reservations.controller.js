@@ -10,7 +10,13 @@ const REQUIRED_PROPERTIES = [
   "people",
 ];
 
-const VALID_PROPERTIES = [...REQUIRED_PROPERTIES, "status"];
+const VALID_PROPERTIES = [
+  ...REQUIRED_PROPERTIES,
+  "reservation_id",
+  "created_at",
+  "updated_at",
+  "status",
+];
 
 /**
  * Middleware validation for request bodies
@@ -59,13 +65,22 @@ function bodyHasAllRequiredFields(req, res, next) {
       } of type ${typeof data.people}) must be a number.`,
     });
 
-  // If an optional status is added, only allow it post if the value is 'booked'
-  if (data.status && data.status !== "booked")
+  res.locals.newReservation = data;
+  return next();
+}
+
+/**
+ * Validation Middleware only for POST requests with new Reservations
+ * If an optional status is added, only allow it to post if the value is 'booked'
+ * on PUT requests, instead use validateUpdateStatus middleware
+ */
+function validateNewStatus(req, res, next) {
+  const { status = "booked" } = res.locals.newReservation;
+  if (status !== "booked")
     return next({
       status: 400,
-      message: `Status cannot be set to '${data.status}'. When creating a reservation, it must have the default status of 'booked', or no status at all.`,
+      message: `Status cannot be set to '${status}'. When creating a reservation, it must have the default status of 'booked', or no status at all.`,
     });
-  res.locals.reservation = data;
   return next();
 }
 
@@ -74,8 +89,8 @@ function bodyHasAllRequiredFields(req, res, next) {
  * Ensures the request body only has properties that are allowed before proceeding
  */
 function bodyHasNoInvalidFields(req, res, next) {
-  const { reservation } = res.locals;
-  const invalidFields = Object.keys(reservation).filter(
+  const { newReservation } = res.locals;
+  const invalidFields = Object.keys(newReservation).filter(
     (field) => !VALID_PROPERTIES.includes(field)
   );
 
@@ -103,7 +118,7 @@ function validateDateTime(req, res, next) {
   const startTime = "10:30"; // Start time is the target date at opening time
   const closeTime = "21:30"; // End time is the target date an hour before closing time
 
-  const { reservation_date, reservation_time } = req.body.data;
+  const { reservation_date, reservation_time } = res.locals.newReservation;
   const date = new Date(`${reservation_date}T${reservation_time}`);
   const today = new Date();
 
@@ -202,17 +217,19 @@ async function reservationExists(req, res, next) {
  * Used for updateStatus() requests
  */
 
-function hasValidStatus(req, res, next) {
+function validateUpdateStatus(req, res, next) {
   const { data: { status } = {} } = req.body;
   const { reservation } = res.locals;
-  const validStatuses = ["booked", "seated", "finished"];
+  const validStatuses = ["booked", "seated", "finished", "cancelled"];
 
+  // There must be a status in the request body
   if (!status)
     return next({
       status: 400,
       message: `The data in the request body requires a status field.`,
     });
 
+  // Status must be a valid value
   if (!validStatuses.includes(status))
     return next({
       status: 400,
@@ -221,13 +238,58 @@ function hasValidStatus(req, res, next) {
       )}'.`,
     });
 
-  if (reservation.status === "finished")
+  // Finished and Cancelled reservations are archived, therefore should be uneditable
+  if (reservation.status === "finished" || reservation.status === "cancelled")
     return next({
       status: 400,
-      message: `A finished reservation cannot be updated. If you must book this reservation again, please make a new reservation instead.`,
+      message: `A '${reservation.status}' reservation cannot be updated. If you must book this reservation again, please make a new reservation instead.`,
+    });
+
+  // Seated reservations can only be updated if they are being set to finished
+  if (reservation.status === "seated" && status !== "finished")
+    return next({
+      status: 400,
+      message: `A 'seated' reservation can not be updated to '${status}'. Seated reservations can only have their status changed to 'finished'.`,
     });
 
   res.locals.status = status;
+  return next();
+}
+
+/**
+ * Validation middleware for update Reservations
+ * Ensures that uneditable properties are not being changed
+ * And forces update_at to become the new date
+ */
+
+function validateReservationUpdate(req, res, next) {
+  const {
+    reservation: { reservation_id: id, created_at: created },
+    newReservation,
+  } = res.locals;
+
+  const {
+    reservation_id: newId = id,
+    created_at: newCreated = created.toISOString(),
+  } = newReservation;
+
+  // reservation_id must match or be omitted from the request body
+  if (id !== newId)
+    return next({
+      status: 400,
+      message: `You are attempting to change this reservation's id from ${id} to ${newId}. You cannot change a reservation's id.`,
+    });
+
+  // created_at must match or be omitted from the request body
+  if (created.toISOString() !== newCreated)
+    return next({
+      status: 400,
+      message: `You cannot alter the date this reservation was created on. Either remove 'created_at' from the request body or ensure it matches the original date`,
+    });
+
+  // Updated_at will always be set to the current date, regardless of the request body
+  newReservation.updated_at = new Date();
+
   return next();
 }
 
@@ -249,8 +311,8 @@ async function list(req, res) {
  * Create handler for new Reservations
  */
 async function create(req, res) {
-  const { reservation } = res.locals;
-  const data = await service.create(reservation);
+  const { newReservation } = res.locals;
+  const data = await service.create(newReservation);
   res.status(201).json({ data });
 }
 
@@ -259,6 +321,15 @@ async function create(req, res) {
  */
 async function read(req, res) {
   res.json({ data: res.locals.reservation });
+}
+
+/**
+ * Update handler for editing entire reservation
+ */
+async function update(req, res) {
+  const { reservation, newReservation } = res.locals;
+  const data = await service.update(reservation.reservation_id, newReservation);
+  res.json({ data });
 }
 
 /**
@@ -275,13 +346,23 @@ module.exports = {
   create: [
     bodyHasAllRequiredFields,
     bodyHasNoInvalidFields,
+    validateNewStatus,
     validateDateTime,
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), read],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    bodyHasAllRequiredFields,
+    bodyHasNoInvalidFields,
+    validateDateTime,
+    validateReservationUpdate,
+    validateUpdateStatus,
+    asyncErrorBoundary(update),
+  ],
   updateStatus: [
     asyncErrorBoundary(reservationExists),
-    hasValidStatus,
+    validateUpdateStatus,
     asyncErrorBoundary(updateStatus),
   ],
 };

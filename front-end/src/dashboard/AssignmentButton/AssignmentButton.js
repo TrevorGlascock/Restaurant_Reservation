@@ -1,4 +1,6 @@
 import React from "react";
+import CancelButton from "./CancelButton";
+import EditButton from "./EditButton";
 import FinishButton from "./FinishButton";
 import SeatButton from "./SeatButton";
 
@@ -7,20 +9,26 @@ import SeatButton from "./SeatButton";
  * @param rowObject
  *  the entire object passed in from the parent component
  *  will either be a table object or a reservation object
- * @var table_id
- *  destructed from rowObject param to distinguish between the types of objects
- *  table objects will have a table_id primary key
- *  reservation objects will have a null table_id
+ * @param type
+ *  a string representing the type of button to conditionally render.
+ *  defaults to a "finishButton"
  * @returns {JSX.Element}
  */
 
-export default function AssignmentButton({ rowObject, finishTable }) {
-  const { table_id = null } = rowObject;
-  return table_id ? (
-    // Table objects have FinishButtons
-    <FinishButton table={rowObject} finishTable={finishTable} />
-  ) : (
-    // Reservation objects have SeatButtons
-    <SeatButton reservation={rowObject} />
-  );
+export default function AssignmentButton({ rowObject, buttonFunction, type }) {
+  switch (type) {
+    case "seatButton":
+      return <SeatButton reservation={rowObject} />;
+    case "editButton":
+      return <EditButton reservation={rowObject} />;
+    case "cancelButton":
+      return (
+        <CancelButton
+          reservation={rowObject}
+          cancelReservation={buttonFunction}
+        />
+      );
+    default:
+      return <FinishButton table={rowObject} finishTable={buttonFunction} />;
+  }
 }

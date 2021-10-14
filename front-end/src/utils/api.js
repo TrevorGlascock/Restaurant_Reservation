@@ -99,6 +99,32 @@ export async function createReservation(reservation, signal) {
 }
 
 /**
+ * Updates a reservation in the database
+ * @param reservation_id
+ *  the id of the reservation to be updated
+ * @param newReservation
+ *  the reservation to object that will overwrite the old reservation
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<reservation>}
+ *  a promise that resolves the new reservation.
+ */
+export async function updateReservation(
+  reservation_id,
+  newReservation,
+  signal
+) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: newReservation }),
+    signal,
+  };
+  return fetchJson(url, options, {});
+}
+
+/**
  * Retrieves all existing tables.
  *  @param signal
  *  optional AbortController.signal
@@ -161,11 +187,34 @@ export async function seatReservation(reservation_id, table_id, signal) {
  * @returns {Promise<reservation>}
  *  a promise that resolves the updated table.
  */
-export async function deleteReservation(table_id, signal) {
+export async function finishReservation(table_id, signal) {
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   const options = {
     method: "DELETE",
     headers,
+    signal,
+  };
+  return fetchJson(url, options, {});
+}
+
+/**
+ * Updates a reservation status independant of table's foreign key deletion
+ * Notably useful for cancelling a reservation
+ * @param reservation_id
+ *  the reservation_id that corresponds to reservation being updated
+ * @param status
+ *  the string value that the status of this reservation will be updated to
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<reservation>}
+ *  a promise that resolves the updated reservation.
+ */
+export async function setReservationStatus(reservation_id, status, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: { status } }),
     signal,
   };
   return fetchJson(url, options, {});

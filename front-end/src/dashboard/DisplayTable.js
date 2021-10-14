@@ -16,14 +16,14 @@ import TableRow from "./TableRow";
 export default function DisplayTable({
   data,
   objCols = {},
-  finishTable = () => null,
+  buttonFunction = () => null,
 }) {
   const rows = data?.map((object, index) => (
     <TableRow
       key={index}
       rowObject={object}
       propNames={Object.keys(objCols)}
-      finishTable={finishTable}
+      buttonFunction={buttonFunction}
     />
   ));
 
