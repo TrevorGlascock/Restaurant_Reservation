@@ -8,16 +8,24 @@ import { listReservations } from "../utils/api";
  * @returns {JSX.Element}
  */
 export function Search() {
-  const [searchQuery, setSearchQuery] = useState(""); // useState control form that defines the search query for the API call
+  const [searchQueries, setSearchQueries] = useState({ mobile_number: "" }); // useState control form that defines the search query for the API call
   const [reservations, setReservations] = useState(null); // useState Array to store the queried reservations
   const [searchResult, setSearchResult] = useState(""); // useState variable to store the searchResults generated from reservations
   const [errorsArray, setErrorsArray] = useState([]); // All errors in validation, potential API error on submit, and finally the tablesError, if it isn't null
+
+  const queriesChangeHandler = ({ target: { name, value } }) =>
+    setSearchQueries((queries) => {
+      return {
+        ...queries,
+        [name]: value,
+      };
+    });
 
   const submitHandler = (event) => {
     event.preventDefault(); // prevents the submit button's default behavior
     setErrorsArray([]);
     const abortController = new AbortController();
-    listReservations({ mobile_number: searchQuery }, abortController.signal)
+    listReservations(searchQueries, abortController.signal)
       .then(setReservations)
       .catch((errorObj) => setErrorsArray((errors) => [...errors, errorObj]));
     return () => abortController.abort();
@@ -64,8 +72,8 @@ export function Search() {
                     placeholder="Enter a customer's phone number"
                     title="Enter a customer's phone number"
                     className="form-control"
-                    value={searchQuery}
-                    onChange={({ target }) => setSearchQuery(target.value)}
+                    value={searchQueries.mobile_number}
+                    onChange={queriesChangeHandler}
                     required
                   />
                 </div>
