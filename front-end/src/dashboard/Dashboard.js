@@ -83,6 +83,10 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  /**
+   * Function to call setReservationStatus with a status of "cancelled", then to call listTables
+   * This function will be prop-drilled into CancelButton
+   */
   async function cancelReservation(id) {
     setReservationsError(null);
     const abortController = new AbortController();
