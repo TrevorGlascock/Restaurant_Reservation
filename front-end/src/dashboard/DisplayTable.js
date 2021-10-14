@@ -16,6 +16,7 @@ import TableRow from "./TableRow";
 export default function DisplayTable({
   data,
   objCols = {},
+  cancelReservation = () => null,
   finishTable = () => null,
 }) {
   const rows = data?.map((object, index) => (
@@ -23,6 +24,7 @@ export default function DisplayTable({
       key={index}
       rowObject={object}
       propNames={Object.keys(objCols)}
+      cancelReservation={cancelReservation}
       finishTable={finishTable}
     />
   ));
