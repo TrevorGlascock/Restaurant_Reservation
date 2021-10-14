@@ -171,6 +171,18 @@ export async function finishReservation(table_id, signal) {
   return fetchJson(url, options, {});
 }
 
+/**
+ * Updates a reservation status independant of table's foreign key deletion
+ * Notably useful for cancelling a reservation
+ * @param reservation_id
+ *  the reservation_id that corresponds to reservation being updated
+ * @param status
+ *  the string value that the status of this reservation will be updated to
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<reservation>}
+ *  a promise that resolves the updated reservation.
+ */
 export async function setReservationStatus(reservation_id, status, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
   const options = {
