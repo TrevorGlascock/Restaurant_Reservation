@@ -47,7 +47,7 @@ export default function NewTable() {
     setSubmissionErrors([]);
 
     formData.capacity = parseInt(formData.capacity); // capacity must be parsed into an integer before submiting the data to the backend
-    
+
     // API util to submit to the backend
     if (formIsValid())
       createTable(formData)
@@ -75,7 +75,7 @@ export default function NewTable() {
         <form onSubmit={submitHandler}>
           <fieldset>
             <legend className="h1">Create a New Table</legend>
-            <div className="form-group">
+            <div className="form-group my-2">
               <label htmlFor="table_name">Table Name</label>
               <input
                 id="table_name"
@@ -83,14 +83,14 @@ export default function NewTable() {
                 name="table_name"
                 placeholder="Please provide a name for the table"
                 title="Please provide a name for the table"
-                className="form-control"
+                className="form-control my-2"
                 value={formData.table_name}
                 onChange={formChangeHandler}
                 required
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group my-2">
               <label htmlFor="capacity">Maximum Capacity</label>
               <input
                 id="capacity"
@@ -98,7 +98,7 @@ export default function NewTable() {
                 name="capacity"
                 placeholder="Please enter the maximum seating capacity for this table"
                 title="Please enter the maximum seating capacity for this table"
-                className="form-control"
+                className="form-control my-2"
                 min="1"
                 value={formData.capacity}
                 onChange={formChangeHandler}
@@ -108,12 +108,12 @@ export default function NewTable() {
 
             <button
               type="button"
-              className="btn btn-secondary"
+              className="btn btn-secondary mt-2"
               onClick={cancelHandler}
             >
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary ml-4">
+            <button type="submit" className="btn btn-primary ms-4 mt-2">
               Submit
             </button>
           </fieldset>

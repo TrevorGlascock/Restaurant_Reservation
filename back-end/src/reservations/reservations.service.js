@@ -28,7 +28,7 @@ function searchByDate(reservation_date) {
  */
 function searchByProperty(queriesObject) {
   const entries = Object.entries(queriesObject);
-  if (!entries.length) return list();
+  if (!entries.find(([, value]) => !!value)) return list();
 
   let whereQuery = "";
   for (let i = 0; i < entries.length; i++) {

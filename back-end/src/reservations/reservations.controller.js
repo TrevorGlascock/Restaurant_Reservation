@@ -216,7 +216,6 @@ async function reservationExists(req, res, next) {
  * And Ensures that the status is a valid status
  * Used for updateStatus() requests
  */
-
 function validateUpdateStatus(req, res, next) {
   const { data: { status } = {} } = req.body;
   const { reservation } = res.locals;
@@ -261,7 +260,6 @@ function validateUpdateStatus(req, res, next) {
  * Ensures that uneditable properties are not being changed
  * And forces update_at to become the new date
  */
-
 function validateReservationUpdate(req, res, next) {
   const {
     reservation: { reservation_id: id, created_at: created },
@@ -290,6 +288,30 @@ function validateReservationUpdate(req, res, next) {
   // Updated_at will always be set to the current date, regardless of the request body
   newReservation.updated_at = new Date();
 
+  return next();
+}
+
+/**
+ * Middleware validation for list Reservations
+ * Ensures that all queries on the request are valid
+ * If there is no query, this middleware is skipped
+ */
+function validateReqQueries(req, res, next) {
+  const { query } = req;
+
+  // Skip this middleware if there are no queries
+  if (!query) return next();
+
+  const invalidQueries = Object.keys(query).filter(
+    (property) => !VALID_PROPERTIES.includes(property) && property !== "date"
+  );
+
+  if (invalidQueries.length) {
+    return next({
+      status: 400,
+      message: `Invalid queries: '${invalidQueries.join("', '")}'`,
+    });
+  }
   return next();
 }
 
@@ -342,7 +364,7 @@ async function updateStatus(req, res) {
 }
 
 module.exports = {
-  list: asyncErrorBoundary(list),
+  list: [validateReqQueries, asyncErrorBoundary(list)],
   create: [
     bodyHasAllRequiredFields,
     bodyHasNoInvalidFields,

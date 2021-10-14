@@ -38,7 +38,7 @@ export default function DateNavigationButton({ type, currentDate }) {
   };
 
   return (
-    <button className="btn btn-secondary mr-3 mb-3" onClick={onClickHandler}>
+    <button className="btn btn-secondary me-3 mb-3" onClick={onClickHandler}>
       {text}
     </button>
   );

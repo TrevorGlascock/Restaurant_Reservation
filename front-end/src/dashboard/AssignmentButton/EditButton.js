@@ -23,7 +23,7 @@ export default function EditButton({ reservation }) {
     </button>
   ) : (
     // Otherwise it's a Link Component to href styled like a primary button
-    <Link className="btn btn-info" to={href}>
+    <Link className="btn btn-warning" to={href}>
       Edit
     </Link>
   );

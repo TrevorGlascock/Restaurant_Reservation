@@ -161,7 +161,7 @@ export default function ReservationForm({ defaultFormData, APICall }) {
         <form onSubmit={submitHandler}>
           <fieldset>
             <legend className="h1">New Reservation</legend>
-            <div className="form-group">
+            <div className="form-group my-2">
               <label htmlFor="first_name">First Name</label>
               <input
                 id="first_name"
@@ -169,14 +169,14 @@ export default function ReservationForm({ defaultFormData, APICall }) {
                 name="first_name"
                 placeholder="Enter your first name"
                 title="Enter your first name"
-                className="form-control"
+                className="form-control my-2"
                 value={formData.first_name}
                 onChange={formChangeHandler}
                 required
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group my-2">
               <label htmlFor="last_name">Last Name</label>
               <input
                 id="last_name"
@@ -184,14 +184,14 @@ export default function ReservationForm({ defaultFormData, APICall }) {
                 name="last_name"
                 placeholder="Enter your last name"
                 title="Enter your last name"
-                className="form-control"
+                className="form-control my-2"
                 value={formData.last_name}
                 onChange={formChangeHandler}
                 required
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group my-2">
               <label htmlFor="mobile_number">Mobile number</label>
               <input
                 id="mobile_number"
@@ -199,42 +199,42 @@ export default function ReservationForm({ defaultFormData, APICall }) {
                 name="mobile_number"
                 placeholder="Enter your mobile phone number"
                 title="Enter your mobile phone number"
-                className="form-control"
+                className="form-control my-2"
                 value={formData.mobile_number}
                 onChange={formChangeHandler}
                 required
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group my-2">
               <label htmlFor="reservation_date">Date of Reservation</label>
               <input
                 id="reservation_date"
                 type="date"
                 name="reservation_date"
                 title="Please select the date you wish to reserve"
-                className="form-control"
+                className="form-control my-2"
                 value={formData.reservation_date}
                 onChange={formChangeHandler}
                 required
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group my-2">
               <label htmlFor="reservation_time">Time of Reservation</label>
               <input
                 id="reservation_time"
                 type="time"
                 name="reservation_time"
                 title="Please select the time you wish to reserve"
-                className="form-control"
+                className="form-control my-2"
                 value={formData.reservation_time}
                 onChange={formChangeHandler}
                 required
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group my-2">
               <label htmlFor="people">Size of Party</label>
               <input
                 id="people"
@@ -242,7 +242,7 @@ export default function ReservationForm({ defaultFormData, APICall }) {
                 name="people"
                 placeholder="Please enter the size of your party"
                 title="Please enter the size of your party"
-                className="form-control"
+                className="form-control my-2"
                 min="1"
                 value={formData.people}
                 onChange={formChangeHandler}
@@ -251,12 +251,12 @@ export default function ReservationForm({ defaultFormData, APICall }) {
             </div>
             <button
               type="button"
-              className="btn btn-secondary"
+              className="btn btn-secondary mt-2"
               onClick={cancelHandler}
             >
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary ml-4">
+            <button type="submit" className="btn btn-primary ms-4 mt-2">
               Submit
             </button>
           </fieldset>
