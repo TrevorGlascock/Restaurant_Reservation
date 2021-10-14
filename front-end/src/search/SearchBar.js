@@ -15,12 +15,12 @@ import React from "react";
  * @returns
  */
 export default function SearchBar({
-  label,
-  name,
-  placeholder,
-  value,
-  onChange,
-  required,
+  label = "",
+  name = "",
+  placeholder = "",
+  value = "",
+  onChange = () => null,
+  required = false,
 }) {
   return (
     <div className="form-group my-2">

@@ -7,7 +7,7 @@ import React from "react";
  * @returns
  */
 export default function OptionButton({
-  label,
+  label = "",
   checked = false,
   onChange = () => null,
 }) {
