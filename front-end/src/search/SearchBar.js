@@ -22,7 +22,7 @@ export default function SearchBar({
   onChange,
 }) {
   return (
-    <div className="form-group">
+    <div className="form-group my-2">
       <label htmlFor={name}>{label}</label>
       <div className="row">
         <div className="col-9">
@@ -32,7 +32,7 @@ export default function SearchBar({
             name={name}
             placeholder={placeholder}
             title={placeholder}
-            className="form-control"
+            className="form-control my-2"
             value={value}
             onChange={onChange}
             required
