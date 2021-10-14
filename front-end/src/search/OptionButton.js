@@ -12,10 +12,10 @@ export default function OptionButton({ label }) {
       <input
         type="checkbox"
         className="btn-check"
-        id="btn-check-outlined"
+        id={`${label}-btn`}
         autocomplete="off"
       />
-      <label className="btn btn-outline-primary" htmlFor="btn-check-outlined">
+      <label className="btn btn-outline-primary" htmlFor={`${label}-btn`}>
         {label}
       </label>
     </>
