@@ -161,7 +161,7 @@ export default function ReservationForm({ defaultFormData, APICall }) {
         <form onSubmit={submitHandler}>
           <fieldset>
             <legend className="h1">New Reservation</legend>
-            <div className="form-group">
+            <div className="form-group my-2">
               <label htmlFor="first_name">First Name</label>
               <input
                 id="first_name"
@@ -176,7 +176,7 @@ export default function ReservationForm({ defaultFormData, APICall }) {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group my-2">
               <label htmlFor="last_name">Last Name</label>
               <input
                 id="last_name"
@@ -191,7 +191,7 @@ export default function ReservationForm({ defaultFormData, APICall }) {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group my-2">
               <label htmlFor="mobile_number">Mobile number</label>
               <input
                 id="mobile_number"
@@ -206,7 +206,7 @@ export default function ReservationForm({ defaultFormData, APICall }) {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group my-2">
               <label htmlFor="reservation_date">Date of Reservation</label>
               <input
                 id="reservation_date"
@@ -220,7 +220,7 @@ export default function ReservationForm({ defaultFormData, APICall }) {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group my-2">
               <label htmlFor="reservation_time">Time of Reservation</label>
               <input
                 id="reservation_time"
@@ -234,7 +234,7 @@ export default function ReservationForm({ defaultFormData, APICall }) {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group my-2">
               <label htmlFor="people">Size of Party</label>
               <input
                 id="people"
