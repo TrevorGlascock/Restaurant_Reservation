@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import DisplayTable from "../dashboard/DisplayTable";
 import ErrorAlert from "../layout/ErrorAlert";
 import { listReservations } from "../utils/api";
+import OptionButton from "./OptionButton";
 import SearchBar from "./SearchBar";
 
 /**
@@ -9,7 +10,7 @@ import SearchBar from "./SearchBar";
  * @returns {JSX.Element}
  */
 export function Search() {
-  // const [searchOptions, setSearchOptions] = useState();
+  const [searchOptions, setSearchOptions] = useState(["mobile_number"]);
   const [searchBars, setSearchBars] = useState([
     {
       label: "Mobile Number",
@@ -64,6 +65,11 @@ export function Search() {
     <ErrorAlert key={index} error={error} />
   ));
 
+  // Dynamic search options picker
+  const optionsPicker = searchOptions.map((option, index) => (
+    <OptionButton label={option} key={index} />
+  ));
+
   // Dynamic SearchBars Display
   const searchBarsDisplay = searchBars.map(
     ({ label, name, placeholder }, index) => (
@@ -86,19 +92,7 @@ export function Search() {
         <form onSubmit={submitHandler}>
           <fieldset>
             <legend className="h1">Search for Reservations</legend>
-            <input
-              type="checkbox"
-              className="btn-check"
-              id="btn-check-outlined"
-              autocomplete="off"
-              value={true}
-            />
-            <label
-              className="btn btn-outline-primary"
-              htmlFor="btn-check-outlined"
-            >
-              mobile_number
-            </label>
+            {optionsPicker}
             {searchBarsDisplay}
           </fieldset>
           <div>
