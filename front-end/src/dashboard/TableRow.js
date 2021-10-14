@@ -1,4 +1,5 @@
 import React from "react";
+import { convert12HourTime } from "../utils/date-time";
 import AssignmentButton from "./AssignmentButton/AssignmentButton";
 
 /**
@@ -48,6 +49,10 @@ export default function TableRow({ rowObject, propNames, buttonFunction }) {
           {data}
         </td>
       );
+    //  if propName contains 'time', we should convert the data into 12-Hour Time for readabilty
+    else if (propName.match(/time/gi)) {
+      row.push(<td key={index}>{convert12HourTime(data)}</td>);
+    }
     // Otherwise, just push the raw data into the row
     else row.push(<td key={index}>{data}</td>);
   }

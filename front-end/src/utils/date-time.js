@@ -41,6 +41,24 @@ export function formatAsTime(timeString) {
 }
 
 /**
+ * Format a time string in "HH:MM (AM/PM)" 12 hour format
+ * @param timeString
+ *  HH:MM or HH:MM:SS 24 hour format
+ * @returns
+ *  the specified time string in "HH:MM (AM/PM)" 12 hour format
+ */
+export function convert12HourTime(timeString) {
+  let hours = Number(timeString.split(":")[0]);
+  const minutes = timeString.split(":")[1];
+  let meridiem = " AM";
+  if (hours > 12) {
+    hours -= 12;
+    meridiem = " PM";
+  }
+  return `${hours}:${minutes}${meridiem}`;
+}
+
+/**
  * Today's date as YYYY-MM-DD.
  * @returns {*}
  *  the today's date formatted as YYYY-MM-DD
@@ -57,7 +75,7 @@ export function today() {
  *  the date one day prior to currentDate, formatted as YYYY-MM-DD
  */
 export function previous(currentDate) {
-  let [ year, month, day ] = currentDate.split("-");
+  let [year, month, day] = currentDate.split("-");
   month -= 1;
   const date = new Date(year, month, day);
   date.setMonth(date.getMonth());
@@ -73,7 +91,7 @@ export function previous(currentDate) {
  *  the date one day after currentDate, formatted as YYYY-MM-DD
  */
 export function next(currentDate) {
-  let [ year, month, day ] = currentDate.split("-");
+  let [year, month, day] = currentDate.split("-");
   month -= 1;
   const date = new Date(year, month, day);
   date.setMonth(date.getMonth());
