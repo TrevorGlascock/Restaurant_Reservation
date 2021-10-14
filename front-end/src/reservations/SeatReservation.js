@@ -106,7 +106,7 @@ export default function SeatReservation() {
       <div className="d-md-flex mb-3">
         <form onSubmit={submitHandler}>
           <fieldset>
-            <div className="form-group">
+            <div className="form-group my-2">
               <label htmlFor="table_id">
                 Please assign a table for reservation #{reservationId}
               </label>
@@ -114,7 +114,7 @@ export default function SeatReservation() {
                 id="table_id"
                 name="table_id"
                 title="Select a table to assign to this reservation"
-                className="form-control"
+                className="form-control my-2"
                 value={tableSelection}
                 onChange={selectTableHandler}
                 required
@@ -125,12 +125,12 @@ export default function SeatReservation() {
             </div>
             <button
               type="button"
-              className="btn btn-secondary"
+              className="btn btn-secondary mt-2"
               onClick={cancelHandler}
             >
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary ml-4">
+            <button type="submit" className="btn btn-primary ms-4 mt-2">
               Submit
             </button>
           </fieldset>
