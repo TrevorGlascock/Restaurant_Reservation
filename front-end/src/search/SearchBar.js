@@ -15,7 +15,7 @@ import React from "react";
  * @returns
  */
 export default function SearchBar({
-  lable,
+  label,
   name,
   placeholder,
   value,
@@ -23,7 +23,7 @@ export default function SearchBar({
 }) {
   return (
     <div className="form-group">
-      <label htmlFor={name}>{lable}</label>
+      <label htmlFor={name}>{label}</label>
       <div className="row">
         <div className="col-9">
           <input
