@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { deleteReservation, listReservations, listTables } from "../utils/api";
+import {
+  finishReservation,
+  setReservationStatus,
+  listReservations,
+  listTables,
+} from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import DisplayTable from "./DisplayTable";
 import DateNavigationButton from "./DateNavigationButtons";
@@ -53,7 +58,7 @@ function Dashboard({ date }) {
   }
 
   /**
-   * Function to call deleteReservation, then to call listTables
+   * Function to call finishReservation, then to call listTables
    * This function will be prop-drilled into FinishButton
    */
   async function finishTable(id) {
@@ -68,12 +73,34 @@ function Dashboard({ date }) {
     )
       return () => abortController.abort();
 
-    // After confirmation, deleteReservation then loadDashboard again
+    // After confirmation, finishReservation then loadDashboard again
     try {
-      await deleteReservation(id, abortController.signal);
+      await finishReservation(id, abortController.signal);
       loadDashboard();
     } catch (error) {
       setTablesError(error);
+    }
+    return () => abortController.abort();
+  }
+
+  async function cancelReservation(id) {
+    setReservationsError(null);
+    const abortController = new AbortController();
+
+    // Window confirmation dialogue
+    if (
+      !window.confirm(
+        "Do you want to cancel this reservation?\nThis cannot be undone."
+      )
+    )
+      return () => abortController.abort();
+
+    // After confirmation, cancelReservation then loadDashboard again
+    try {
+      await setReservationStatus(id, "cancelled", abortController.signal);
+      loadDashboard();
+    } catch (error) {
+      setReservationsError(error);
     }
     return () => abortController.abort();
   }
@@ -88,7 +115,11 @@ function Dashboard({ date }) {
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
       <h4 className="h4">Reservations for date {date}</h4>
-      <DisplayTable data={reservations} objCols={reservationsCols} />
+      <DisplayTable
+        data={reservations}
+        objCols={reservationsCols}
+        cancelReservation={cancelReservation}
+      />
       <h4 className="h4">Tables in the Restaurant</h4>
       <DisplayTable
         data={tables}
