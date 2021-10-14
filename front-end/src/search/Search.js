@@ -7,38 +7,61 @@ import SearchBar from "./SearchBar";
 
 /**
  * Defines the Search page.
+ * @var {Array} reservations @function setReservations
+ *  useState array holding the JSON data retrieved from the API call used in the submit handler
+ *  updates in whenever the submit handler is called
+ * @var {Object} searchQueries @function setSearchQueries
+ *  useState object storing all the query params to be included in the API call
+ *  updates whenever a searchbar is typed into, or an option is disabled
+ * @var {String|Component} searchResult @function setSearchResult
+ *  useState variable that stores the rendered search results in a user-friendly displayTable component, or a message inforing the user no match was found
+ *  updates in the useEffect whenever reservations is updated
+ * @var {Array} errorsArray @function setErrorsArray
+ *  UseState array storing all errors made from the API call
+ * @var {Object} searchOptions @function setSearchOptions @var defaultSearchOptions
+ *  a useState control object storing all of the checkbox information used to populate optionsPicker
+ *  each key represents a searchQuery property name, and each value is another object with two keys
+ *    label: a string representing the property it correlates to in a user-friendly readable format
+ *    checked: a boolean that acts as the control for the checkbox's status
+ * @var {Array} searchBars @function setSearchBars @var defaultSearchBars
+ *  a useState control array storing all of the searchBar information use to populate searchBarsDisplay
+ *  each element is an object with two keys used to define the specific SearchBarComponent
+ *    label: a string representing the type of data in a user-friendly readable format
+ *    name: a string representing a valid searchQuery property name
+ * @function optionClickHandler
+ *  a function that defines the functionality of clicking on a searchOption
+ *  will setSearchOptions to either activate or deactivate the button clicked
+ *  will setSearchBars to to either add or remove the button's corresponding searchBar
+ * @function queriesChangeHandler
+ *  a function that defines the behavior of a searchBar's onchange handler
+ *  whenever a user types into a searchBar, it will update the searchQueries to reflect what has been typed
+ * @var {Array} optionsPicker @var {Array} searchBarsDisplay @var {Array} errorDisplay
+ *  made from mapping through useState variables to populate populate itself with corresponding JSX components to be rendered
  * @returns {JSX.Element}
  */
 export function Search() {
-  const [searchOptions, setSearchOptions] = useState({
+  const [reservations, setReservations] = useState(null); // useState Array to store the queried reservations
+  const [searchQueries, setSearchQueries] = useState({}); // useState control form that defines the search query for the API call
+  const [searchResult, setSearchResult] = useState(""); // useState variable to store the searchResults generated from reservations
+  const [errorsArray, setErrorsArray] = useState([]); // All errors in validation, potential API error on submit, and finally the tablesError, if it isn't null
+
+  const defaultSearchOptions = {
     first_name: { label: "First Name", checked: false },
     last_name: { label: "Last Name", checked: false },
     mobile_number: { label: "Phone Number", checked: true },
     reservation_time: { label: "Time of Reservation", checked: false },
     people: { label: "Size of Party", checked: false },
     status: { label: "Status", checked: false },
-  });
-  const [searchBars, setSearchBars] = useState([
-    {
-      label: "Mobile Number",
-      name: "mobile_number",
-      placeholder: "Enter a customer's phone number",
-    },
-  ]);
-  const [searchQueries, setSearchQueries] = useState({ mobile_number: "" }); // useState control form that defines the search query for the API call
-  const [reservations, setReservations] = useState(null); // useState Array to store the queried reservations
-  const [searchResult, setSearchResult] = useState(""); // useState variable to store the searchResults generated from reservations
-  const [errorsArray, setErrorsArray] = useState([]); // All errors in validation, potential API error on submit, and finally the tablesError, if it isn't null
-
-  const submitHandler = (event) => {
-    event.preventDefault(); // prevents the submit button's default behavior
-    setErrorsArray([]);
-    const abortController = new AbortController();
-    listReservations(searchQueries, abortController.signal)
-      .then(setReservations)
-      .catch((errorObj) => setErrorsArray((errors) => [...errors, errorObj]));
-    return () => abortController.abort();
   };
+  const defaultSearchBars = [
+    {
+      label: "Phone Number",
+      name: "mobile_number",
+    },
+  ];
+
+  const [searchOptions, setSearchOptions] = useState(defaultSearchOptions); // Stores the state of all available options, tracking of which ones are currently active
+  const [searchBars, setSearchBars] = useState(defaultSearchBars); // Holds an array that is mapped through to generate the dynamic searchBars
 
   // Update the search results anytime reservations changes
   useEffect(() => {
@@ -60,43 +83,45 @@ export function Search() {
       );
   }, [reservations]);
 
-  // Dynamic error display
-  const errorDisplay = errorsArray.map((error, index) => (
-    <ErrorAlert key={index} error={error} />
-  ));
+  // Update the reservations data whenever the find button is clicked
+  const submitHandler = (event) => {
+    event.preventDefault();
+    setErrorsArray([]);
+    const abortController = new AbortController();
+    listReservations(searchQueries, abortController.signal)
+      .then(setReservations)
+      .catch((errorObj) => setErrorsArray((errors) => [...errors, errorObj]));
+    return () => abortController.abort();
+  };
+
+  /**************************************************************************
+   * * * * * * * * * * * * * Dynamic Option Buttons * * * * * * * * * * * * *
+   **************************************************************************/
 
   const optionClickHandler = ({ target }) => {
     const propName = target.id.replace(/-btn$/, "");
-    // When the option is unchecked:
-    if (!target.checked) {
-      // Filter out the matching searchBar
-      setSearchBars((options) =>
-        options.filter(({ name }) => name !== propName)
-      );
-      // Set it's corresponding query to an empty string
-      setSearchQueries((queries) => ({
-        ...queries,
-        [propName]: "",
-      }));
-    }
 
-    // When the option is checked:
-    else {
-      // Add a new searchBar based on the option clicked
-      setSearchBars((options) => [
+    // After clicking a checkbox, flip it's checked value
+    setSearchOptions((options) => ({
+      ...options,
+      [propName]: { ...options[propName], checked: target.checked },
+    }));
+
+    // If the option is being enabled, activate it's corresponding searchBar
+    if (target.checked)
+      return setSearchBars((options) => [
         ...options,
         {
           label: target.name,
           name: propName,
-          placeholder: `Enter a customer's ${target.name.toLowerCase()}`,
         },
       ]);
-    }
 
-    // After clicking an option, flip it's checked value
-    setSearchOptions((options) => ({
-      ...options,
-      [propName]: { ...options[propName], checked: target.checked },
+    // Otherwise disable the corresponding searchBar and reset the searchQuery that it defined
+    setSearchBars((options) => options.filter(({ name }) => name !== propName));
+    return setSearchQueries((queries) => ({
+      ...queries,
+      [propName]: "",
     }));
   };
 
@@ -121,6 +146,9 @@ export function Search() {
     </div>
   );
 
+  /**************************************************************************
+   * * * * * * * * * * * * * * Dynamic SearchBars * * * * * * * * * * * * * *
+   **************************************************************************/
   const queriesChangeHandler = ({ target: { name, value } }) =>
     setSearchQueries((queries) => ({
       ...queries,
@@ -142,6 +170,14 @@ export function Search() {
     )
   );
 
+  // Dynamic error display
+  const errorDisplay = errorsArray.map((error, index) => (
+    <ErrorAlert key={index} error={error} />
+  ));
+
+  /****************************************************************************
+   * * * * * * * * * * * * * * JSX return statement * * * * * * * * * * * * * *
+   ****************************************************************************/
   return (
     <main>
       <div className="d-md-flex mb-3"></div>
