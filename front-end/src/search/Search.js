@@ -10,14 +10,14 @@ import SearchBar from "./SearchBar";
  * @returns {JSX.Element}
  */
 export function Search() {
-  const [searchOptions, setSearchOptions] = useState([
-    { label: "mobile_number", checked: true },
-    { label: "first_name" },
-    { label: "last_name" },
-    { label: "status" },
-    { label: "people" },
-    { label: "reservation_time" },
-  ]);
+  const [searchOptions, setSearchOptions] = useState({
+    mobile_number: true,
+    first_name: false,
+    last_name: false,
+    status: false,
+    people: false,
+    reservation_time: false,
+  });
   const [searchBars, setSearchBars] = useState([
     {
       label: "Mobile Number",
@@ -72,6 +72,30 @@ export function Search() {
     <ErrorAlert key={index} error={error} />
   ));
 
+  const optionClick = ({ target }) => {
+    // When the option is unchecked, remove it's searchBar
+    if (!target.checked)
+      setSearchBars((options) =>
+        options.filter(({ name }) => name !== target.name)
+      );
+    // When the option is checked, add it's searchBar
+    else
+      setSearchBars((options) => [
+        ...options,
+        {
+          label: target.name,
+          name: target.name,
+          placeholder: `Enter a customer's ${target.name}`,
+        },
+      ]);
+
+    // After adding or removing the searchBar, update the option that was changed
+    setSearchOptions((options) => ({
+      ...options,
+      [target.name]: target.checked,
+    }));
+  };
+
   // Dynamic search options picker
   const optionsPicker = (
     <div
@@ -79,8 +103,13 @@ export function Search() {
       role="group"
       aria-label="Search options toggle button group"
     >
-      {searchOptions.map(({ label, checked = false }, index) => (
-        <OptionButton label={label} checked={checked} key={index} />
+      {Object.entries(searchOptions).map(([label, checked], index) => (
+        <OptionButton
+          label={label}
+          checked={checked}
+          key={index}
+          onChange={optionClick}
+        />
       ))}
     </div>
   );
@@ -92,7 +121,7 @@ export function Search() {
         label={label}
         name={name}
         placeholder={placeholder}
-        value={searchQueries.mobile_number}
+        value={searchQueries[name]}
         onChange={queriesChangeHandler}
         key={index}
       />

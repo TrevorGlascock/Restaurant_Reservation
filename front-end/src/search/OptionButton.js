@@ -6,14 +6,21 @@ import React from "react";
  *  string for the text that labels the button
  * @returns
  */
-export default function OptionButton({ label }) {
+export default function OptionButton({
+  label,
+  checked = false,
+  onChange = () => null,
+}) {
   return (
     <>
       <input
         type="checkbox"
         className="btn-check"
+        name={label}
         id={`${label}-btn`}
-        autocomplete="off"
+        autoComplete="off"
+        onChange={onChange}
+        checked={checked}
       />
       <label className="btn btn-outline-primary" htmlFor={`${label}-btn`}>
         {label}
