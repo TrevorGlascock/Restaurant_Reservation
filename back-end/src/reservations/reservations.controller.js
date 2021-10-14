@@ -293,6 +293,21 @@ function validateReservationUpdate(req, res, next) {
   return next();
 }
 
+function validateReqQueries(req, res, next) {
+  const { query } = req;
+  const invalidQueries = Object.keys(query).filter(
+    (property) => !VALID_PROPERTIES.includes(property) && property !== "date"
+  );
+
+  if (invalidQueries.length) {
+    return next({
+      status: 400,
+      message: `Invalid queries: '${invalidQueries.join("', '")}'`,
+    });
+  }
+  return next();
+}
+
 /**
  * List handler for reservation resources with two variants based on the provided queries
  * If any of the queries are a date query: list all reservation with exact matching reservation_date properties sorted by time
@@ -342,7 +357,7 @@ async function updateStatus(req, res) {
 }
 
 module.exports = {
-  list: asyncErrorBoundary(list),
+  list: [validateReqQueries, asyncErrorBoundary(list)],
   create: [
     bodyHasAllRequiredFields,
     bodyHasNoInvalidFields,
