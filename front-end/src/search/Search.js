@@ -11,12 +11,12 @@ import SearchBar from "./SearchBar";
  */
 export function Search() {
   const [searchOptions, setSearchOptions] = useState({
-    mobile_number: true,
     first_name: false,
     last_name: false,
-    status: false,
-    people: false,
+    mobile_number: true,
     reservation_time: false,
+    people: false,
+    status: false,
   });
   const [searchBars, setSearchBars] = useState([
     {
@@ -43,6 +43,7 @@ export function Search() {
   // Update the search results anytime reservations changes
   useEffect(() => {
     const resultTableCols = {
+      reservation_id: "Id #",
       first_name: "First Name",
       last_name: "Last Name",
       mobile_number: "Mobile Number",
