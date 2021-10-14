@@ -11,13 +11,13 @@ import React from "react";
  * @returns {JSX.Element}
  */
 
-export default function CancelButton({ reservation }) {
+export default function CancelButton({ reservation, cancelReservation }) {
   const { reservation_id: id, status } = reservation;
 
   const disabled = status === "booked" ? false : true;
 
   const onClick = () => {
-    console.log(`Cancel reservation #${id}`);
+    cancelReservation(id);
   };
 
   // When disabled, CancelButton is a secondary, disabled button element
