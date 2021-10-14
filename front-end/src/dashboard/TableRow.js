@@ -11,12 +11,7 @@ import AssignmentButton from "./AssignmentButton/AssignmentButton";
  *  An array of JSX table-data containing all the data of that makes up this row
  * @returns {JSX.Element}
  */
-export default function TableRow({
-  rowObject,
-  propNames,
-  cancelReservation,
-  finishTable,
-}) {
+export default function TableRow({ rowObject, propNames, buttonFunction }) {
   const row = [];
   for (let index in propNames) {
     const propName = propNames[index];
@@ -40,8 +35,7 @@ export default function TableRow({
         <td key={index}>
           <AssignmentButton
             rowObject={rowObject}
-            finishTable={finishTable}
-            cancelReservation={cancelReservation}
+            buttonFunction={buttonFunction}
             type={propName}
           />
         </td>

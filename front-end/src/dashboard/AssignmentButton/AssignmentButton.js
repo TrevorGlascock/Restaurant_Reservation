@@ -15,12 +15,7 @@ import SeatButton from "./SeatButton";
  * @returns {JSX.Element}
  */
 
-export default function AssignmentButton({
-  rowObject,
-  cancelReservation,
-  finishTable,
-  type,
-}) {
+export default function AssignmentButton({ rowObject, buttonFunction, type }) {
   switch (type) {
     case "seatButton":
       return <SeatButton reservation={rowObject} />;
@@ -30,10 +25,10 @@ export default function AssignmentButton({
       return (
         <CancelButton
           reservation={rowObject}
-          cancelReservation={cancelReservation}
+          cancelReservation={buttonFunction}
         />
       );
     default:
-      return <FinishButton table={rowObject} finishTable={finishTable} />;
+      return <FinishButton table={rowObject} finishTable={buttonFunction} />;
   }
 }

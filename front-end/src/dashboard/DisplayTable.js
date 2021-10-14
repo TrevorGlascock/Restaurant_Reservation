@@ -16,16 +16,14 @@ import TableRow from "./TableRow";
 export default function DisplayTable({
   data,
   objCols = {},
-  cancelReservation = () => null,
-  finishTable = () => null,
+  buttonFunction = () => null,
 }) {
   const rows = data?.map((object, index) => (
     <TableRow
       key={index}
       rowObject={object}
       propNames={Object.keys(objCols)}
-      cancelReservation={cancelReservation}
-      finishTable={finishTable}
+      buttonFunction={buttonFunction}
     />
   ));
 

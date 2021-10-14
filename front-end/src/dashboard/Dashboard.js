@@ -118,13 +118,13 @@ function Dashboard({ date }) {
       <DisplayTable
         data={reservations}
         objCols={reservationsCols}
-        cancelReservation={cancelReservation}
+        buttonFunction={cancelReservation}
       />
       <h4 className="h4">Tables in the Restaurant</h4>
       <DisplayTable
         data={tables}
         objCols={tableCols}
-        finishTable={finishTable}
+        buttonFunction={finishTable}
       />
     </main>
   );
