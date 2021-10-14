@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
+import { convert12HourTime } from "../utils/date-time";
 
 /**
  * Defines the form for a user to fill out to add or edit a reservation
@@ -86,9 +87,9 @@ export default function ReservationForm({ defaultFormData, APICall }) {
       setSubmissionErrors((subErrors) => [
         ...subErrors,
         {
-          message: `The restaurant is only taking reservations between ${_convert12HourTime(
+          message: `The restaurant is only taking reservations between ${convert12HourTime(
             startTime
-          )} and ${_convert12HourTime(closeTime)}.`,
+          )} and ${convert12HourTime(closeTime)}.`,
         },
       ]);
     }
@@ -140,18 +141,6 @@ export default function ReservationForm({ defaultFormData, APICall }) {
     closedMessage += closedDayNames.slice(-1);
 
     return closedMessage + "s."; // Return the final message with a plural "s" and a period at the end
-  }
-
-  //Helper function to convert 24hr time to 12hr time
-  function _convert12HourTime(timeString) {
-    let hours = Number(timeString.split(":")[0]);
-    const minutes = timeString.split(":")[1];
-    let meridiem = "AM";
-    if (hours > 12) {
-      hours -= 12;
-      meridiem = "PM";
-    }
-    return `${hours}:${minutes}${meridiem}`;
   }
 
   const cancelHandler = () => {
