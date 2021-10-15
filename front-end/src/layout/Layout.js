@@ -14,11 +14,11 @@ import "./Layout.css";
 function Layout() {
   return (
     <div className="container-fluid">
-      <div className="row h-100">
-        <div className="col-md-2 side-bar">
+      <div className="row h-100 ">
+        <div className="col-xl-1 side-bar">
           <Menu />
         </div>
-        <div className="col-md">
+        <div className="col-md pt-4">
           <Routes />
         </div>
       </div>
