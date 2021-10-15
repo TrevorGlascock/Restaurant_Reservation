@@ -104,7 +104,7 @@ export default function SeatReservation() {
     <main>
       <h1>Seating Reservation #{reservationId}</h1>
       {errorDisplay}
-      <div className="d-md-flex mb-3 justify-content-between col-xl-6">
+      <div className="d-md-flex mb-3 justify-content-between col-xl-8">
         <form onSubmit={submitHandler}>
           <fieldset>
             <div className="form-group my-2">
