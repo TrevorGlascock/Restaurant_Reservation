@@ -104,7 +104,7 @@ export default function SeatReservation() {
     <main>
       <h1>Seating Reservation #{reservationId}</h1>
       {errorDisplay}
-      <div className="d-md-flex mb-3">
+      <div className="d-md-flex mb-3 justify-content-between">
         <form onSubmit={submitHandler}>
           <fieldset>
             <div className="form-group my-2">
@@ -115,7 +115,7 @@ export default function SeatReservation() {
                 id="table_id"
                 name="table_id"
                 title="Select a table to assign to this reservation"
-                className="form-control my-2"
+                className="form-select my-2"
                 value={tableSelection}
                 onChange={selectTableHandler}
                 required
@@ -136,8 +136,8 @@ export default function SeatReservation() {
             </button>
           </fieldset>
         </form>
+        <DisplayReservation reservation={reservation} />
       </div>
-      <DisplayReservation reservation={reservation} />
     </main>
   );
 }
