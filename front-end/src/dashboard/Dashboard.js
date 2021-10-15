@@ -102,15 +102,14 @@ function Dashboard({ date }) {
     <main>
       <div className="d-flex flex-column mb-3">
         <h1 className="h1 align-self-center">Dashboard</h1>
+        <ErrorAlert error={reservationsError} />
+        <ErrorAlert error={tablesError} />
         <h4 className="h4 align-self-center">Reservations for {date}</h4>
         <div className="align-self-center">
           <DateNavigationButton type="previous" currentDate={date} />
           <DateNavigationButton type="today" currentDate={date} />
           <DateNavigationButton type="next" currentDate={date} />
         </div>
-        <ErrorAlert error={reservationsError} />
-        <ErrorAlert error={tablesError} />
-
         <div className="align-self-center col-12 col-lg-10">
           <DisplayTable
             data={reservations}
