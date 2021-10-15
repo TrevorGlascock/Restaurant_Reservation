@@ -27,12 +27,14 @@ export default function DisplayTable({
     />
   ));
 
-  return (
+  return rows?.length ? (
     <div className="table-responsive">
       <table className="table table-hover">
         <TableHead columnLabels={Object.values(objCols)} />
         <tbody>{rows}</tbody>
       </table>
     </div>
+  ) : (
+    <h5 className="h5 text-center my-5">No reservations scheduled today!</h5>
   );
 }
