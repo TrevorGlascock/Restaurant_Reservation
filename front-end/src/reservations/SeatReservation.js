@@ -102,42 +102,48 @@ export default function SeatReservation() {
 
   return (
     <main>
-      <h1>Seating Reservation #{reservationId}</h1>
-      {errorDisplay}
-      <div className="d-md-flex mb-3 justify-content-between col-xl-8">
-        <form onSubmit={submitHandler}>
-          <fieldset>
-            <div className="form-group my-2">
-              <label htmlFor="table_id">
-                Please assign a table for reservation #{reservationId}
-              </label>
-              <select
-                id="table_id"
-                name="table_id"
-                title="Select a table to assign to this reservation"
-                className="form-select my-2"
-                value={tableSelection}
-                onChange={selectTableHandler}
-                required
-              >
-                <option value="">Please Select a Table</option>
-                {tableOptions}
-              </select>
+      <div className="d-flex flex-column mb-3 justify-content-around ">
+        <h1 className="align-self-center">
+          Seating Reservation #{reservationId}
+        </h1>
+        <div className="col-8 col-xl-10 align-self-center">
+          {errorDisplay}
+          <div className="d-flex flex-column flex-xl-row">
+            <form onSubmit={submitHandler} className="col mx-4">
+              <fieldset>
+                <div className="form-group my-2">
+                  <label htmlFor="table_id">
+                    Please assign a table for reservation #{reservationId}
+                  </label>
+                  <select
+                    id="table_id"
+                    name="table_id"
+                    title="Select a table to assign to this reservation"
+                    className="form-select my-2"
+                    value={tableSelection}
+                    onChange={selectTableHandler}
+                    required
+                  >
+                    <option value="">Please Select a Table</option>
+                    {tableOptions}
+                  </select>
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-secondary mt-2"
+                  onClick={cancelHandler}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-primary ms-4 mt-2">
+                  Submit
+                </button>
+              </fieldset>
+            </form>
+            <div className="col mx-4">
+              <DisplayReservation reservation={reservation} />
             </div>
-            <button
-              type="button"
-              className="btn btn-secondary mt-2"
-              onClick={cancelHandler}
-            >
-              Cancel
-            </button>
-            <button type="submit" className="btn btn-primary ms-4 mt-2">
-              Submit
-            </button>
-          </fieldset>
-        </form>
-        <div className="mx-4">
-          <DisplayReservation reservation={reservation} />
+          </div>
         </div>
       </div>
     </main>
