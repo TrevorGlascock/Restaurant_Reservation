@@ -26,6 +26,10 @@ export default function NewReservation() {
   };
 
   return (
-    <ReservationForm defaultFormData={defaultFormData} APICall={APICall} />
+    <ReservationForm
+      type="New"
+      defaultFormData={defaultFormData}
+      APICall={APICall}
+    />
   );
 }

@@ -47,6 +47,6 @@ export default function EditReservation() {
   };
 
   return (
-    <ReservationForm defaultFormData={defaultFormData} APICall={APICall} />
+    <ReservationForm type="Edit" defaultFormData={defaultFormData} APICall={APICall} />
   );
 }

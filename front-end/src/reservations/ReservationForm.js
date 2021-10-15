@@ -5,6 +5,8 @@ import { convert12HourTime } from "../utils/date-time";
 
 /**
  * Defines the form for a user to fill out to add or edit a reservation
+ * @param type
+ *  a string defining the form legend. Will either be "New" or "Edit"
  * @param defaultFormData
  *  object passed in from parent component to define the inital values of the form
  * @param APICall
@@ -28,7 +30,7 @@ import { convert12HourTime } from "../utils/date-time";
  *
  * @returns {JSX.Element}
  */
-export default function ReservationForm({ defaultFormData, APICall }) {
+export default function ReservationForm({ type, defaultFormData, APICall }) {
   const [formData, setFormData] = useState(defaultFormData);
   const [submissionErrors, setSubmissionErrors] = useState([]);
 
@@ -160,7 +162,7 @@ export default function ReservationForm({ defaultFormData, APICall }) {
       <div className="d-md-flex mb-3">
         <form onSubmit={submitHandler}>
           <fieldset>
-            <legend className="h1">New Reservation</legend>
+            <legend className="h1">{type} Reservation</legend>
             <div className="form-group my-2">
               <label htmlFor="first_name">First Name</label>
               <input
