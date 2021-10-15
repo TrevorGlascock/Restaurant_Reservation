@@ -22,9 +22,7 @@ export default function DisplayReservation({ reservation }) {
   return (
     <div className="col">
       <table className="table table-secondary table-hover">
-        <thead>
-          <th>Reservation #{reservation_id} Info</th>
-        </thead>
+        <thead className="text-muted">Reservation #{reservation_id} Info</thead>
         <tbody>
           <tr>
             <td>First Name</td>
