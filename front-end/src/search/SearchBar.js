@@ -25,23 +25,19 @@ export default function SearchBar({
 }) {
   const placeholder = `Enter a customer's ${label.toLowerCase()}`;
   return (
-    <div className="form-group my-2">
+    <div className="form-group my-2 col col-md-10 col-xl-5">
       <label htmlFor={name}>{label}</label>
-      <div className="row">
-        <div className="col-9">
-          <input
-            id={name}
-            type="text"
-            name={name}
-            placeholder={placeholder}
-            title={placeholder}
-            className="form-control my-2"
-            value={value}
-            onChange={onChange}
-            required={required}
-          />
-        </div>
-      </div>
+      <input
+        id={name}
+        type="text"
+        name={name}
+        placeholder={placeholder}
+        title={placeholder}
+        className="form-control my-2"
+        value={value}
+        onChange={onChange}
+        required={required}
+      />
     </div>
   );
 }
