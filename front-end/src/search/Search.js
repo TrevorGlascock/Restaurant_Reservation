@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DisplayTable from "../dashboard/DisplayTable";
 import ErrorAlert from "../layout/ErrorAlert";
 import { listReservations, setReservationStatus } from "../utils/api";
@@ -63,35 +63,38 @@ export function Search() {
   const [searchOptions, setSearchOptions] = useState(defaultSearchOptions); // Stores the state of all available options, tracking of which ones are currently active
   const [searchBars, setSearchBars] = useState(defaultSearchBars); // Holds an array that is mapped through to generate the dynamic searchBars
 
-  const loadSearchResults = () => {
+  const loadSearchResults = useCallback(() => {
     const abortController = new AbortController();
     listReservations(searchQueries, abortController.signal)
       .then(setReservations)
       .catch((errorObj) => setErrorsArray((errors) => [...errors, errorObj]));
     return () => abortController.abort();
-  };
+  }, [searchQueries]);
 
-  async function cancelReservation(id) {
-    setErrorsArray([]);
-    const abortController = new AbortController();
+  const cancelReservation = useCallback(
+    async (id) => {
+      setErrorsArray([]);
+      const abortController = new AbortController();
 
-    // Window confirmation dialogue
-    if (
-      !window.confirm(
-        "Do you want to cancel this reservation?\nThis cannot be undone."
+      // Window confirmation dialogue
+      if (
+        !window.confirm(
+          "Do you want to cancel this reservation?\nThis cannot be undone."
+        )
       )
-    )
-      return () => abortController.abort();
+        return () => abortController.abort();
 
-    // After confirmation, cancelReservation then loadSearchResults again
-    try {
-      await setReservationStatus(id, "cancelled", abortController.signal);
-      loadSearchResults();
-    } catch (error) {
-      setErrorsArray(error);
-    }
-    return () => abortController.abort();
-  }
+      // After confirmation, cancelReservation then loadSearchResults again
+      try {
+        await setReservationStatus(id, "cancelled", abortController.signal);
+        loadSearchResults();
+      } catch (error) {
+        setErrorsArray(error);
+      }
+      return () => abortController.abort();
+    },
+    [loadSearchResults]
+  );
 
   // Update the search results anytime reservations changes
   useEffect(() => {
@@ -117,7 +120,7 @@ export function Search() {
           buttonFunction={cancelReservation}
         />
       );
-  }, [reservations]);
+  }, [reservations, cancelReservation]);
 
   // Update the reservations data whenever the find button is clicked
   const submitHandler = (event) => {
