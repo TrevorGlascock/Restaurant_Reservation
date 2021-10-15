@@ -17,7 +17,18 @@ export default function CancelButton({ reservation, cancelReservation }) {
   const disabled = status === "booked" ? false : true;
 
   const onClick = () => {
-    cancelReservation(id);
+    const abortController = new AbortController();
+
+    // Window confirmation dialogue
+    if (
+      !window.confirm(
+        "Do you want to cancel this reservation?\nThis cannot be undone."
+      )
+    )
+      return () => abortController.abort();
+
+    // After confirmation, cancel the reservation
+    cancelReservation(id, abortController);
   };
 
   // When disabled, CancelButton is a secondary, disabled button element
