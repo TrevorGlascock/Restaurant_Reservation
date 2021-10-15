@@ -111,25 +111,33 @@ function Dashboard({ date }) {
 
   return (
     <main>
-      <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3"></div>
-      <DateNavigationButton type="previous" currentDate={date} />
-      <DateNavigationButton type="today" currentDate={date} />
-      <DateNavigationButton type="next" currentDate={date} />
-      <ErrorAlert error={reservationsError} />
-      <ErrorAlert error={tablesError} />
-      <h4 className="h4">Reservations for date {date}</h4>
-      <DisplayTable
-        data={reservations}
-        objCols={reservationsCols}
-        buttonFunction={cancelReservation}
-      />
-      <h4 className="h4">Tables in the Restaurant</h4>
-      <DisplayTable
-        data={tables}
-        objCols={tableCols}
-        buttonFunction={finishTable}
-      />
+      <div className="d-flex flex-column mb-3">
+        <h1 className="h1 align-self-center">Dashboard</h1>
+        <h4 className="h4 align-self-center">Reservations for {date}</h4>
+        <div className="align-self-center">
+          <DateNavigationButton type="previous" currentDate={date} />
+          <DateNavigationButton type="today" currentDate={date} />
+          <DateNavigationButton type="next" currentDate={date} />
+        </div>
+        <ErrorAlert error={reservationsError} />
+        <ErrorAlert error={tablesError} />
+
+        <div className="align-self-center col-12 col-lg-10">
+          <DisplayTable
+            data={reservations}
+            objCols={reservationsCols}
+            buttonFunction={cancelReservation}
+          />
+        </div>
+        <h4 className="h4 align-self-center">Tables in the Restaurant</h4>
+        <div className="align-self-center col-12 col-lg-10">
+          <DisplayTable
+            data={tables}
+            objCols={tableCols}
+            buttonFunction={finishTable}
+          />
+        </div>
+      </div>
     </main>
   );
 }
