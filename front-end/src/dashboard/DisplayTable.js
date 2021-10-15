@@ -51,6 +51,6 @@ export default function DisplayTable({
       </table>
     </div>
   ) : (
-    <h5 className="h5 text-center my-5">{emptyMessage}</h5>
+    <h5 className="h5 text-center my-3">{emptyMessage}</h5>
   );
 }
