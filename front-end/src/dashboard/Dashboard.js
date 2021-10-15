@@ -87,26 +87,15 @@ function Dashboard({ date }) {
    * Function to call setReservationStatus with a status of "cancelled", then to call listTables
    * This function will be prop-drilled into CancelButton
    */
-  async function cancelReservation(id) {
+  async function cancelReservation(id, controller) {
     setReservationsError(null);
-    const abortController = new AbortController();
-
-    // Window confirmation dialogue
-    if (
-      !window.confirm(
-        "Do you want to cancel this reservation?\nThis cannot be undone."
-      )
-    )
-      return () => abortController.abort();
-
-    // After confirmation, cancelReservation then loadDashboard again
     try {
-      await setReservationStatus(id, "cancelled", abortController.signal);
+      await setReservationStatus(id, "cancelled", controller.signal);
       loadDashboard();
     } catch (error) {
       setReservationsError(error);
     }
-    return () => abortController.abort();
+    return () => controller.abort();
   }
 
   return (

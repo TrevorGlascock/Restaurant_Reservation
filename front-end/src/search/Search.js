@@ -72,26 +72,15 @@ export function Search() {
   }, [searchQueries]);
 
   const cancelReservation = useCallback(
-    async (id) => {
+    async (id, controller) => {
       setErrorsArray([]);
-      const abortController = new AbortController();
-
-      // Window confirmation dialogue
-      if (
-        !window.confirm(
-          "Do you want to cancel this reservation?\nThis cannot be undone."
-        )
-      )
-        return () => abortController.abort();
-
-      // After confirmation, cancelReservation then loadSearchResults again
       try {
-        await setReservationStatus(id, "cancelled", abortController.signal);
+        await setReservationStatus(id, "cancelled", controller.signal);
         loadSearchResults();
       } catch (error) {
         setErrorsArray(error);
       }
-      return () => abortController.abort();
+      return () => controller.abort();
     },
     [loadSearchResults]
   );
