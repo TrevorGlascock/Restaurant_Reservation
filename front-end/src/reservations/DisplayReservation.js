@@ -8,20 +8,53 @@ import { convert12HourTime, formatAsDate } from "../utils/date-time";
 
 export default function DisplayReservation({ reservation }) {
   if (!reservation) return null;
-  const { first_name, last_name, mobile_number, people, status } = reservation;
+  const {
+    reservation_id,
+    first_name,
+    last_name,
+    mobile_number,
+    people,
+    status,
+  } = reservation;
   const date = formatAsDate(reservation.reservation_date);
   const time = convert12HourTime(reservation.reservation_time);
 
   return (
     <div>
       <aside>
-        <p>{first_name}</p>
-        <p>{last_name}</p>
-        <p>{mobile_number}</p>
-        <p>{date}</p>
-        <p>{time}</p>
-        <p>{people}</p>
-        <p>{status}</p>
+        <table className="table table-secondary table-hover caption-top">
+          <caption>Reservation #{reservation_id} info</caption>
+          <tbody>
+            <tr>
+              <td>First Name</td>
+              <td>{first_name}</td>
+            </tr>
+            <tr>
+              <td>Last Name</td>
+              <td>{last_name}</td>
+            </tr>
+            <tr>
+              <td>Mobile Phone</td>
+              <td>{mobile_number}</td>
+            </tr>
+            <tr>
+              <td>Date of Reservation</td>
+              <td>{date}</td>
+            </tr>
+            <tr>
+              <td>Time of Reservation</td>
+              <td>{time}</td>
+            </tr>
+            <tr>
+              <td>Size of Party</td>
+              <td>{people}</td>
+            </tr>
+            <tr>
+              <td>Status of Reservation</td>
+              <td>{status}</td>
+            </tr>
+          </tbody>
+        </table>
       </aside>
     </div>
   );
