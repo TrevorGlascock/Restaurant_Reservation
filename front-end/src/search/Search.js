@@ -204,19 +204,17 @@ export function Search() {
    ****************************************************************************/
   return (
     <main>
-      {errorDisplay}
-      <div className="d-md-flex mb-3">
-        <form onSubmit={submitHandler} className="w-100">
-          <fieldset>
-            <legend className="h1">Search for Reservations</legend>
-            {optionsPicker}
-            {searchBarsDisplay}
+      <div className="d-flex mb-3 flex-column">
+        <h1 className="h1 align-self-center">Search for Reservations</h1>
+        <form onSubmit={submitHandler} className="align-self-center">
+          {errorDisplay}
+          <fieldset className="d-flex flex-column">
+            <div className="col align-self-center">{optionsPicker}</div>
+            <div className="col">{searchBarsDisplay}</div>
           </fieldset>
-          <div>
-            <button type="submit" className="btn btn-success px-3 mt-2">
-              Find
-            </button>
-          </div>
+          <button type="submit" className="btn btn-success px-3 mt-2">
+            Find
+          </button>
         </form>
       </div>
       {searchResult}
