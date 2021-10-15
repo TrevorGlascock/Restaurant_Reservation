@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DisplayTable from "../dashboard/DisplayTable";
 import ErrorAlert from "../layout/ErrorAlert";
-import { listReservations } from "../utils/api";
+import { listReservations, setReservationStatus } from "../utils/api";
 import OptionButton from "./OptionButton";
 import SearchBar from "./SearchBar";
 
@@ -63,6 +63,36 @@ export function Search() {
   const [searchOptions, setSearchOptions] = useState(defaultSearchOptions); // Stores the state of all available options, tracking of which ones are currently active
   const [searchBars, setSearchBars] = useState(defaultSearchBars); // Holds an array that is mapped through to generate the dynamic searchBars
 
+  const loadSearchResults = () => {
+    const abortController = new AbortController();
+    listReservations(searchQueries, abortController.signal)
+      .then(setReservations)
+      .catch((errorObj) => setErrorsArray((errors) => [...errors, errorObj]));
+    return () => abortController.abort();
+  };
+
+  async function cancelReservation(id) {
+    setErrorsArray([]);
+    const abortController = new AbortController();
+
+    // Window confirmation dialogue
+    if (
+      !window.confirm(
+        "Do you want to cancel this reservation?\nThis cannot be undone."
+      )
+    )
+      return () => abortController.abort();
+
+    // After confirmation, cancelReservation then loadSearchResults again
+    try {
+      await setReservationStatus(id, "cancelled", abortController.signal);
+      loadSearchResults();
+    } catch (error) {
+      setErrorsArray(error);
+    }
+    return () => abortController.abort();
+  }
+
   // Update the search results anytime reservations changes
   useEffect(() => {
     const resultTableCols = {
@@ -74,12 +104,18 @@ export function Search() {
       reservation_time: "Time of Reservation",
       people: "Party Size",
       status: "Current Status",
+      editButton: "",
+      cancelButton: "",
     };
     if (!reservations) setSearchResult("");
     else if (!reservations.length) setSearchResult("No reservations found!");
     else
       setSearchResult(
-        <DisplayTable data={reservations} objCols={resultTableCols} />
+        <DisplayTable
+          data={reservations}
+          objCols={resultTableCols}
+          buttonFunction={cancelReservation}
+        />
       );
   }, [reservations]);
 
@@ -87,11 +123,7 @@ export function Search() {
   const submitHandler = (event) => {
     event.preventDefault();
     setErrorsArray([]);
-    const abortController = new AbortController();
-    listReservations(searchQueries, abortController.signal)
-      .then(setReservations)
-      .catch((errorObj) => setErrorsArray((errors) => [...errors, errorObj]));
-    return () => abortController.abort();
+    return loadSearchResults();
   };
 
   /**************************************************************************
