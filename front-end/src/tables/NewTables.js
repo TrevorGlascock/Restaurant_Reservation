@@ -72,7 +72,7 @@ export default function NewTable() {
       <div className="d-md-flex mb-3"></div>
       {errorDisplay}
       <div className="d-md-flex mb-3">
-        <form onSubmit={submitHandler} class="col col-md-10 col-xl-5">
+        <form onSubmit={submitHandler} className="col col-md-10 col-xl-5">
           <fieldset>
             <legend className="h1">Create a New Table</legend>
             <div className="form-group my-2">
