@@ -157,7 +157,6 @@ export default function ReservationForm({ type, defaultFormData, APICall }) {
   // JSX return statement to create the form
   return (
     <main>
-      <div className="d-md-flex mb-3"></div>
       {errorDisplay}
       <div className="d-md-flex mb-3">
         <form onSubmit={submitHandler}>
