@@ -28,9 +28,11 @@ export default function DisplayTable({
   ));
 
   return (
-    <table className="table">
-      <TableHead columnLabels={Object.values(objCols)} />
-      <tbody>{rows}</tbody>
-    </table>
+    <div className="table-responsive">
+      <table className="table table-hover">
+        <TableHead columnLabels={Object.values(objCols)} />
+        <tbody>{rows}</tbody>
+      </table>
+    </div>
   );
 }

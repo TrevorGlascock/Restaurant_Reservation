@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
 import { listTables, readReservation, seatReservation } from "../utils/api";
+import DisplayReservation from "./DisplayReservation";
 
 /**
  * Defines the Reservation-Table Assignment Page.
@@ -103,10 +104,10 @@ export default function SeatReservation() {
     <main>
       <h1>Seating Reservation #{reservationId}</h1>
       {errorDisplay}
-      <div className="d-md-flex mb-3">
+      <div className="d-md-flex mb-3 justify-content-between col-xl-8">
         <form onSubmit={submitHandler}>
           <fieldset>
-            <div className="form-group">
+            <div className="form-group my-2">
               <label htmlFor="table_id">
                 Please assign a table for reservation #{reservationId}
               </label>
@@ -114,7 +115,7 @@ export default function SeatReservation() {
                 id="table_id"
                 name="table_id"
                 title="Select a table to assign to this reservation"
-                className="form-control"
+                className="form-select my-2"
                 value={tableSelection}
                 onChange={selectTableHandler}
                 required
@@ -125,16 +126,19 @@ export default function SeatReservation() {
             </div>
             <button
               type="button"
-              className="btn btn-secondary"
+              className="btn btn-secondary mt-2"
               onClick={cancelHandler}
             >
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary ml-4">
+            <button type="submit" className="btn btn-primary ms-4 mt-2">
               Submit
             </button>
           </fieldset>
         </form>
+        <div className="mx-4">
+          <DisplayReservation reservation={reservation} />
+        </div>
       </div>
     </main>
   );

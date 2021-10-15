@@ -128,7 +128,7 @@ export function Search() {
   // Dynamic search options picker
   const optionsPicker = (
     <div
-      className="btn-group"
+      className="btn-group flex-wrap "
       role="group"
       aria-label="Search options toggle button group"
     >
@@ -180,10 +180,9 @@ export function Search() {
    ****************************************************************************/
   return (
     <main>
-      <div className="d-md-flex mb-3"></div>
       {errorDisplay}
       <div className="d-md-flex mb-3">
-        <form onSubmit={submitHandler}>
+        <form onSubmit={submitHandler} className="w-100">
           <fieldset>
             <legend className="h1">Search for Reservations</legend>
             {optionsPicker}
