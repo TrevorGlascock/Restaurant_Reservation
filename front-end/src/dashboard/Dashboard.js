@@ -119,7 +119,7 @@ function Dashboard({ date }) {
             buttonFunction={cancelReservation}
           />
         </div>
-        <h4 className="h4 align-self-center">Tables in the Restaurant</h4>
+        <h4 className="h4 align-self-center mt-5">Tables in the Restaurant</h4>
         <div className="align-self-center col-12 col-xl-10">
           <DisplayTable
             data={tables}
