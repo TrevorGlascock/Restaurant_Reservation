@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import TableHead from "./TableHead";
 import TableRow from "./TableRow";
 
@@ -11,6 +12,8 @@ import TableRow from "./TableRow";
  *  the values of this object represent the actual display name used in the TableHead
  * @var rows
  *  an array of TableRow components that make up the table's body
+ * @var emptyMessage
+ *  a conditional JSX component that points the user to the right page to create data whenever it is empty
  * @returns {JSX.Element}
  */
 export default function DisplayTable({
@@ -26,6 +29,19 @@ export default function DisplayTable({
       buttonFunction={buttonFunction}
     />
   ));
+  const emptyMessage = Object.keys(objCols).includes("table_name") ? (
+    <>
+      <p>Currently there are no tables in the restaurant.</p>
+      <Link to="/tables/new">
+        Click here to add a table so you can seat a reservation!
+      </Link>
+    </>
+  ) : (
+    <>
+      <p>No reservations scheduled today.</p>
+      <Link to="/reservations/new">Click here to make a new reservation!</Link>
+    </>
+  );
 
   return rows?.length ? (
     <div className="table-responsive">
@@ -35,6 +51,6 @@ export default function DisplayTable({
       </table>
     </div>
   ) : (
-    <h5 className="h5 text-center my-5">No reservations scheduled today!</h5>
+    <h5 className="h5 text-center my-5">{emptyMessage}</h5>
   );
 }
