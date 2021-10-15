@@ -22,8 +22,10 @@ export default function DisplayReservation({ reservation }) {
   return (
     <div>
       <aside>
-        <table className="table table-secondary table-hover caption-top">
-          <caption>Reservation #{reservation_id} info</caption>
+        <table className="table table-secondary table-hover">
+          <thead>
+            <th>Reservation #{reservation_id} Info</th>
+          </thead>
           <tbody>
             <tr>
               <td>First Name</td>
