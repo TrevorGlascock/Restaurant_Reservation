@@ -216,8 +216,10 @@ export function Search() {
             Find
           </button>
         </form>
+        <div className="align-self-center col-12 col-xl-10 mt-4">
+          {searchResult}
+        </div>
       </div>
-      {searchResult}
     </main>
   );
 }
