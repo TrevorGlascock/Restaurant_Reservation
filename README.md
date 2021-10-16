@@ -88,6 +88,18 @@
 * Similar to `GET /reservations/:reservation_id`, the reservation_id in the param must correspond to an existing reservation.
 
 
+### `PUT /reservations/:reservation_id/status`
+* Replaces an existing reservation's status with the status provided in the request body data.
+* Returns the entire modified reservation object.
+* Similar to `GET /reservations/:reservation_id`, the reservation_id in the param must correspond to an existing reservation.
+* The status in the request body data must be one of the 4 valid statuses:
+   * `booked` (default state)
+   * `seated` (seated at a table)
+   * `cancelled` (cancelled by user)
+   * `finished` (after leaving a table, reservation is archived)
+ * If the reservation being modified is currently `cancelled` or `finished`, it cannot be modified.
+ * If the reservation being modified is currently `seated`,  the status in the request body data must be `finished`
+
 
 <hr/>
 
