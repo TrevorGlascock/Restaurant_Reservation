@@ -1,8 +1,10 @@
-# Restaurant Reservation Fullstack Web App
+# [Restaurant Reservation Fullstack Web App](https://restaurant-reserve-127-client.herokuapp.com/)
 <hr/>
 
 ## Live Deployment
+* ### [React App Client-Side Deployment](https://restaurant-reserve-127-client.herokuapp.com/)
 
+* ### [Express API Back-End Deployment](https://restaurant-reserve-127-backend.herokuapp.com/)
 <hr/>
 
 ## API Documentation
