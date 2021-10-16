@@ -1,6 +1,11 @@
 # [Restaurant Reservation Fullstack Web App](https://restaurant-reserve-127-client.herokuapp.com/)
 <hr/>
 
+## General Info
+> Info blurb goes here
+> 
+<hr/>
+
 ## Live Deployment
 * ### [React App Client-Side Deployment](https://restaurant-reserve-127-client.herokuapp.com/)
 
@@ -8,10 +13,38 @@
 <hr/>
 
 ## API Documentation
+> This REST API adheres to RESTful standards. There are only two resource endpoints: `reservations` and `tables`. This API supports the following requests:
 
-<hr/>
+### `GET /reservations` 
+  * Returns a list of all reservations in the database. 
+  * Ordered by id.
+  
+### `GET /reservations?date` 
+  * Returns a list of all reservations scheduled for the specified date. 
+  * Ordered by scheduled time.
+  * If any of the queries are a `date` query, this route will override the next route.
 
-## Screenshots and General Usage
+### `GET /reservations?validSearchQuery`
+  * Returns a list of all reservations that contain a partial match to each of the provided search queries.
+  * Ordered by scheduled date starting from the most future date.
+  * Any number of queries can be passed in like `/reservations?query1=one&query2=two&query3=three` etc.
+  * All queries are treated as strings, and all queries are case insensitive.
+  * If any query is invalid, the entire request will be considered invalid.
+  * Currently supports the following valid search params:
+     * `reservation_id`
+     * `created_at`
+     * `updated_at`
+     * `first_name`
+     * `last_name`
+     * `mobile_number`
+     * `reservation_date`
+     * `reservation_time`
+     * `people`
+     * `status`
+
+### `GET /reservation/:reservation_id`
+  * Returns a single reservation object given a valid `reservation_id` param.
+  * Request is invalid if the provided reservation_id does not correspond to an existing reservation.
 
 <hr/>
 
