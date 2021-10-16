@@ -13,23 +13,21 @@
 > On the search page, a user can search for any reservation by multiple different possible search options, defaulting to searching by phone number. If the find feature is used with no search options selected, it will show all reservations ordered by their id.
 
 
-<hr/>
 
-## Live Deployment Links
-* ### [React App Client-Side Deployment](https://restaurant-reserve-127-client.herokuapp.com/)
+# Live Deployment Links
+* ## [React App Client-Side Deployment](https://restaurant-reserve-127-client.herokuapp.com/)
 
-* ### [Express API Back-End Deployment](https://restaurant-reserve-127-backend.herokuapp.com/)
-<hr/>
+* ## [Express API Back-End Deployment](https://restaurant-reserve-127-backend.herokuapp.com/)
 
 
-## General Usage and Screenshots
+# General Usage and Screenshots
 > Info blurb goes here
 > 
-<hr/>
 
-## API Documentation
+# API Documentation
 > This REST API adheres to RESTful standards. There are only two resource endpoints: `reservations` and `tables`. This API supports the following requests:
 
+## Reservations Resource Endpoints
 ### `GET /reservations` 
   * Returns a list of all reservations in the database. 
   * Ordered by id.
@@ -100,10 +98,9 @@
  * If the reservation being modified is currently `cancelled` or `finished`, it cannot be modified.
  * If the reservation being modified is currently `seated`,  the status in the request body data must be `finished`
 
+## Tables Resource Endpoints
 
-<hr/>
-
-## Technologies Used
+# Technologies Used
 * Client-side Application made with `React` for state-management and front-end routing.
 * UI and CSS styling primarily handled with `Bootstrap`. 
 * Back-end API made with `Node` and `Express`.
@@ -117,7 +114,7 @@
 <hr/>
 
 
-## Local Installation Instructions
+# Local Installation Instructions
 1. Fork or Clone the repo.
 1. Run `npm install` to install dependencies.
 1. Run `cp ./back-end/.env.sample ./back-end/.env`.
