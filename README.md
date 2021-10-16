@@ -1,5 +1,18 @@
 # [Restaurant Reservation Fullstack Web App](https://restaurant-reserve-127-client.herokuapp.com/)
 
+> Full-Stack Web App built from the ground up by Trevor Glascock in Node and React. 
+> 
+> Allows a user to create Reservations and Tables for their restaurant. 
+> 
+> On the dashboard page, a user can see all created tables, as well as all the reservations scheduled for the current date. The user can traverse forward and backward by single dates, as well instantly travel to today's date. 
+> 
+> Booked reservations on the current date can be seated at a table of an appropriate size. Seated tables can also have their corresponding reservation removed and archived out of the Dashboard as a 'finished' reservation.
+> 
+> Booked reservations can also be freely cancelled or edited. Unlike finished reservations, cancelled reservations will not be archived out of the dashboard.
+> 
+> On the search page, a user can search for any reservation by multiple different possible search options, defaulting to searching by phone number. If the find feature is used with no search options selected, it will show all reservations ordered by their id.
+
+
 <hr/>
 
 ## Live Deployment Links
