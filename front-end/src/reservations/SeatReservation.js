@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
 import { listTables, readReservation, seatReservation } from "../utils/api";
+import { formatAsDate } from "../utils/date-time";
 import DisplayReservation from "./DisplayReservation";
 
 /**
@@ -85,7 +86,11 @@ export default function SeatReservation() {
     setErrorsArray([]);
     if (selectionIsValid())
       seatReservation(reservationId, tableSelection)
-        .then(() => history.push(""))
+        .then(() =>
+          history.push(
+            `/dashboard?date=${formatAsDate(reservation.reservation_date)}`
+          )
+        )
         .catch((errorObj) =>
           setErrorsArray((subErrors) => [...subErrors, errorObj])
         );
