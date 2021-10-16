@@ -31,15 +31,17 @@ export default function DisplayTable({
   ));
   const emptyMessage = Object.keys(objCols).includes("table_name") ? (
     <>
-      <p>Currently there are no tables in the restaurant.</p>
-      <Link to="/tables/new">
-        Click here to add a table so you can seat a reservation!
+      <p>There are no tables in the restaurant.</p>
+      <Link className="btn btn-success" to="/tables/new">
+        Click here to add a Table!
       </Link>
     </>
   ) : (
     <>
       <p>No reservations scheduled today.</p>
-      <Link to="/reservations/new">Click here to make a new reservation!</Link>
+      <Link className="btn btn-success" to="/reservations/new">
+        Click here to add a Reservation!
+      </Link>
     </>
   );
 
