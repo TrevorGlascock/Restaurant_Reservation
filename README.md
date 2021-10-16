@@ -1,15 +1,17 @@
 # [Restaurant Reservation Fullstack Web App](https://restaurant-reserve-127-client.herokuapp.com/)
+
 <hr/>
 
-## General Info
-> Info blurb goes here
-> 
-<hr/>
-
-## Live Deployment
+## Live Deployment Links
 * ### [React App Client-Side Deployment](https://restaurant-reserve-127-client.herokuapp.com/)
 
 * ### [Express API Back-End Deployment](https://restaurant-reserve-127-backend.herokuapp.com/)
+<hr/>
+
+
+## General Usage and Screenshots
+> Info blurb goes here
+> 
 <hr/>
 
 ## API Documentation
@@ -42,9 +44,32 @@
      * `people`
      * `status`
 
-### `GET /reservation/:reservation_id`
+### `GET /reservations/:reservation_id`
   * Returns a single reservation object given a valid `reservation_id` param.
   * Request is invalid if the provided reservation_id does not correspond to an existing reservation.
+
+### `POST /reservations`
+  * Creates a new reservation using the data provided in the request body data.
+  * Returns the newly created reservation object.
+  * To be a valid request, the body data must include the following properties:
+     * `first_name`
+     * `last_name`
+     * `mobile_number`
+     * `reservation_date`
+       * Must be a valid date in the future
+     * `reservation_time`
+       * Must be a valid time in the future
+     * `people`
+       * Must be a number greater than zero. 
+ * Although not required, you may optionally include the following properties 
+     * `reservation_id`
+     * `status`
+     * `created_at`
+     * `edited_at`
+* No other properties will be allowed in the request body data. 
+
+### `PUT /reservations/:reservation_id`
+* 
 
 <hr/>
 
