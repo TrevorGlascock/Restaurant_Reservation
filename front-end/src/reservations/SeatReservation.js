@@ -11,18 +11,19 @@ import DisplayReservation from "./DisplayReservation";
  */
 export default function SeatReservation() {
   const { reservationId } = useParams();
-  const [reservation, setReservation] = useState();
-  const [tables, setTables] = useState([]);
+  const [reservation, setReservation] = useState(); // Reservation to be seated
+  const [tables, setTables] = useState([]); // All of the tables
   const [tableSelection, setTableSelection] = useState(""); // Current Selection
   const [tableOptions, setTableOptions] = useState(""); // All the table options to choose from
   const [errorsArray, setErrorsArray] = useState([]); // All errors in validation, potential API error on submit, and finally the tablesError, if it isn't null
 
   const history = useHistory();
 
-  useEffect(loadTables, []);
-  useEffect(loadReservation, [reservationId]);
-  useEffect(loadTableSelection, [tables]);
+  useEffect(loadTables, []); // Load all tables from API on page load
+  useEffect(loadReservation, [reservationId]); // Load the currnet reservation whenever reservationId param changes
+  useEffect(loadTableSelection, [tables]); // Repopulate the option picker choices whenever tables changes
 
+  // Fetches all of the tables as an array of raw table object data
   function loadTables() {
     const abortController = new AbortController();
     listTables(abortController.signal)
@@ -31,6 +32,7 @@ export default function SeatReservation() {
     return () => abortController.abort();
   }
 
+  // Fetches the current reservation object based on param
   function loadReservation() {
     const abortController = new AbortController();
     readReservation(reservationId)
@@ -39,6 +41,7 @@ export default function SeatReservation() {
     return () => abortController.abort();
   }
 
+  // Converts the array of tables into options for an option picker in JSX
   function loadTableSelection() {
     const loadedOptions = tables?.map((table, index) => (
       <option key={index} value={table.table_id}>
@@ -48,16 +51,13 @@ export default function SeatReservation() {
     setTableOptions(loadedOptions);
   }
 
-  const selectTableHandler = ({ target }) => {
-    setTableSelection(target.value);
-  };
-
+  // Table selection must be valid before we seat a reservation there
   const selectionIsValid = () => {
     let validSelection = true;
     const table = tables.find(
       (currentTable) => currentTable.table_id === Number(tableSelection)
     );
-
+    // Table must be unoccupied
     if (table.occupied) {
       validSelection = false;
       setErrorsArray((subErrors) => [
@@ -68,6 +68,7 @@ export default function SeatReservation() {
       ]);
     }
 
+    // Table must be big enough to accomodate reservation
     if (table.capacity < reservation.people) {
       validSelection = false;
       setErrorsArray((subErrors) => [
@@ -81,8 +82,14 @@ export default function SeatReservation() {
     return validSelection;
   };
 
+  // Whenever the option picker form is changed, record the new selection in the useState variable
+  const selectTableHandler = ({ target }) => {
+    setTableSelection(target.value);
+  };
+
+  // On submit, validate the selection, seatReservation, then navigate to the dashboard
   const submitHandler = (event) => {
-    event.preventDefault(); // prevents the submit button's default behavior
+    event.preventDefault();
     setErrorsArray([]);
     if (selectionIsValid())
       seatReservation(reservationId, tableSelection)
@@ -96,8 +103,8 @@ export default function SeatReservation() {
         );
   };
 
+  // On cancel, navigate backwards in history
   const cancelHandler = () => {
-    // Navigate one step backwards through browser's history
     history.goBack();
   };
 
