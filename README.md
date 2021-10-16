@@ -82,7 +82,12 @@
 * No other properties will be allowed in the request body data. 
 
 ### `PUT /reservations/:reservation_id`
-* 
+* Replaces an existing reservation with the reservation provided in the request body data.
+* Returns the modified reservation object.
+* Has all the same validation as the above `POST /reservations` route.
+* Similar to `GET /reservations/:reservation_id`, the reservation_id in the param must correspond to an existing reservation.
+
+
 
 <hr/>
 
