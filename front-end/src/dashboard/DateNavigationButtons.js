@@ -23,7 +23,8 @@ import { previous, next, today } from "../utils/date-time";
  *  react-router-dom's UseHistory creates a history object to allow us to navigate to new destination in browser
  * @function onClickHandler
  *  will navigate to the specified destination location using history.push
- *
+ * @var buttonStyle
+ * string to define the button styling conditionally based on the text variable
  * @returns {JSX.Element}
  */
 export default function DateNavigationButton({ type, currentDate }) {
@@ -37,8 +38,10 @@ export default function DateNavigationButton({ type, currentDate }) {
     history.push(destination);
   };
 
+  const buttonStyle = text === "Today" ? "btn-primary" : "btn-secondary";
+
   return (
-    <button className="btn btn-secondary me-3 mb-3" onClick={onClickHandler}>
+    <button className={`btn ${buttonStyle} me-3 mb-3`} onClick={onClickHandler}>
       {text}
     </button>
   );

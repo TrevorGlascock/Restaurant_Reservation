@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DisplayTable from "../dashboard/DisplayTable";
 import ErrorAlert from "../layout/ErrorAlert";
-import { listReservations } from "../utils/api";
+import { listReservations, setReservationStatus } from "../utils/api";
 import OptionButton from "./OptionButton";
 import SearchBar from "./SearchBar";
 
@@ -63,6 +63,28 @@ export function Search() {
   const [searchOptions, setSearchOptions] = useState(defaultSearchOptions); // Stores the state of all available options, tracking of which ones are currently active
   const [searchBars, setSearchBars] = useState(defaultSearchBars); // Holds an array that is mapped through to generate the dynamic searchBars
 
+  const loadSearchResults = useCallback(() => {
+    const abortController = new AbortController();
+    listReservations(searchQueries, abortController.signal)
+      .then(setReservations)
+      .catch((errorObj) => setErrorsArray((errors) => [...errors, errorObj]));
+    return () => abortController.abort();
+  }, [searchQueries]);
+
+  const cancelReservation = useCallback(
+    async (id, controller) => {
+      setErrorsArray([]);
+      try {
+        await setReservationStatus(id, "cancelled", controller.signal);
+        loadSearchResults();
+      } catch (error) {
+        setErrorsArray(error);
+      }
+      return () => controller.abort();
+    },
+    [loadSearchResults]
+  );
+
   // Update the search results anytime reservations changes
   useEffect(() => {
     const resultTableCols = {
@@ -74,24 +96,26 @@ export function Search() {
       reservation_time: "Time of Reservation",
       people: "Party Size",
       status: "Current Status",
+      editButton: "",
+      cancelButton: "",
     };
     if (!reservations) setSearchResult("");
     else if (!reservations.length) setSearchResult("No reservations found!");
     else
       setSearchResult(
-        <DisplayTable data={reservations} objCols={resultTableCols} />
+        <DisplayTable
+          data={reservations}
+          objCols={resultTableCols}
+          buttonFunction={cancelReservation}
+        />
       );
-  }, [reservations]);
+  }, [reservations, cancelReservation]);
 
   // Update the reservations data whenever the find button is clicked
   const submitHandler = (event) => {
     event.preventDefault();
     setErrorsArray([]);
-    const abortController = new AbortController();
-    listReservations(searchQueries, abortController.signal)
-      .then(setReservations)
-      .catch((errorObj) => setErrorsArray((errors) => [...errors, errorObj]));
-    return () => abortController.abort();
+    return loadSearchResults();
   };
 
   /**************************************************************************
@@ -180,22 +204,22 @@ export function Search() {
    ****************************************************************************/
   return (
     <main>
-      {errorDisplay}
-      <div className="d-md-flex mb-3">
-        <form onSubmit={submitHandler} className="w-100">
-          <fieldset>
-            <legend className="h1">Search for Reservations</legend>
-            {optionsPicker}
-            {searchBarsDisplay}
+      <div className="d-flex mb-3 flex-column">
+        <h1 className="h1 align-self-center">Search for Reservations</h1>
+        <form onSubmit={submitHandler} className="align-self-center">
+          {errorDisplay}
+          <fieldset className="d-flex flex-column">
+            <div className="col align-self-center">{optionsPicker}</div>
+            <div className="col">{searchBarsDisplay}</div>
           </fieldset>
-          <div>
-            <button type="submit" className="btn btn-success px-3 mt-2">
-              Find
-            </button>
-          </div>
+          <button type="submit" className="btn btn-success px-3 mt-2">
+            Find
+          </button>
         </form>
+        <div className="align-self-center col-12 col-xl-10 mt-4">
+          {searchResult}
+        </div>
       </div>
-      {searchResult}
     </main>
   );
 }

@@ -14,6 +14,7 @@ import AssignmentButton from "./AssignmentButton/AssignmentButton";
  */
 export default function TableRow({ rowObject, propNames, buttonFunction }) {
   const row = [];
+  const dataStyle = "text-center align-middle";
   for (let index in propNames) {
     const propName = propNames[index];
     // data is the value of the rowObject at that property name
@@ -26,14 +27,18 @@ export default function TableRow({ rowObject, propNames, buttonFunction }) {
     // if data is a boolean, then it's a table status that we push into the row instead
     if (isBoolean)
       row.push(
-        <td key={index} data-table-id-status={rowObject.table_id}>
+        <td
+          className={dataStyle}
+          key={index}
+          data-table-id-status={rowObject.table_id}
+        >
           {status}
         </td>
       );
     // if data is undefined, we render a button of the matching propName type instead
     else if (!data) {
       row.push(
-        <td key={index}>
+        <td className={dataStyle} key={index}>
           <AssignmentButton
             rowObject={rowObject}
             buttonFunction={buttonFunction}
@@ -45,16 +50,29 @@ export default function TableRow({ rowObject, propNames, buttonFunction }) {
     // if data is a reservation status, give it a special attribute for the unit test to find it
     else if (["booked", "seated", "finished", "cancelled"].includes(data))
       row.push(
-        <td key={index} data-reservation-id-status={rowObject.reservation_id}>
+        <td
+          className={dataStyle}
+          key={index}
+          data-reservation-id-status={rowObject.reservation_id}
+        >
           {data}
         </td>
       );
     //  if propName contains 'time', we should convert the data into 12-Hour Time for readabilty
     else if (propName.match(/time/gi)) {
-      row.push(<td key={index}>{convert12HourTime(data)}</td>);
+      row.push(
+        <td className={dataStyle} key={index}>
+          {convert12HourTime(data)}
+        </td>
+      );
     }
     // Otherwise, just push the raw data into the row
-    else row.push(<td key={index}>{data}</td>);
+    else
+      row.push(
+        <td className={dataStyle} key={index}>
+          {data}
+        </td>
+      );
   }
 
   return <tr>{row}</tr>;

@@ -10,7 +10,7 @@ import React from "react";
  */
 export default function TableHead({ columnLabels }) {
   const tableHeader = columnLabels.map((columnName, index) => (
-    <th key={index} scope="col">
+    <th className="text-center" key={index} scope="col">
       {columnName}
     </th>
   ));

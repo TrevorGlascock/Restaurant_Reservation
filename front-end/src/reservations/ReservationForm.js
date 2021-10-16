@@ -157,11 +157,14 @@ export default function ReservationForm({ type, defaultFormData, APICall }) {
   // JSX return statement to create the form
   return (
     <main>
-      {errorDisplay}
-      <div className="d-md-flex mb-3">
-        <form onSubmit={submitHandler} className="col col-md-10 col-xl-5">
-          <fieldset>
-            <legend className="h1">{type} Reservation</legend>
+      <div className="d-flex flex-column mb-3">
+        <h1 className="h1 align-self-center">{type} Reservation</h1>
+        <form
+          onSubmit={submitHandler}
+          className="align-self-center col-10 col-xl-5"
+        >
+          {errorDisplay}
+          <fieldset className="d-flex flex-column ">
             <div className="form-group my-2">
               <label htmlFor="first_name">First Name</label>
               <input
@@ -250,16 +253,18 @@ export default function ReservationForm({ type, defaultFormData, APICall }) {
                 required
               />
             </div>
-            <button
-              type="button"
-              className="btn btn-secondary mt-2"
-              onClick={cancelHandler}
-            >
-              Cancel
-            </button>
-            <button type="submit" className="btn btn-primary ms-4 mt-2">
-              Submit
-            </button>
+            <div className="d-flex justify-content-between">
+              <button
+                type="button"
+                className="btn btn-secondary btn-lg col-5"
+                onClick={cancelHandler}
+              >
+                Cancel
+              </button>
+              <button type="submit" className="btn btn-primary btn-lg col-5">
+                Submit
+              </button>
+            </div>
           </fieldset>
         </form>
       </div>

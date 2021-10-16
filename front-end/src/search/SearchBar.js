@@ -25,7 +25,7 @@ export default function SearchBar({
 }) {
   const placeholder = `Enter a customer's ${label.toLowerCase()}`;
   return (
-    <div className="form-group my-2 col col-md-10 col-xl-5">
+    <div className="form-group my-2 col-12 ">
       <label htmlFor={name}>{label}</label>
       <input
         id={name}
