@@ -22,7 +22,9 @@
 
 # General Usage and Screenshots
 > Info blurb goes here
-> 
+
+
+<hr/>
 
 # API Documentation
 > This REST API adheres to RESTful standards. There are only two resource endpoints: `reservations` and `tables`. This API supports the following requests:
@@ -54,10 +56,6 @@
      * `people`
      * `status`
 
-### `GET /reservations/:reservation_id`
-  * Returns a single reservation object given a valid `reservation_id` param.
-  * Request is invalid if the provided reservation_id does not correspond to an existing reservation.
-
 ### `POST /reservations`
   * Creates a new reservation using the data provided in the request body data.
   * Returns the newly created reservation object.
@@ -78,12 +76,15 @@
      * `edited_at`
 * No other properties will be allowed in the request body data. 
 
+### `GET /reservations/:reservation_id`
+  * Returns a single reservation object given a valid `reservation_id` param.
+  * Request is invalid if the provided reservation_id does not correspond to an existing reservation.
+  
 ### `PUT /reservations/:reservation_id`
 * Replaces an existing reservation with the reservation provided in the request body data.
 * Returns the modified reservation object.
 * Has all the same validation as the above `POST /reservations` route.
 * Similar to `GET /reservations/:reservation_id`, the reservation_id in the param must correspond to an existing reservation.
-
 
 ### `PUT /reservations/:reservation_id/status`
 * Replaces an existing reservation's status with the status provided in the request body data.
@@ -96,6 +97,43 @@
    * `finished` (after leaving a table, reservation is archived)
  * If the reservation being modified is currently `cancelled` or `finished`, it cannot be modified.
  * If the reservation being modified is currently `seated`,  the status in the request body data must be `finished`
+
+
+### `GET /tables`
+  * Returns a list of all restaurant tables in the database. 
+  * Ordered alphabetically by the table's name.
+  
+### `POST /tables`
+* Creates a new table using the data provided in the request body data.
+* Returns the newly created table object.
+* To be a valid request, the body data must include the following properties:
+   * `table_name`
+   * `capacity`
+      * Must be a number greater than zero. 
+* Although not required, you may optionally include a `reservation_id` property
+   * Note that the `occupied` property is NOT allowed, because it is conditionally set based on the presence of the optional `reservation_id`.
+   * A table is only occupied if there is a reservation currently sitting at it.
+* No other properties will be allowed in the request body data. 
+
+### `GET /tables/:table_id`
+  * Returns a single table object given a valid `table_id` param.
+  * Request is invalid if the provided table_id does not correspond to an existing table.
+
+### `GET /tables/:table_id/seat`
+* This route is identical to `GET /tables/:table_id` 
+* Primarily included as a development/testing convenience.
+
+### `PUT /tables/:table_id/seat`
+* Modifies a table to be seated with the reservation_id provided in the request body data.
+* Similar to `GET /tables/:table_id`, request is invalid if the table_id in the params does not correspond to an exisiting table.
+* Request is invalid if the reservation_id provided in the request body data does not correspond to an existing reservation.
+* A table can only be seated if it is not occupied.
+
+### `DELETE /tables/:table_id/seat`
+* Modifies a table to set reservation_id to null. 
+   >NOTE: This is more of an update than a true delete.
+* Similar to `GET /tables/:table_id`, request is invalid if the table_id in the params does not correspond to an exisiting table.
+* A table's reservation can only be deleted/unseated if the table is currently occupied.
 
 <hr/>
 
