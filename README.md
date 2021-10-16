@@ -14,7 +14,16 @@
 <hr/>
 
 ## Technologies Used
-
+* Client-side Application made with `React` for state-management and front-end routing.
+* UI and CSS styling primarily handled with `Bootstrap`. 
+* Back-end API made with `Node` and `Express`.
+* API communicates with a `PostgreSQL` database.
+* SQL queries in the API  are made with `Knex`.
+* Client-side and back-end Applications are both deployed with `Heroku`.
+* The PostgreSQL Database is hosted on `ElephantSQL`.
+* Unit testing handled with `Jest`.
+  * `Supertest` used for back-end tests.
+  * `Puppeteer` used for end-2-end tests.
 <hr/>
 
 
