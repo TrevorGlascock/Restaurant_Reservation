@@ -27,7 +27,6 @@
 # API Documentation
 > This REST API adheres to RESTful standards. There are only two resource endpoints: `reservations` and `tables`. This API supports the following requests:
 
-## Reservations Resource Endpoints
 ### `GET /reservations` 
   * Returns a list of all reservations in the database. 
   * Ordered by id.
@@ -98,7 +97,7 @@
  * If the reservation being modified is currently `cancelled` or `finished`, it cannot be modified.
  * If the reservation being modified is currently `seated`,  the status in the request body data must be `finished`
 
-## Tables Resource Endpoints
+<hr/>
 
 # Technologies Used
 * Client-side Application made with `React` for state-management and front-end routing.
