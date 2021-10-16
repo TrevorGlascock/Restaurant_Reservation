@@ -17,16 +17,54 @@
 
 
 # General Usage and Screenshots
-> Allows a user to create Reservations and Tables for their restaurant. 
-> 
-> On the dashboard page, a user can see all created tables, as well as all the reservations scheduled for the current date. The user can traverse forward and backward by single dates, as well instantly travel to today's date. 
-> 
-> Booked reservations on the current date can be seated at a table of an appropriate size. Seated tables can also have their corresponding reservation removed and archived out of the Dashboard as a 'finished' reservation.
-> 
-> Booked reservations can also be freely cancelled or edited. Unlike finished reservations, cancelled reservations will not be archived out of the dashboard.
-> 
-> On the search page, a user can search for any reservation by multiple different possible search options, defaulting to searching by phone number. If the find feature is used with no search options selected, it will show all reservations ordered by their id.
+## New Reservation `/reservations/new`
+![New Reservation Screenshot](https://raw.githubusercontent.com/TrevorGlascock/Restaurant_Reservation/main/new-reservation.png)
+> Allows a user to create a new Reservation. 
 
+## New Table `/tables/new`
+![New Table Screenshot](https://raw.githubusercontent.com/TrevorGlascock/Restaurant_Reservation/main/new-table.png)
+> Allows a user to create a new Table.
+## Dashboard `/dashboard?date=2021-10-20`
+![Dashboard Screenshot](https://raw.githubusercontent.com/TrevorGlascock/Restaurant_Reservation/main/dashboard.png)
+> Dashboard displays all of the restaurant tables, as well as all the reservations scheduled for the current date defined in the query. If no date is defined, the date will default to today's date. 
+> 
+> The user can traverse forward and backward one date at a time, as well instantly travel to today's date. 
+> 
+> From here, the user can seat a booked reservation, edit a booked reservation, cancel a booked reservation, or finish a occupied table.
+> 
+> NOTE: Reservations that have been finished will not show up on the dashboard.
+
+## Seat Table with a reservation `/reservations/6/seat`
+![Seat Table Screenshot](https://raw.githubusercontent.com/TrevorGlascock/Restaurant_Reservation/main/seat-table.png)
+> Clicking the Seat button next to a reservation on the Dashboard takes the user to that reservation's Seat Page. 
+> 
+> On this page, the user selects one of the tables from a drop down menu to assign this reservation to.
+> 
+>  Although the user can freely select any table, the submit button will only allow the user to assign the reservation to a table that can accomodate it.
+
+## Delete/Finish/Unseat a reservation from a table `No Route, the button is on each table in the dashboard`
+![Delete/Finish/Unseat Table Screenshot](https://raw.githubusercontent.com/TrevorGlascock/Restaurant_Reservation/main/unseat-table.png)
+> Clicking on the Finish button displays a confirmation window.
+> 
+> If the user confirms the action, the corresponding reservation's status is set to `finished` and the table is made free.
+> 
+>If the confirmation window is cancelled, the button does nothing.
+
+## Search  for Reservations `/search`
+![Search Screenshot](https://raw.githubusercontent.com/TrevorGlascock/Restaurant_Reservation/main/search.png)
+> On the search page, a user can search for any reservation using a wide selection of possible search options. The default setting just has the `Phone Number` option selected. The user can enable or disable a search option by clicking on it.
+> 
+> If there is at least one search options enabled, the top search bar becomes a required field.
+> 
+> If the find button is clicked with no search options selected, it will show all reservations ordered by their id.
+> 
+> NOTE: These searches will work for partial matches, and they are not case sensitive.
+
+## Edit a Booked Reservation `reservations/7/edit`
+![Edit Reservation Screenshot](https://raw.githubusercontent.com/TrevorGlascock/Restaurant_Reservation/main/edit-reservation.png)
+> Allows a user to edit an existing reservation.
+> 
+> NOTE: Reservations can only be edited if they are booked.
 
 <hr/>
 
