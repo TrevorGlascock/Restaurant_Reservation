@@ -1,7 +1,22 @@
 # [Restaurant Reservation Fullstack Web App](https://restaurant-reserve-127-client.herokuapp.com/)
 
-> Full-Stack Web App built from the ground up by Trevor Glascock in Node and React. 
-> 
+> Full-Stack Restaurant Reservation Web App built from the ground up by Trevor Glascock in Node and React. This app is to be used by restaurant staff to create and handle restaurant reservations.
+### Table of Contents
+1. [Live Deployment Links](#live-deployment-links)
+2. [General Usage and Screenshots](#general-usage-and-screenshots)
+3. [API Documentation](#api-documentation)
+4. [Technologies Used](#technologies-used)
+5. [Local Installation Instructions](#local-installation-instructions)
+
+<hr/>
+
+# Live Deployment Links
+* ### [React App Client-Side Deployment](https://restaurant-reserve-127-client.herokuapp.com/)
+
+* ### [Express API Back-End Deployment](https://restaurant-reserve-127-backend.herokuapp.com/)
+
+
+# General Usage and Screenshots
 > Allows a user to create Reservations and Tables for their restaurant. 
 > 
 > On the dashboard page, a user can see all created tables, as well as all the reservations scheduled for the current date. The user can traverse forward and backward by single dates, as well instantly travel to today's date. 
@@ -11,17 +26,6 @@
 > Booked reservations can also be freely cancelled or edited. Unlike finished reservations, cancelled reservations will not be archived out of the dashboard.
 > 
 > On the search page, a user can search for any reservation by multiple different possible search options, defaulting to searching by phone number. If the find feature is used with no search options selected, it will show all reservations ordered by their id.
-
-
-
-# Live Deployment Links
-* ## [React App Client-Side Deployment](https://restaurant-reserve-127-client.herokuapp.com/)
-
-* ## [Express API Back-End Deployment](https://restaurant-reserve-127-backend.herokuapp.com/)
-
-
-# General Usage and Screenshots
-> Info blurb goes here
 
 
 <hr/>
