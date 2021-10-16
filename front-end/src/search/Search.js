@@ -100,7 +100,10 @@ export function Search() {
       cancelButton: "",
     };
     if (!reservations) setSearchResult("");
-    else if (!reservations.length) setSearchResult("No reservations found!");
+    else if (!reservations.length)
+      setSearchResult(
+        <h3 className="text-center mt-4">No reservations found!</h3>
+      );
     else
       setSearchResult(
         <DisplayTable
