@@ -78,7 +78,7 @@ export async function listReservations(params, signal) {
  */
 export async function readReservation(reservation_id, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
-  return fetchJson(url, { headers, signal }, []);
+  return trackPromise(fetchJson(url, { headers, signal }, []));
 }
 
 /**
@@ -136,7 +136,7 @@ export async function updateReservation(
  */
 export async function listTables(signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
-  return fetchJson(url, { headers, signal }, []);
+  return trackPromise(fetchJson(url, { headers, signal }, []));
 }
 
 /**
