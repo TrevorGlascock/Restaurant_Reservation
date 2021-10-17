@@ -54,10 +54,10 @@ export default function DisplayTable({
       </table>
     </div>
   ) : (
-    <>
+    <div className="my-3">
       <LoadingPrompt
-        component={<h5 className="h5 text-center mt-3">{emptyMessage}</h5>}
+        component={<h5 className="h5 text-center">{emptyMessage}</h5>}
       />
-    </>
+    </div>
   );
 }
