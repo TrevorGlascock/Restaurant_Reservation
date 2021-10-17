@@ -40,21 +40,42 @@ function Dashboard({ date }) {
   const [reservationsError, setReservationsError] = useState(null);
   const [tablesError, setTablesError] = useState(null);
 
-  useEffect(loadDashboard, [date]);
+  useEffect(loadReservations, [date]);
+  useEffect(loadTables, []);
 
   /**
-   * API call to listReservations and listTables
-   * Retrieves the data necessary to render the dashboard and stores it in useStatevariables
+   * API call to listReservations
+   * Retrieves the data necessary to render the tables and stores it in useStatevariables
    */
-  function loadDashboard() {
+  function loadReservations() {
     const abortController = new AbortController();
     setReservationsError(null);
-    setTablesError(null);
+    setReservations([]);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+    return () => abortController.abort();
+  }
+
+  /**
+   * API call to listTables
+   * Retrieves the data necessary to render the tables and stores it in useStatevariables
+   */
+  function loadTables() {
+    const abortController = new AbortController();
+    setTablesError(null);
+    setTables([]);
     listTables(abortController.signal).then(setTables).catch(setTablesError);
     return () => abortController.abort();
+  }
+
+  /**
+   * Function to load Reservations and Tables at the same time
+   * This function will be prop drilled into button subcomponents to re-load the entire dashboard
+   */
+  function loadDashboard() {
+    loadReservations();
+    loadTables();
   }
 
   /**
