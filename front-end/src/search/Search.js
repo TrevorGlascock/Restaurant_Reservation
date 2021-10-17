@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import DisplayTable from "../dashboard/DisplayTable";
 import ErrorAlert from "../layout/ErrorAlert";
+import LoadingPrompt from "../loading/LoadingPrompt";
 import { listReservations, setReservationStatus } from "../utils/api";
 import OptionButton from "./OptionButton";
 import SearchBar from "./SearchBar";
@@ -65,6 +66,7 @@ export function Search() {
 
   const loadSearchResults = useCallback(() => {
     const abortController = new AbortController();
+    setReservations([]);
     listReservations(searchQueries, abortController.signal)
       .then(setReservations)
       .catch((errorObj) => setErrorsArray((errors) => [...errors, errorObj]));
@@ -99,11 +101,18 @@ export function Search() {
       editButton: "",
       cancelButton: "",
     };
-    if (!reservations) setSearchResult("");
+    // Before button is clicked, the result component is null
+    if (!reservations) setSearchResult(null);
+    // If there are no results, show loadingPrompt until API is finished, then show No Reservation Found.
     else if (!reservations.length)
       setSearchResult(
-        <h3 className="text-center mt-4">No reservations found!</h3>
+        <LoadingPrompt
+          component={
+            <h3 className="text-center mt-4">No reservations found!</h3>
+          }
+        />
       );
+    // Otherwise the API call has been completed, and you can show a displayTable of all the reservations
     else
       setSearchResult(
         <DisplayTable
