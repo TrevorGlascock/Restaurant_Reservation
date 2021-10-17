@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import LoadingPrompt from "../loading/LoadingPrompt";
 import TableHead from "./TableHead";
 import TableRow from "./TableRow";
 
@@ -53,6 +54,10 @@ export default function DisplayTable({
       </table>
     </div>
   ) : (
-    <h5 className="h5 text-center my-3">{emptyMessage}</h5>
+    <div className="my-3">
+      <LoadingPrompt
+        component={<h5 className="h5 text-center">{emptyMessage}</h5>}
+      />
+    </div>
   );
 }

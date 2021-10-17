@@ -40,21 +40,42 @@ function Dashboard({ date }) {
   const [reservationsError, setReservationsError] = useState(null);
   const [tablesError, setTablesError] = useState(null);
 
-  useEffect(loadDashboard, [date]);
+  useEffect(loadReservations, [date]);
+  useEffect(loadTables, []);
 
   /**
-   * API call to listReservations and listTables
-   * Retrieves the data necessary to render the dashboard and stores it in useStatevariables
+   * API call to listReservations
+   * Retrieves the data necessary to render the tables and stores it in useStatevariables
    */
-  function loadDashboard() {
+  function loadReservations() {
     const abortController = new AbortController();
     setReservationsError(null);
-    setTablesError(null);
+    setReservations([]);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+    return () => abortController.abort();
+  }
+
+  /**
+   * API call to listTables
+   * Retrieves the data necessary to render the tables and stores it in useStatevariables
+   */
+  function loadTables() {
+    const abortController = new AbortController();
+    setTablesError(null);
+    setTables([]);
     listTables(abortController.signal).then(setTables).catch(setTablesError);
     return () => abortController.abort();
+  }
+
+  /**
+   * Function to load Reservations and Tables at the same time
+   * This function will be prop drilled into button subcomponents to re-load the entire dashboard
+   */
+  function loadDashboard() {
+    loadReservations();
+    loadTables();
   }
 
   /**
@@ -102,30 +123,32 @@ function Dashboard({ date }) {
     <main>
       <div className="d-flex flex-column mb-3">
         <h1 className="h1 align-self-center">Dashboard</h1>
-        <div className="col-12 col-xl-10 align-self-center">
-          <ErrorAlert error={reservationsError} />
-          <ErrorAlert error={tablesError} />
-        </div>
-        <h4 className="h4 align-self-center">Reservations for {date}</h4>
-        <div className="align-self-center">
-          <DateNavigationButton type="previous" currentDate={date} />
-          <DateNavigationButton type="today" currentDate={date} />
-          <DateNavigationButton type="next" currentDate={date} />
-        </div>
-        <div className="align-self-center col-12 col-xl-10">
-          <DisplayTable
-            data={reservations}
-            objCols={reservationsCols}
-            buttonFunction={cancelReservation}
-          />
-        </div>
-        <h4 className="h4 align-self-center mt-5">Tables in the Restaurant</h4>
-        <div className="align-self-center col-12 col-xl-10">
-          <DisplayTable
-            data={tables}
-            objCols={tableCols}
-            buttonFunction={finishTable}
-          />
+        <div className="container-lg d-flex flex-column align-items-center justify-content-center px-0">
+          <div className="col-12">
+            <ErrorAlert error={reservationsError} />
+            <ErrorAlert error={tablesError} />
+          </div>
+          <h4 className="h4">Reservations for {date}</h4>
+          <div>
+            <DateNavigationButton type="previous" currentDate={date} />
+            <DateNavigationButton type="today" currentDate={date} />
+            <DateNavigationButton type="next" currentDate={date} />
+          </div>
+          <div className="col-11">
+            <DisplayTable
+              data={reservations}
+              objCols={reservationsCols}
+              buttonFunction={cancelReservation}
+            />
+          </div>
+          <h4 className="h4 mt-5">Tables in the Restaurant</h4>
+          <div className="col-12">
+            <DisplayTable
+              data={tables}
+              objCols={tableCols}
+              buttonFunction={finishTable}
+            />
+          </div>
         </div>
       </div>
     </main>
