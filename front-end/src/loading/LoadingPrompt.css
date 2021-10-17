@@ -10,7 +10,6 @@
   width: 3rem;
   height: 3rem;
   border: 0.5rem solid transparent;
-  border-top-color: var(--accent-color-primary);
   border-radius: 50%;
   animation: buffering 1s ease infinite;
 }
