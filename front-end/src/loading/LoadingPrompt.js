@@ -1,5 +1,7 @@
 import React from "react";
+import { usePromiseTracker } from "react-promise-tracker";
 
 export default function LoadingPrompt() {
-  return <h1>Now Loading...</h1>;
+  const { promiseInProgress } = usePromiseTracker();
+  return promiseInProgress && <h1>Now Loading...</h1>;
 }
