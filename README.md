@@ -18,7 +18,7 @@
 
 # General Usage and Screenshots
 ## New Reservation `/reservations/new`
-![New Reservation Screenshot](https://raw.githubusercontent.com/TrevorGlascock/Restaurant_Reservation/main/new-reservation.png)
+![New Reservation Screenshot](https://raw.githubusercontent.com/TrevorGlascock/Restaurant_Reservation/main/screenshots/new-reservation.png)
 > Allows a user to create a new Reservation. 
 
 ## New Table `/tables/new`
