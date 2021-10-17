@@ -123,30 +123,32 @@ function Dashboard({ date }) {
     <main>
       <div className="d-flex flex-column mb-3">
         <h1 className="h1 align-self-center">Dashboard</h1>
-        <div className="col-12 col-xl-10 align-self-center">
-          <ErrorAlert error={reservationsError} />
-          <ErrorAlert error={tablesError} />
-        </div>
-        <h4 className="h4 align-self-center">Reservations for {date}</h4>
-        <div className="align-self-center">
-          <DateNavigationButton type="previous" currentDate={date} />
-          <DateNavigationButton type="today" currentDate={date} />
-          <DateNavigationButton type="next" currentDate={date} />
-        </div>
-        <div className="align-self-center col-12 col-xl-10">
-          <DisplayTable
-            data={reservations}
-            objCols={reservationsCols}
-            buttonFunction={cancelReservation}
-          />
-        </div>
-        <h4 className="h4 align-self-center mt-5">Tables in the Restaurant</h4>
-        <div className="align-self-center col-12 col-xl-10">
-          <DisplayTable
-            data={tables}
-            objCols={tableCols}
-            buttonFunction={finishTable}
-          />
+        <div className="container-lg d-flex flex-column align-items-center justify-content-center px-0">
+          <div className="col-12">
+            <ErrorAlert error={reservationsError} />
+            <ErrorAlert error={tablesError} />
+          </div>
+          <h4 className="h4">Reservations for {date}</h4>
+          <div>
+            <DateNavigationButton type="previous" currentDate={date} />
+            <DateNavigationButton type="today" currentDate={date} />
+            <DateNavigationButton type="next" currentDate={date} />
+          </div>
+          <div className="col-11">
+            <DisplayTable
+              data={reservations}
+              objCols={reservationsCols}
+              buttonFunction={cancelReservation}
+            />
+          </div>
+          <h4 className="h4 mt-5">Tables in the Restaurant</h4>
+          <div className="col-12">
+            <DisplayTable
+              data={tables}
+              objCols={tableCols}
+              buttonFunction={finishTable}
+            />
+          </div>
         </div>
       </div>
     </main>
