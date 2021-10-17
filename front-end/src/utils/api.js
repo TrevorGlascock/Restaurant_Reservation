@@ -1,3 +1,4 @@
+import { trackPromise } from "react-promise-tracker";
 /**
  * Defines the base URL for the API.
  * The default values is overridden by the `API_BASE_URL` environment variable.
@@ -63,9 +64,11 @@ export async function listReservations(params, signal) {
   Object.entries(params).forEach(([key, value]) =>
     url.searchParams.append(key, value.toString())
   );
-  return fetchJson(url, { headers, signal }, [])
-    .then(formatReservationDate)
-    .then(formatReservationTime);
+  return trackPromise(
+    fetchJson(url, { headers, signal }, [])
+      .then(formatReservationDate)
+      .then(formatReservationTime)
+  );
 }
 
 /**
