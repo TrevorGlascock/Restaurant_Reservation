@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
+import LoadingPrompt from "../loading/LoadingPrompt";
 import { listTables, readReservation, seatReservation } from "../utils/api";
 import { formatAsDate } from "../utils/date-time";
 import DisplayReservation from "./DisplayReservation";
@@ -118,45 +119,51 @@ export default function SeatReservation() {
         <h1 className="align-self-center">
           Seating Reservation #{reservationId}
         </h1>
-        <div className="col-8 col-xl-10 align-self-center">
-          {errorDisplay}
-          <div className="d-flex flex-column flex-xl-row">
-            <form onSubmit={submitHandler} className="col mx-4">
-              <fieldset>
-                <div className="form-group my-2">
-                  <label htmlFor="table_id">
-                    Please assign a table for reservation #{reservationId}
-                  </label>
-                  <select
-                    id="table_id"
-                    name="table_id"
-                    title="Select a table to assign to this reservation"
-                    className="form-select my-2"
-                    value={tableSelection}
-                    onChange={selectTableHandler}
-                    required
-                  >
-                    <option value="">Please Select a Table</option>
-                    {tableOptions}
-                  </select>
+        <LoadingPrompt
+          component={
+            <div className="col-8 col-xl-10 align-self-center">
+              {errorDisplay}
+              <div className="d-flex flex-column flex-xl-row">
+                <form onSubmit={submitHandler} className="col mx-4 mb-4">
+                  <fieldset>
+                    <div className="form-group my-2">
+                      <label htmlFor="table_id">
+                        Please assign a table for reservation #{reservationId}
+                      </label>
+                      {
+                        <select
+                          id="table_id"
+                          name="table_id"
+                          title="Select a table to assign to this reservation"
+                          className="form-select my-2"
+                          value={tableSelection}
+                          onChange={selectTableHandler}
+                          required
+                        >
+                          <option value="">Please Select a Table</option>
+                          {tableOptions}
+                        </select>
+                      }
+                    </div>
+                    <button
+                      type="button"
+                      className="btn btn-secondary mt-2"
+                      onClick={cancelHandler}
+                    >
+                      Cancel
+                    </button>
+                    <button type="submit" className="btn btn-primary ms-4 mt-2">
+                      Submit
+                    </button>
+                  </fieldset>
+                </form>
+                <div className="col mx-4">
+                  <DisplayReservation reservation={reservation} />
                 </div>
-                <button
-                  type="button"
-                  className="btn btn-secondary mt-2"
-                  onClick={cancelHandler}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="btn btn-primary ms-4 mt-2">
-                  Submit
-                </button>
-              </fieldset>
-            </form>
-            <div className="col mx-4">
-              <DisplayReservation reservation={reservation} />
+              </div>
             </div>
-          </div>
-        </div>
+          }
+        />
       </div>
     </main>
   );

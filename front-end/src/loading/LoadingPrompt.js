@@ -8,10 +8,10 @@ import "./LoadingPrompt.css";
  *  a JSX element to be rendered when the promiseInProgress is completed.
  * @returns
  */
-export default function LoadingPrompt({ component = null }) {
+export default function LoadingPrompt({ component = null, color = "primary" }) {
   const { promiseInProgress } = usePromiseTracker();
   return promiseInProgress ? (
-    <div className="loader text-primary">Now Loading...</div>
+    <div className={`loader text-${color}`}>Now Loading...</div>
   ) : (
     component
   );
